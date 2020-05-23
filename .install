@@ -4,6 +4,7 @@
 sudo pacman -S --needed --noconfirm yay
 yay -Syu --needed --noconfirm
 
+
 # BASE
 yay -S --needed --noconfirm bash-completion
 yay -S --needed --noconfirm vim
@@ -17,6 +18,11 @@ yay -S --needed --noconfirm google-chrome
 yay -S --needed --noconfirm discord
 yay -S --needed --noconfirm mpv
 
+
+# DEVELOPMENT
+yay -S --needed --noconfirm qt
+yay -S --needed --noconfirm qtcreator
+
 # youcompleteme
 yay -S --needed --noconfirm cmake
 yay -S --needed --noconfirm mono
@@ -25,10 +31,9 @@ yay -S --needed --noconfirm npm
 yay -S --needed --noconfirm jdk8-openjdk
 yay -S --needed --noconfirm python2
 
+
 # WORK
 yay -S --needed --noconfirm optimus-manager
-yay -S --needed --noconfirm qt
-yay -S --needed --noconfirm qtcreator
 
 # aubo
 yay -S --needed --noconfirm xf86-input-vmmouse
