@@ -17,13 +17,19 @@ yay -S --needed --noconfirm google-chrome
 yay -S --needed --noconfirm discord
 yay -S --needed --noconfirm mpv
 
+# youcompleteme
+yay -S --needed --noconfirm cmake
+yay -S --needed --noconfirm mono
+yay -S --needed --noconfirm go
+yay -S --needed --noconfirm npm
+yay -S --needed --noconfirm jdk8-openjdk
+
 # work
 yay -S --needed --noconfirm optimus-manager
 yay -S --needed --noconfirm qt
 yay -S --needed --noconfirm qtcreator
-yay -S --needed --noconfirm jdk8-openjdk
-yay -S --needed --noconfirm maven
 yay -S --needed --noconfirm xf86-input-vmmouse
 yay -S --needed --noconfirm xf86-video-vmware
 yay -S --needed --noconfirm open-vm-tools
 yay -S --needed --noconfirm vmware-workstation
+yay -S --needed --noconfirm maven
