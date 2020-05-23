@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# maintenance
+sudo pacman -S --needed --noconfirm yay
+yay -Syu --needed --noconfirm
+
+# base
+yay -S --needed --noconfirm bash-completion
+yay -S --needed --noconfirm vim
+yay -S --needed --noconfirm alacritty
+yay -S --needed --noconfirm redshift
+yay -S --needed --noconfirm timeshift
+yay -S --needed --noconfirm i3-wm
+yay -S --needed --noconfirm perl-anyevent-i3
+yay -S --needed --noconfirm dmenu-manjaro
+yay -S --needed --noconfirm google-chrome
+yay -S --needed --noconfirm discord
+
+# work
+yay -S --needed --noconfirm optimus-manager
+yay -S --needed --noconfirm xf86-input-vmmouse
+yay -S --needed --noconfirm xf86-video-vmware
+yay -S --needed --noconfirm open-vm-tools
+yay -S --needed --noconfirm vmware-workstation
