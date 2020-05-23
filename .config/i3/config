@@ -134,12 +134,12 @@ bindsym $sub+w layout tabbed
 bindsym $sub+e layout toggle split
 
 # toggle tiling / floating
-# bindsym $mod+Shift+space floating toggle
-# bindsym $sub+Shift+space floating toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $sub+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-# bindsym $mod+space focus mode_toggle
-# bindsym $sub+space focus mode_toggle
+bindsym $mod+space focus mode_toggle
+bindsym $sub+space focus mode_toggle
 
 # focus the parent container
 # bindsym $mod+a focus parent
@@ -259,15 +259,13 @@ hide_edge_borders both
 # alt tab
 bindsym $mod+Tab workspace next
 bindsym $mod+onehalf workspace prev
-bindsym $mod+Escape workspace prev
 bindsym $sub+Tab workspace next
 bindsym $sub+onehalf workspace prev
-bindsym $sub+Escape workspace prev
 
 # disable focus on mouse hover
 focus_follows_mouse no
 
-exec redshift -O 2500
+exec redshift -O 3000
 
 # layouts
 exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
@@ -277,7 +275,5 @@ exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/w
 # programs
 exec google-chrome-stable
 exec discord
-exec qbittorrent
-exec alacritty --class Videos --working-directory /home/nikv/Videos/
-
+exec alacritty
 exec sleep 5 && xmodmap ~/.Xmodmap
