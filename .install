@@ -12,12 +12,17 @@ yay -S --needed --noconfirm redshift
 yay -S --needed --noconfirm timeshift
 yay -S --needed --noconfirm i3-wm
 yay -S --needed --noconfirm perl-anyevent-i3
-yay -S --needed --noconfirm dmenu-manjaro
+# yay -S --needed --noconfirm dmenu-manjaro
 yay -S --needed --noconfirm google-chrome
 yay -S --needed --noconfirm discord
+yay -S --needed --noconfirm mpv
 
 # work
 yay -S --needed --noconfirm optimus-manager
+yay -S --needed --noconfirm qt
+yay -S --needed --noconfirm qtcreator
+yay -S --needed --noconfirm jdk8-openjdk
+yay -S --needed --noconfirm maven
 yay -S --needed --noconfirm xf86-input-vmmouse
 yay -S --needed --noconfirm xf86-video-vmware
 yay -S --needed --noconfirm open-vm-tools
