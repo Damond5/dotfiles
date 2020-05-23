@@ -1,0 +1,23 @@
+{
+    "border": "pixel",
+    "current_border_width": 5,
+    "floating": "auto_off",
+    "geometry": {
+       "height": 539,
+       "width": 940,
+       "x": 481,
+       "y": 0
+    },
+    "name": "Discord",
+    "percent": 1,
+    "swallows": [
+       {
+       "class": "^discord$",
+       "instance": "^discord$",
+       "title": "^Discord$",
+       "window_role": "^browser\\-window$"
+       }
+    ],
+    "type": "con"
+}
+

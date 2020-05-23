@@ -1,0 +1,30 @@
+2020-05-22 13:47:05.178 (0x7ffce1eb4b50) Debug: New PolkitAgentListener  0x55b9d8afe200
+2020-05-22 13:47:05.178 (0x7ffce1eb4b50) Debug: Adding new listener  PolkitQt1::Agent::Listener(0x7ffce1eb4b60) for  0x55b9d8afe200
+2020-05-22 13:47:05.421 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:47:05.421 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:47:05.424 (0x7ffdf5e8c380) Warning: libpng warning: iCCP: known incorrect sRGB profile
+2020-05-22 13:47:05.494 (0x7ffcf18942b0) Debug: ()
+2020-05-22 13:47:05.898 (0x7ffcf18942b0) Debug: WinIdChange 1200008 handle QWidgetWindow(0x560c06ce9940, name="LXQtPanel panel1Window") QScreen(0x560c06267fc0, name="HDMI-0")
+2020-05-22 13:47:05.948 (0x7ffcf18942b0) Debug: Systray started
+2020-05-22 13:47:06.120 (0x7fffb8d89640) Debug: BatteryChanged discharging: true chargeLevel: nan actionTime: QTime(Invalid)
+2020-05-22 13:47:06.124 (0x7fffb8d89640) Debug: Inhibit got: 26
+2020-05-22 13:47:06.239 (0x7fffb8d89640) Debug: Starting idlenesswatcher
+2020-05-22 13:47:07.093 (0x7ffcf18942b0) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:47:07.093 (0x7ffcf18942b0) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:47:07.109 (0x7ffcf18942b0) Warning: libpng warning: iCCP: known incorrect sRGB profile
+2020-05-22 13:47:12.082 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 1666, resource id: 33554439, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:48:36.341 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 3293, resource id: 33554438, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:49:15.536 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 3476, resource id: 33554438, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:49:20.057 (0x7ffcf18942b0) Debug: execAction "/usr/share/applications/pcmanfm-qt.desktop"
+2020-05-22 13:49:26.361 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 4340, resource id: 14680198, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:49:45.281 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:49:45.281 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:49:45.281 (0x7ffdf5e8c380) Warning: libpng warning: iCCP: known incorrect sRGB profile
+2020-05-22 13:50:03.058 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 10403, resource id: 33554438, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:50:08.160 (0x7ffcf18942b0) Warning: QXcbConnection: XCB error: 3 (BadWindow), sequence: 13108, resource id: 33554454, major code: 18 (ChangeProperty), minor code: 0
+2020-05-22 13:50:45.867 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:50:45.867 (0x7ffdf5e8c380) Warning: Cannot open file '/usr/share/icons/Humanity/devices/48/printer.svg', because: No such file or directory
+2020-05-22 13:50:45.868 (0x7ffdf5e8c380) Warning: libpng warning: iCCP: known incorrect sRGB profile
+2020-05-22 13:57:59.921 (0x7ffcf18942b0) Warning: The X11 connection broke: I/O error (code 1)
+2020-05-22 13:58:01.966 (0x7ffdb9ad9aa0) Warning: Module lxqt-panel.desktop won't terminate ... killing.
+2020-05-22 13:58:01.967 (0x7ffdb9ad9aa0) Warning: QProcess: Destroyed while process ("lxqt-panel") is still running.

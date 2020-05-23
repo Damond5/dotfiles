@@ -1,0 +1,14 @@
+/*
+!.config
+.config/*
+!.config/i3
+!.config/gtk-3.0
+!.config/alacritty
+!.config/lxqt
+!.bashrc
+!.gitignore
+!.profile
+!.vimrc
+!.Xmodmap
+!.series
+!installElvUI.sh
