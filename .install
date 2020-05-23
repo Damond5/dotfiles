@@ -4,7 +4,7 @@
 sudo pacman -S --needed --noconfirm yay
 yay -Syu --needed --noconfirm
 
-# base
+# BASE
 yay -S --needed --noconfirm bash-completion
 yay -S --needed --noconfirm vim
 yay -S --needed --noconfirm alacritty
@@ -23,13 +23,24 @@ yay -S --needed --noconfirm mono
 yay -S --needed --noconfirm go
 yay -S --needed --noconfirm npm
 yay -S --needed --noconfirm jdk8-openjdk
+yay -S --needed --noconfirm python2
 
-# work
+# WORK
 yay -S --needed --noconfirm optimus-manager
 yay -S --needed --noconfirm qt
 yay -S --needed --noconfirm qtcreator
+
+# aubo
 yay -S --needed --noconfirm xf86-input-vmmouse
 yay -S --needed --noconfirm xf86-video-vmware
 yay -S --needed --noconfirm open-vm-tools
 yay -S --needed --noconfirm vmware-workstation
+
+# ur
 yay -S --needed --noconfirm maven
+
+# nlock
+yay -S --needed --noconfirm boost
+
+# weldmate
+yay -S --needed --noconfirm eigen
