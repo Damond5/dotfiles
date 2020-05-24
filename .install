@@ -40,6 +40,9 @@ yay -S --needed --noconfirm xf86-input-vmmouse
 yay -S --needed --noconfirm xf86-video-vmware
 yay -S --needed --noconfirm open-vm-tools
 yay -S --needed --noconfirm vmware-workstation
+sudo systemctl enable --now vmware-networks.service
+sudo systemctl enable --now vmware-usbarbitrator.service
+sudo systemctl enable --now vmware-hostd.service
 
 # ur
 yay -S --needed --noconfirm maven
