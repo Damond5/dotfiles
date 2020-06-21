@@ -13,10 +13,11 @@ yay -S --needed --noconfirm redshift
 yay -S --needed --noconfirm timeshift
 yay -S --needed --noconfirm i3-wm
 yay -S --needed --noconfirm perl-anyevent-i3
-# yay -S --needed --noconfirm dmenu-manjaro
+yay -S --needed --noconfirm dmenu-manjaro
 yay -S --needed --noconfirm google-chrome
 yay -S --needed --noconfirm discord
 yay -S --needed --noconfirm mpv
+yay -S --needed --noconfirm mlocate
 
 
 # DEVELOPMENT
