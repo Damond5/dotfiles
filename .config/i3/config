@@ -274,6 +274,7 @@ exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/w
  
 # programs
 exec google-chrome-stable
-exec discord
+# exec discord
+flatpak run com.discordapp.Discord
 exec alacritty
 exec sleep 5 && xmodmap ~/.Xmodmap
