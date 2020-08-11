@@ -5,7 +5,6 @@
 !.config/gtk-3.0
 !.config/alacritty
 !.config/lxqt
-!.config/qBittorrent
 !.bashrc
 !.gitignore
 !.profile
