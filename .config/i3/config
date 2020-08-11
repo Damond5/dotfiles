@@ -126,7 +126,7 @@ bindsym $mod+f fullscreen toggle
 bindsym $sub+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+# bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 bindsym $sub+s layout stacking
@@ -263,6 +263,9 @@ bindsym $mod+Escape workspace prev
 bindsym $sub+Tab workspace next
 bindsym $sub+onehalf workspace prev
 bindsym $sub+Escape workspace prev
+
+# screenshot
+bindsym $mod+s exec lximage-qt -d ~/Pictures/
 
 # disable focus on mouse hover
 focus_follows_mouse no

@@ -50,7 +50,7 @@ set background=dark
 colorscheme solarized
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
-setlocal sw=4 
+setlocal sw=4
 setlocal ts=4
 
 source $VIMRUNTIME/macros/matchit.vim
