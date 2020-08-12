@@ -35,22 +35,5 @@ yay -S --needed --noconfirm jdk8-openjdk
 yay -S --needed --noconfirm python2
 
 
-# GAMING
-yay -S --needed --noconfirm gamemode
-yay -S --needed --noconfirm steam
-
-# wine
-yay -S --needed --noconfirm dxvk-bin
-yay -S --needed --noconfirm lib32-vkd3d
-yay -S --needed --noconfirm vkd3d
-yay -S --needed --noconfirm wine-gecko
-yay -S --needed --noconfirm wine-mono
-yay -S --needed --noconfirm wine-nine
-yay -S --needed --noconfirm wine-staging
-yay -S --needed --noconfirm winetricks
-
-# lutris
-yay -S --needed --noconfirm lutris
-yay -S --needed --noconfirm lutris-battlenet-meta
-yay -S --needed --noconfirm lutris-wine-meta
-yay -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+# TABLET
+yay -S --needed --noconfirm onboard
