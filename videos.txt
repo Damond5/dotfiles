@@ -1,14 +1,15 @@
 0-----------------------------------------------------------------------------------------0
 365.days.movie.netflix
 Almost.Paradise.S01E10.watched
+black.summer.series.netflix
 Blindspot.S04.COMPLETE.720p.AMZN.WEBRip.x264-GalaxyTV[TGx]
 Brave.New.World.2020.S01.watched
 Condor.S01.watched
 Condor.S02E10.watched
-cursed.series.netflix
-daybreak.series.netflix
+cursed.S01E10.watched
+daybreak.S01E10.watched
 DCs.Legends.of.Tomorrow.S05E15.watched
-die.hart.series
+Die.Hart.S01.watched
 find_strikeback_episode
 focus.movie.netflix
 Godzilla (2014)
@@ -16,14 +17,17 @@ Godzilla King Of The Monsters (2019) [BluRay] [720p] [YTS.LT]
 Hanna.S02.watched
 instant.family.movie.netflix
 man.with.a.plan.s01e01.watched
-Marvels.Agents.of.S.H.I.E.L.D.S07E10.watched
+Marvels.Agents.of.S.H.I.E.L.D.S07E12-13.watched
 Motherland.Fort.Salem.S01E07.watched
 Motherland.Fort.Salem.S01E08.720p.WEBRip.x265-MiNX[TGx]
 Motherland.Fort.Salem.S01E09.720p.WEB.x265-MiNX[TGx]
 Motherland.Fort.Salem.S01E10.720p.WEB.x265-MiNX[TGx]
 Mythic.Quest.Ravens.Banquet.S01.COMPLETE.720p.watched
+Raised.by.Wolves.2020.S01E03.watched
+Supergirl.S05E19.watched
 tenet.movie
-The.100.S07E11.watched
+The.100.S07E13.watched
+The.Boys.S02E04.watched
 the.code.series.netflix
 The Outpost (2020) [1080p] [WEBRip] [5.1] [YTS.MX]
 The Outpost (2020) [720p] [WEBRip] [YTS.MX]
