@@ -57,3 +57,11 @@ yay -S --needed --noconfirm boost
 
 # weldmate
 yay -S --needed --noconfirm eigen
+
+# google drive
+yay -S --needed --noconfirm opam
+opam init
+opam update
+opam install depext
+opam depext google-drive-ocamlfuse
+opam install google-drive-ocamlfuse
