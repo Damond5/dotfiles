@@ -12,8 +12,8 @@ yay -S --needed --noconfirm vim
 yay -S --needed --noconfirm alacritty
 yay -S --needed --noconfirm redshift
 yay -S --needed --noconfirm timeshift
-yay -S --needed --noconfirm google-chrome
-# yay -S --needed --noconfirm discord
+yay -S --needed --noconfirm chromium
+yay -S --needed --noconfirm chromium-widevine
 yay -S --needed --noconfirm flatpak
 flatpak install -y discord
 yay -S --needed --noconfirm mpv
