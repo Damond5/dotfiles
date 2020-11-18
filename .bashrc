@@ -139,3 +139,17 @@ ex ()
 }
 
 # xmodmap /home/nikv/.Xmodmap
+
+function fuzzypath() {
+  if [ -z $2 ]
+  then
+    COMPREPLY=( `ls` )
+  else
+    DIRPATH=`echo "$2" | sed 's|[^/]*$||'`
+    BASENAME=`echo "$2" | sed 's|.*/||'`
+    FILTER=`echo "$BASENAME" | sed 's|.|\0.*|g'`
+    COMPREPLY=( `ls -a $DIRPATH | grep -i "$FILTER" | sed "s|^|$DIRPATH|g"` )
+  fi
+}
+
+complete -o nospace -o filenames -F fuzzypath cd ls cat vim
