@@ -15,8 +15,8 @@ yay -S --needed --noconfirm timeshift
 yay -S --needed --noconfirm i3-wm
 yay -S --needed --noconfirm perl-anyevent-i3
 yay -S --needed --noconfirm dmenu-manjaro
-yay -S --needed --noconfirm google-chrome
-# yay -S --needed --noconfirm discord
+yay -S --needed --noconfirm chromium
+yay -S --needed --noconfirm microsoft-edge-dev-bin
 yay -S --needed --noconfirm flatpak
 flatpak install -y discord
 yay -S --needed --noconfirm mpv

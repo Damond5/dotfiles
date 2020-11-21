@@ -8,13 +8,13 @@
        "x": 0,
        "y": 0
     },
-    "name": "New Tab - Google Chrome",
+    "name": "Chromium",
     "percent": 1,
     "swallows": [
        {
-       "class": "^Google\\-chrome$",
-       "instance": "^google\\-chrome$",
-       "title": "^New\\ Tab\\ \\-\\ Google\\ Chrome$",
+       "class": "^Chromium$",
+       "instance": "^chromium$",
+       "title": "^New\\ Tab\\ \\-\\ Chromium$",
        "window_role": "^browser$"
        }
     ],
