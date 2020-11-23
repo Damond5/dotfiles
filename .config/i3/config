@@ -263,7 +263,7 @@ bindsym $sub+Tab workspace next
 bindsym $sub+onehalf workspace prev
 
 # screenshot
-bindsym $mod+s exec lximage-qt -d ~/Pictures/
+bindsym --release $mod+s exec scrot -s ~/Pictures/
 
 # disable focus on mouse hover
 focus_follows_mouse no

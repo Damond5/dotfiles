@@ -89,7 +89,7 @@ set signcolumn=yes
 " Don't pass messages to |ins-completion-menu|.
 " set shortmess+=c
 
-set shell=/bin/bash
+set shell=/bin/fish
 
 
 " SNIPPETS
