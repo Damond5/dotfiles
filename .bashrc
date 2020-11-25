@@ -154,3 +154,7 @@ ex ()
 # }
 # 
 # complete -o nospace -o filenames -F fuzzypath cat vim
+
+
+# WORK ALIASES
+alias pdf='qpdfview'
