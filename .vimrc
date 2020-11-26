@@ -89,8 +89,6 @@ set signcolumn=yes
 " Don't pass messages to |ins-completion-menu|.
 " set shortmess+=c
 
-set shell=/bin/fish
-
 
 " SNIPPETS
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
