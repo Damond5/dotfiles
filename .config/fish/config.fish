@@ -1,3 +1,6 @@
+set fish_greeting
+
+
 # ALIASES
 alias cp="cp -i"                          # confirm before overwriting something
 alias mv="mv -i"                          # confirm before overwriting something
