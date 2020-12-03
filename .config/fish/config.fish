@@ -10,7 +10,10 @@ alias du="du -h"                          # human-readable sizes
 alias date="date -R"
 alias cal="cal -y"
 
-alias pdf="qpdfview"
+# alias for qpdfview that also disowns the process
+function pdf
+  command qpdfview $argv &; disown
+end
 
 
 # opam configuration
