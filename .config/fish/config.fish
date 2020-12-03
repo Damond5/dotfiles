@@ -7,7 +7,7 @@ alias mv="mv -i"                          # confirm before overwriting something
 alias df="df -h"                          # human-readable sizes
 alias du="du -h"                          # human-readable sizes
 
-alias date="date -R"
+alias date="date +'%T'"
 alias cal="cal -y"
 
 # alias for qpdfview that also disowns the process
