@@ -1,6 +1,9 @@
 set fish_greeting
 
 
+fish_vi_key_bindings
+
+
 # ALIASES
 alias cp="cp -i"                          # confirm before overwriting something
 alias mv="mv -i"                          # confirm before overwriting something
