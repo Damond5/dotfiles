@@ -78,6 +78,11 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+autocmd FileType html setlocal noexpandtab
+autocmd FileType urscript setlocal noexpandtab
+autocmd FileType java setlocal noexpandtab
+autocmd FileType xml setlocal noexpandtab
+
 set encoding=utf-8
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
