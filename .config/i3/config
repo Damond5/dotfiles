@@ -286,7 +286,7 @@ exec --no-startup-id "i3-msg 'workspace 2; append_layout /home/nikv/.config/i3/w
 exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/workspace3.json'"
  
 # programs
-exec chromium
+exec firefox
 exec flatpak run com.discordapp.Discord
 exec qbittorrent
 exec alacritty --class Videos --working-directory /home/nikv/Videos/
