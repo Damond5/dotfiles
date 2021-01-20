@@ -21,7 +21,7 @@ flatpak install -y discord
 yay -S --needed --noconfirm mpv
 yay -S --needed --noconfirm mlocate
 yay -S --needed --noconfirm neofetch
-yay -S --needed --noconfirm bashtop
+yay -S --needed --noconfirm bpytop
 yay -S --needed --noconfirm fish
 yay -S --needed --noconfirm scrot
 
