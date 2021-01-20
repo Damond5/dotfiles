@@ -14,3 +14,12 @@
 !.series
 !installElvUI.sh
 !.install
+!gdMount.sh
+!ugdMount.sh
+!pdftohtml.sh
+!mountUSB.sh
+!umountUSB.sh
+!fatMount.sh
+!uFatMount.sh
+!generateMavenProject.sh
+!ping.py
