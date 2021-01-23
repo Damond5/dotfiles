@@ -20,10 +20,6 @@ end
 source /home/nikv/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 
 
-# fuck command to fix typo's and more
-thefuck --alias | source
-
-
 # run last command as sudo
 function sudo
   if test "$argv" = !!
