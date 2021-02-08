@@ -21,8 +21,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'yggdroot/indentline'
 Plug 'myusuf3/numbers.vim'
 
-Plug 'valloric/youcompleteme'
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+" Plug 'valloric/youcompleteme'
+" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
@@ -96,6 +97,8 @@ set signcolumn=yes
 
 set shell=/bin/fish
 
+let mapleader = ","
+
 
 " SNIPPETS
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -110,12 +113,30 @@ augroup filetypedetect
     au BufRead,BufNewFile *.aubo setfiletype lua
     " au BufRead,BufNewFile *.aubo let g:ale_python_autopep8_options='--ignore=E24,W503,E101,E11,E121'
     " associate *.foo with php filetype
+    au BufRead,BufNewFile *.cocrc setfiletype vim
 augroup END
 
-" YOUCOMEPLETEME
-let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_always_populate_location_list = 1
+" " YOUCOMEPLETEME
+" let g:ycm_autoclose_preview_window_after_completion = 1
+" " let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_always_populate_location_list = 1
+" let g:ycm_filetype_blacklist = {
+"       \ 'java': 1,
+"       \ 'tagbar': 1,
+"       \ 'notes': 1,
+"       \ 'markdown': 1,
+"       \ 'netrw': 1,
+"       \ 'unite': 1,
+"       \ 'text': 1,
+"       \ 'vimwiki': 1,
+"       \ 'pandoc': 1,
+"       \ 'infolog': 1,
+"       \ 'leaderf': 1,
+"       \ 'mail': 1
+"       \}
+
+" COC
+source /home/nikv/.cocrc
 
 " NERDTREE
 autocmd StdinReadPre * let s:std_in=1
