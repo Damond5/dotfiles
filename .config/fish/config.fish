@@ -20,11 +20,7 @@ end
 
 
 # opam configuration
-source /home/nikv/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
-
-
-# fuck command to fix typo's and more
-thefuck --alias | source
+source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
 
 
 # run last command as sudo
