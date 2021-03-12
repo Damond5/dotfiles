@@ -114,6 +114,8 @@ augroup filetypedetect
     " au BufRead,BufNewFile *.aubo let g:ale_python_autopep8_options='--ignore=E24,W503,E101,E11,E121'
     " associate *.foo with php filetype
     au BufRead,BufNewFile *.cocrc setfiletype vim
+    au BufRead,BufNewFile *.pro setfiletype make
+    au BufRead,BufNewFile *.pri setfiletype make
 augroup END
 
 " " YOUCOMEPLETEME
