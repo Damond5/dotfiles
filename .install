@@ -23,6 +23,8 @@ yay -S --needed --noconfirm neofetch
 yay -S --needed --noconfirm bpytop
 yay -S --needed --noconfirm fish
 yay -S --needed --noconfirm scrot
+yay -S --needed --noconfirm pv
+yay -S --needed --noconfirm pigz
 
 
 # DEVELOPMENT
