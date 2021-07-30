@@ -82,7 +82,7 @@ set expandtab
 autocmd FileType html setlocal noexpandtab
 autocmd FileType urscript setlocal noexpandtab
 autocmd FileType java setlocal noexpandtab
-autocmd FileType xml setlocal noexpandtab
+" autocmd FileType xml setlocal noexpandtab
 
 set encoding=utf-8
 
@@ -114,6 +114,8 @@ augroup filetypedetect
     au BufRead,BufNewFile *.cocrc setfiletype vim
     au BufRead,BufNewFile *.pro setfiletype make
     au BufRead,BufNewFile *.pri setfiletype make
+    au BufRead,BufNewFile *.urp setfiletype xml
+    au BufRead,BufNewFile *.script setfiletype urscript
 augroup END
 
 " " YOUCOMEPLETEME

@@ -11,7 +11,7 @@ def ping(ip):
 
 
 for i in range(256):
-    thread = threading.Thread(target=ping, args=("192.168.0." + str(i),))
+    thread = threading.Thread(target=ping, args=("192.168.1." + str(i),))
     thread.start()
 
 #     if i == 101:
