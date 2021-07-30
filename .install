@@ -1,70 +1,24 @@
 #!/bin/bash
 
 # maintenance
-sudo pacman -Syu --needed --noconfirm
-sudo pacman -S --needed --noconfirm yay
-yay -Syu --needed --noconfirm
+apt update
+apt upgrade -y
 
 
 # BASE
-yay -S --needed --noconfirm vim
-yay -S --needed --noconfirm alacritty
-yay -S --needed --noconfirm redshift
-yay -S --needed --noconfirm timeshift
-yay -S --needed --noconfirm i3-wm
-yay -S --needed --noconfirm perl-anyevent-i3
-yay -S --needed --noconfirm dmenu-manjaro
-yay -S --needed --noconfirm firefox
-yay -S --needed --noconfirm flatpak
-flatpak install -y discord
-yay -S --needed --noconfirm mpv
-yay -S --needed --noconfirm mlocate
-yay -S --needed --noconfirm neofetch
-yay -S --needed --noconfirm bpytop
-yay -S --needed --noconfirm fish
-yay -S --needed --noconfirm scrot
-yay -S --needed --noconfirm pv
-yay -S --needed --noconfirm pigz
+apt remove vim-tiny
+apt install vim-nox -y
+apt install pv -y
+apt install pigz -y
 
 
 # DEVELOPMENT
-yay -S --needed --noconfirm qt
-yay -S --needed --noconfirm qtcreator
+apt install cmake3 -y
+apt install qt5-default -y
 
-# youcompleteme
-yay -S --needed --noconfirm cmake
-yay -S --needed --noconfirm mono
-yay -S --needed --noconfirm go
-yay -S --needed --noconfirm npm
-yay -S --needed --noconfirm jdk8-openjdk
-yay -S --needed --noconfirm python2
-
-
-# WORK
-yay -S --needed --noconfirm optimus-manager
-
-# aubo
-yay -S --needed --noconfirm xf86-input-vmmouse
-yay -S --needed --noconfirm xf86-video-vmware
-yay -S --needed --noconfirm open-vm-tools
-yay -S --needed --noconfirm vmware-workstation
-sudo systemctl enable --now vmware-networks.service
-sudo systemctl enable --now vmware-usbarbitrator.service
-sudo systemctl enable --now vmware-hostd.service
-
-# ur
-yay -S --needed --noconfirm maven
 
 # nlock
-yay -S --needed --noconfirm boost
-
-# weldmate
-yay -S --needed --noconfirm eigen
-
-# google drive
-yay -S --needed --noconfirm opam
-opam init
-opam update
-opam install depext
-opam depext google-drive-ocamlfuse
-opam install google-drive-ocamlfuse
+apt install libboost-date-time1.55-dev -y
+apt install libboost-iostreams1.55-dev -y
+apt install libboost-filesystem1.55-dev -y
+apt install libboost-system1.55-dev -y
