@@ -23,9 +23,10 @@ Plug 'myusuf3/numbers.vim'
 
 " Plug 'valloric/youcompleteme'
 " Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" issues on ubuntu 14
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'sirver/ultisnips'
+" Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
 
 Plug 'raimondi/delimitmate'
@@ -37,8 +38,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/gv.vim'
 
 " On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" issues on ubuntu 14
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 
 
 " Initialize plugin system
@@ -73,7 +75,8 @@ highlight clear LineNr
 highlight clear SignColumn
 
 set cursorline
-set breakindent
+" issues on ubuntu 14
+" set breakindent
 
 set tabstop=2
 set shiftwidth=2
@@ -89,10 +92,11 @@ set encoding=utf-8
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
 set updatetime=300
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-set signcolumn=yes
-" Don't pass messages to |ins-completion-menu|.
+" issues on ubuntu 14
+" " Always show the signcolumn, otherwise it would shift the text each time
+" " diagnostics appear/become resolved.
+" set signcolumn=yes
+" " Don't pass messages to |ins-completion-menu|.
 " set shortmess+=c
 
 let mapleader = ","
@@ -137,12 +141,15 @@ augroup END
 "       \ 'mail': 1
 "       \}
 
-" COC
-source /home/nikv/.cocrc
+" issues on ubuntu 14
+" " COC
+" source /root/.cocrc
 
 " NERDTREE
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") && v:this_session == "" | exe 'NERDTree' | exe 'term' | wincmd x | endif
+" issues on ubuntu 14
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") && v:this_session == "" | exe 'NERDTree' | exe 'term' | wincmd x | endif
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") && v:this_session == "" | exe 'NERDTree' | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
 " MERGINAL
