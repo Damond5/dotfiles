@@ -10,6 +10,7 @@ apt remove vim-tiny
 apt install vim-nox -y
 apt install pv -y
 apt install pigz -y
+apt install bsdtar -y
 
 
 # DEVELOPMENT
