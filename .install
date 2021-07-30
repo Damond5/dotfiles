@@ -15,6 +15,7 @@ apt install pigz -y
 # DEVELOPMENT
 apt install cmake3 -y
 apt install qt5-default -y
+ln -s /opt/Qt5.5.1/5.5/gcc/bin/qmake /bin/qm
 
 
 # nlock
