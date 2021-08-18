@@ -19,8 +19,8 @@ function pdf
 end
 
 
-# opam configuration
-source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
+# # opam configuration
+# source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
 
 
 # run last command as sudo
