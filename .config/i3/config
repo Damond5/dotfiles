@@ -274,6 +274,9 @@ bindsym --release $mod+w exec scrot -u ~/Pictures/
 # disable focus on mouse hover
 focus_follows_mouse no
 
+# start ursim in floating window
+for_window [instance="sun-awt-X11-XFramePeer" class="java-lang-Thread"] floating enable
+
 exec redshift -O 3000
 
 # layouts
