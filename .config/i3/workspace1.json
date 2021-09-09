@@ -15,7 +15,6 @@
     "swallows": [
        {
        "class": "^firefox$",
-       "window_role": "^browser$"
        }
     ],
     "type": "con"
