@@ -13,7 +13,6 @@ yay -S --needed --noconfirm redshift
 yay -S --needed --noconfirm timeshift
 yay -S --needed --noconfirm i3-wm
 yay -S --needed --noconfirm perl-anyevent-i3
-yay -S --needed --noconfirm rofi
 yay -S --needed --noconfirm firefox
 yay -S --needed --noconfirm microsoft-edge-dev-bin
 yay -S --needed --noconfirm flatpak
@@ -29,6 +28,8 @@ yay -S --needed --noconfirm ncdu
 yay -S --needed --noconfirm pv
 yay -S --needed --noconfirm pigz
 yay -S --needed --noconfirm gnome-calculator
+yay -S --needed --noconfirm rofi
+yay -S --needed --noconfirm networkmanager-dmenu
 
 
 # DEVELOPMENT

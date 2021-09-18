@@ -73,10 +73,6 @@ bindsym $sub+x kill
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 # bindsym $sub+d exec --no-startup-id i3-dmenu-desktop
 
-# rofi
-bindsym $mod+d exec --no-startup-id ~/.config/rofi/bin/launcher_misc
-bindsym $sub+d exec --no-startup-id ~/.config/rofi/bin/launcher_misc
-
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -278,6 +274,15 @@ bindsym $sub+Escape workspace prev
 # screenshot
 bindsym --release $mod+s exec scrot -s ~/Pictures/
 bindsym --release $mod+w exec scrot -u ~/Pictures/
+
+## ROFI
+# rofi apps
+bindsym $mod+d exec --no-startup-id ~/.config/rofi/bin/launcher_misc
+bindsym $sub+d exec --no-startup-id ~/.config/rofi/bin/launcher_misc
+
+# rofi network
+bindsym $mod+n exec --no-startup-id networkmanager_dmenu
+bindsym $sub+n exec --no-startup-id networkmanager_dmenu
 
 # disable focus on mouse hover
 focus_follows_mouse no

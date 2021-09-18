@@ -3,4 +3,5 @@
 configuration {
   show-icons:         true;
   icon-theme:         "Papirus";
+  theme:              "/home/nikv/.config/rofi/launchers/misc/kde_krunner";
 }
