@@ -281,6 +281,9 @@ focus_follows_mouse no
 # start ursim in floating window
 for_window [instance="sun-awt-X11-XFramePeer" class="java-lang-Thread"] floating enable
 
+# floating calculator
+for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
+
 exec redshift -O 3000
 
 # layouts
