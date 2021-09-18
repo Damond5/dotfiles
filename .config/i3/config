@@ -282,6 +282,9 @@ bindsym --release $mod+w exec scrot -u ~/Pictures/
 # disable focus on mouse hover
 focus_follows_mouse no
 
+# floating calculator
+for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
+
 exec redshift -O 2500
 
 # layouts

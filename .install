@@ -28,6 +28,7 @@ yay -S --needed --noconfirm viewnior
 yay -S --needed --noconfirm ncdu
 yay -S --needed --noconfirm pv
 yay -S --needed --noconfirm pigz
+yay -S --needed --noconfirm gnome-calculator
 
 
 # DEVELOPMENT
