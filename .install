@@ -34,14 +34,6 @@ yay -S --needed --noconfirm pigz
 yay -S --needed --noconfirm qt
 yay -S --needed --noconfirm qtcreator
 
-# youcompleteme
-yay -S --needed --noconfirm cmake
-yay -S --needed --noconfirm mono
-yay -S --needed --noconfirm go
-yay -S --needed --noconfirm npm
-yay -S --needed --noconfirm jdk8-openjdk
-yay -S --needed --noconfirm python2
-
 
 # GAMING
 yay -S --needed --noconfirm gamemode
