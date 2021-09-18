@@ -284,6 +284,10 @@ bindsym $sub+d exec --no-startup-id ~/.config/rofi/bin/launcher_misc
 bindsym $mod+n exec --no-startup-id networkmanager_dmenu
 bindsym $sub+n exec --no-startup-id networkmanager_dmenu
 
+# rofi bluetooth
+bindsym $mod+b exec --no-startup-id rofi-bluetooth
+bindsym $sub+b exec --no-startup-id rofi-bluetooth
+
 # disable focus on mouse hover
 focus_follows_mouse no
 
