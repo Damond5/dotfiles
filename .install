@@ -2,58 +2,64 @@
 
 # maintenance
 sudo pacman -Syu --needed --noconfirm
-sudo pacman -S --needed --noconfirm yay
-yay -Syu --needed --noconfirm
+
+# aur helper
+sudo pacman -S --needed --noconfirm base-devel
+sudo pacman -S --needed --noconfirm git
+git clone https://aur.archlinux.org/paru-bin.git
+cd paru
+makepkg -si
+cd
 
 
 # BASE
-yay -S --needed --noconfirm vim
-yay -S --needed --noconfirm alacritty
-yay -S --needed --noconfirm redshift
-yay -S --needed --noconfirm timeshift
-yay -S --needed --noconfirm i3-wm
-yay -S --needed --noconfirm perl-anyevent-i3
-yay -S --needed --noconfirm firefox
-yay -S --needed --noconfirm microsoft-edge-dev-bin
-yay -S --needed --noconfirm flatpak
+paru -S --needed --noconfirm vim
+paru -S --needed --noconfirm alacritty
+paru -S --needed --noconfirm redshift
+paru -S --needed --noconfirm timeshift
+paru -S --needed --noconfirm i3-wm
+paru -S --needed --noconfirm perl-anyevent-i3
+paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm microsoft-edge-dev-bin
+paru -S --needed --noconfirm flatpak
 flatpak install -y discord
-yay -S --needed --noconfirm mpv
-yay -S --needed --noconfirm mlocate
-yay -S --needed --noconfirm neofetch
-yay -S --needed --noconfirm bpytop
-yay -S --needed --noconfirm fish
-yay -S --needed --noconfirm scrot
-yay -S --needed --noconfirm viewnior
-yay -S --needed --noconfirm ncdu
-yay -S --needed --noconfirm pv
-yay -S --needed --noconfirm pigz
-yay -S --needed --noconfirm gnome-calculator
-yay -S --needed --noconfirm rofi
-yay -S --needed --noconfirm networkmanager-dmenu
-yay -S --needed --noconfirm rofi-bluetooth-git
+paru -S --needed --noconfirm mpv
+paru -S --needed --noconfirm mlocate
+paru -S --needed --noconfirm neofetch
+paru -S --needed --noconfirm btop
+paru -S --needed --noconfirm fish
+paru -S --needed --noconfirm scrot
+paru -S --needed --noconfirm viewnior
+paru -S --needed --noconfirm ncdu
+paru -S --needed --noconfirm pv
+paru -S --needed --noconfirm pigz
+paru -S --needed --noconfirm gnome-calculator
+paru -S --needed --noconfirm rofi
+paru -S --needed --noconfirm networkmanager-dmenu
+paru -S --needed --noconfirm rofi-bluetooth-git
+paru -S --needed --noconfirm nautilus
 
 
 # DEVELOPMENT
-yay -S --needed --noconfirm qt
-yay -S --needed --noconfirm qtcreator
+paru -S --needed --noconfirm rustup
 
 
 # GAMING
-yay -S --needed --noconfirm gamemode
-yay -S --needed --noconfirm steam
+paru -S --needed --noconfirm gamemode
+paru -S --needed --noconfirm steam
 
 # wine
-yay -S --needed --noconfirm dxvk-bin
-yay -S --needed --noconfirm lib32-vkd3d
-yay -S --needed --noconfirm vkd3d
-yay -S --needed --noconfirm wine-gecko
-yay -S --needed --noconfirm wine-mono
-yay -S --needed --noconfirm wine-nine
-yay -S --needed --noconfirm wine-staging
-yay -S --needed --noconfirm winetricks
+paru -S --needed --noconfirm dxvk-bin
+paru -S --needed --noconfirm lib32-vkd3d
+paru -S --needed --noconfirm vkd3d
+paru -S --needed --noconfirm wine-staging
+paru -S --needed --noconfirm wine-gecko
+paru -S --needed --noconfirm wine-mono
+paru -S --needed --noconfirm wine-nine
+paru -S --needed --noconfirm winetricks
 
 # lutris
-yay -S --needed --noconfirm lutris
-yay -S --needed --noconfirm lutris-battlenet-meta
-yay -S --needed --noconfirm lutris-wine-meta
-yay -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+paru -S --needed --noconfirm lutris
+paru -S --needed --noconfirm lutris-battlenet-meta
+paru -S --needed --noconfirm lutris-wine-meta
+paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
