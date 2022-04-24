@@ -55,6 +55,7 @@ paru -S --needed --noconfirm i3-wm
 paru -S --needed --noconfirm perl-anyevent-i3
 paru -S --needed --noconfirm autorandr
 paru -S --needed --noconfirm redshift
+paru -S --needed --noconfirm picom
 paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
@@ -100,6 +101,8 @@ paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
 paru -S --needed --noconfirm lxappearance-gtk3
 paru -S --needed --noconfirm kvantum
+paru -S --needed --noconfirm qt5ct
+paru -S --needed --noconfirm qt6ct
 
 
 # DEVELOPMENT
