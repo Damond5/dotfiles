@@ -90,11 +90,12 @@ sudo sd "#Color" "Color" /etc/pacman.conf
 paru -S --needed --noconfirm helix
 
 ## theme
-paru -S --needed --noconfirm papirus-icon-theme
 paru -S --needed --noconfirm gnome-themes-extra
 paru -S --needed --noconfirm adwaita-qt
 paru -S --needed --noconfirm adwaita-qt6
 sudo sd "Exec=qbittorrent %U" "Exec=qbittorrent %U -style adwaita-dark" org.qbittorrent.qBittorrent.desktop
+paru -S --needed --noconfirm papirus-icon-theme
+paru -S --needed --noconfirm vimix-cursors
 paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
 paru -S --needed --noconfirm lxappearance-gtk3
