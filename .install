@@ -78,6 +78,7 @@ paru -S --needed --noconfirm rustup
 # GAMING
 paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm steam
+paru -S --needed --noconfirm linux-steam-integration
 
 ## wine
 paru -S --needed --noconfirm dxvk-bin
