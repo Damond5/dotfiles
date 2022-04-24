@@ -94,13 +94,12 @@ paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm gnome-themes-extra
 paru -S --needed --noconfirm adwaita-qt
 paru -S --needed --noconfirm adwaita-qt6
-sudo sd "Exec=qbittorrent %U" "Exec=qbittorrent %U -style adwaita-dark" org.qbittorrent.qBittorrent.desktop
 paru -S --needed --noconfirm papirus-icon-theme
 paru -S --needed --noconfirm vimix-cursors
 paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
 paru -S --needed --noconfirm lxappearance-gtk3
-paru -S --needed --noconfirm kvantum
+# paru -S --needed --noconfirm kvantum
 paru -S --needed --noconfirm qt5ct
 paru -S --needed --noconfirm qt6ct
 
