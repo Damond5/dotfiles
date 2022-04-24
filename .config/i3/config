@@ -127,10 +127,10 @@ bindsym $sub+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 # bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+# bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
-bindsym $sub+s layout stacking
-bindsym $sub+w layout tabbed
+# bindsym $sub+s layout stacking
+# bindsym $sub+w layout tabbed
 bindsym $sub+e layout toggle split
 
 # toggle tiling / floating
@@ -272,8 +272,8 @@ bindsym $sub+onehalf workspace prev
 bindsym $sub+Escape workspace prev
 
 # screenshot
-bindsym --release $mod+s exec scrot -s ~/Pictures/
-bindsym --release $mod+w exec scrot -u ~/Pictures/
+bindsym --release $mod+s exec scrot -s ~/Pictures/screenshot.png -e "nautilus ~/Pictures"
+bindsym --release $mod+w exec scrot -u ~/Pictures/screenshot.png -e "nautilus ~/Pictures"
 
 ## ROFI
 # rofi apps
@@ -299,12 +299,12 @@ exec redshift -O 2500
 # layouts
 exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
 exec --no-startup-id "i3-msg 'workspace 2; append_layout /home/nikv/.config/i3/workspace2.json'"
-exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/workspace3.json'"
+# exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/workspace3.json'"
  
 # programs
 exec firefox
 exec flatpak run com.discordapp.Discord
-exec qbittorrent
-exec alacritty --class Videos --working-directory /home/nikv/Videos/
+# exec qbittorrent -style adwaita-dark
+# exec alacritty --class Videos --working-directory /home/nikv/Videos/
 
 exec sleep 5 && xmodmap ~/.Xmodmap

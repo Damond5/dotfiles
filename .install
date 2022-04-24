@@ -1,46 +1,77 @@
 #!/bin/bash
 
-# maintenance
+# MAINTENANCE
 sudo pacman -Syu --needed --noconfirm
 
-# aur helper
-sudo pacman -S --needed --noconfirm base-devel
+# AUR
 sudo pacman -S --needed --noconfirm git
 git clone https://aur.archlinux.org/paru-bin.git
-cd paru
-makepkg -si
+cd paru-bin
+makepkg -si --needed --noconfirm
 cd
 
 
 # BASE
 paru -S --needed --noconfirm vim
+paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm alacritty
-paru -S --needed --noconfirm redshift
 paru -S --needed --noconfirm timeshift
-paru -S --needed --noconfirm i3-wm
-paru -S --needed --noconfirm perl-anyevent-i3
-paru -S --needed --noconfirm firefox
-paru -S --needed --noconfirm microsoft-edge-dev-bin
-paru -S --needed --noconfirm flatpak
-flatpak install -y discord
-paru -S --needed --noconfirm mpv
+paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
-paru -S --needed --noconfirm btop
 paru -S --needed --noconfirm fish
+chsh -s /bin/fish
+paru -S --needed --noconfirm autorandr
+
+## desktop
+paru -S --needed --noconfirm i3-wm
+paru -S --needed --noconfirm perl-anyevent-i3
+paru -S --needed --noconfirm redshift
+paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
 paru -S --needed --noconfirm viewnior
-paru -S --needed --noconfirm ncdu
+paru -S --needed --noconfirm qbittorrent
+paru -S --needed --noconfirm gnome-calculator
+paru -S --needed --noconfirm gnome-screenshot
+paru -S --needed --noconfirm nautilus
+paru -S --needed --noconfirm discord
+# paru -S --needed --noconfirm flatpak
+# flatpak install -y discord
+
+## scripts
 paru -S --needed --noconfirm pv
 paru -S --needed --noconfirm pigz
-paru -S --needed --noconfirm gnome-calculator
+
+## launcher
 paru -S --needed --noconfirm rofi
 paru -S --needed --noconfirm networkmanager-dmenu
 paru -S --needed --noconfirm rofi-bluetooth-git
-paru -S --needed --noconfirm nautilus
+
+## modern utils
+paru -S --needed --noconfirm btop
+paru -S --needed --noconfirm gdu
+paru -S --needed --noconfirm bat
+paru -S --needed --noconfirm duf
+paru -S --needed --noconfirm tealdeer
+paru -S --needed --noconfirm sd
+sudo sd "#Color" "Color" /etc/pacman.conf
+paru -S --needed --noconfirm helix
+
+## theme
+paru -S --needed --noconfirm papirus-icon-theme
+paru -S --needed --noconfirm gnome-themes-extra
+paru -S --needed --noconfirm adwaita-qt
+paru -S --needed --noconfirm adwaita-qt6
+sudo sd "Exec=qbittorrent %U" "Exec=qbittorrent %U -style adwaita-dark" org.qbittorrent.qBittorrent.desktop
+paru -S --needed --noconfirm ttf-roboto
+paru -S --needed --noconfirm ttf-roboto-mono
+paru -S --needed --noconfirm lxappearance-gtk3
+paru -S --needed --noconfirm kvantum
 
 
 # DEVELOPMENT
+paru -S --needed --noconfirm base-devel
 paru -S --needed --noconfirm rustup
 
 
@@ -48,7 +79,7 @@ paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm steam
 
-# wine
+## wine
 paru -S --needed --noconfirm dxvk-bin
 paru -S --needed --noconfirm lib32-vkd3d
 paru -S --needed --noconfirm vkd3d
@@ -58,7 +89,7 @@ paru -S --needed --noconfirm wine-mono
 paru -S --needed --noconfirm wine-nine
 paru -S --needed --noconfirm winetricks
 
-# lutris
+## lutris
 paru -S --needed --noconfirm lutris
 paru -S --needed --noconfirm lutris-battlenet-meta
 paru -S --needed --noconfirm lutris-wine-meta
