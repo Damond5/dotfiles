@@ -64,6 +64,7 @@ paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm nautilus
+paru -S --needed --noconfirm evince
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
 # paru -S --needed --noconfirm flatpak

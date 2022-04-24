@@ -13,9 +13,9 @@ alias du="du -h"                          # human-readable sizes
 alias date="date +'%T'"
 alias cal="cal -y"
 
-# alias for qpdfview that also disowns the process
+# alias for evince that also disowns the process
 function pdf
-  command qpdfview $argv &; disown
+  command evince $argv &; disown
 end
 
 
