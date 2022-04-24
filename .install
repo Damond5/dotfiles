@@ -1,7 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# FUNCTIONS
+function install_appimage {
+  # install_appimage(user, repo, package)
+  user=$1
+  repo=$2
+  package=$3
+
+  local_dir=~/Applications/
+
+  if [ -e $local_dir$package*.AppImage ]; then
+    return
+  fi
+
+  api_url=https://api.github.com/repos/$user/$repo/releases/latest
+
+  tag_name=$(curl --silent $api_url | jq -r ".tag_name")
+  download_url=https://github.com/$user/$repo/releases/download/$tag_name/
+  
+  name=$(curl --silent $api_url | jq -r ".name")
+  file_name=$package-$name.AppImage
+  
+  echo "Downloading $download_url$file_name"
+  curl -fLo $local_dir$file_name $download_url$file_name --create-dirs
+  chmod +x $local_dir$file_name
+  exec $local_dir$file_name
+}
+
 
 # MAINTENANCE
 sudo pacman -Syu --needed --noconfirm
+
 
 # AUR
 sudo pacman -S --needed --noconfirm git
@@ -80,6 +109,8 @@ paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm steam
 paru -S --needed --noconfirm linux-steam-integration
+install_appimage WowUp WowUp WowUp
+install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
 
 ## wine
 paru -S --needed --noconfirm dxvk-bin
