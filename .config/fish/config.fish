@@ -13,9 +13,14 @@ alias du="du -h"                          # human-readable sizes
 alias date="date +'%T'"
 alias cal="cal -y"
 
-# alias for evince that also disowns the process
+# alias to open pdf that also disowns the process
 function pdf
   command evince $argv &; disown
+end
+
+# alias to open image that also disowns the process
+function img
+  command eog $argv &; disown
 end
 
 

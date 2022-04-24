@@ -58,12 +58,12 @@ paru -S --needed --noconfirm redshift
 paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
-paru -S --needed --noconfirm viewnior
-paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm eog
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
+paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
