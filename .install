@@ -41,30 +41,30 @@ cd
 
 
 # BASE
+paru -S --needed --noconfirm fish
+chsh -s /bin/fish
 paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
-paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm timeshift
 paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
-paru -S --needed --noconfirm fish
-chsh -s /bin/fish
-paru -S --needed --noconfirm autorandr
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
 paru -S --needed --noconfirm perl-anyevent-i3
+paru -S --needed --noconfirm autorandr
 paru -S --needed --noconfirm redshift
-paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
 paru -S --needed --noconfirm viewnior
-paru -S --needed --noconfirm qbittorrent
+paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
+paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
 # paru -S --needed --noconfirm flatpak
