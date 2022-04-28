@@ -42,7 +42,7 @@ cd
 
 # BASE
 paru -S --needed --noconfirm fish
-chsh -s /bin/fish
+sudo chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm timeshift
