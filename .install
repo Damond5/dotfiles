@@ -90,6 +90,7 @@ paru -S --needed --noconfirm duf
 paru -S --needed --noconfirm tealdeer
 paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
+sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 paru -S --needed --noconfirm helix
 
 ## theme
