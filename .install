@@ -53,6 +53,7 @@ paru -S --needed --noconfirm neofetch
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
+paru -S --needed --noconfirm autotiling
 paru -S --needed --noconfirm perl-anyevent-i3
 paru -S --needed --noconfirm autorandr
 paru -S --needed --noconfirm redshift
