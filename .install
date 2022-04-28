@@ -47,6 +47,7 @@ paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm timeshift
 paru -S --needed --noconfirm timeshift-autosnap
+paru -S --needed --noconfirm grub-btrfs
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 
