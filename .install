@@ -113,7 +113,7 @@ paru -S --needed --noconfirm rustup
 
 # GAMING
 paru -S --needed --noconfirm gamemode
-paru -S --needed --noconfirm steam
+paru -S --needed --noconfirm steam-native-runtime
 paru -S --needed --noconfirm linux-steam-integration
 install_appimage WowUp WowUp WowUp
 install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
