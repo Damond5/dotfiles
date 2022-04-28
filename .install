@@ -13,6 +13,8 @@ function install_appimage {
     return
   fi
 
+  paru -S --needed --noconfirm jq
+
   api_url=https://api.github.com/repos/$user/$repo/releases/latest
 
   tag_name=$(curl --silent $api_url | jq -r ".tag_name")
@@ -23,8 +25,6 @@ function install_appimage {
   
   echo "Downloading $download_url$file_name"
   curl -fLo $local_dir$file_name $download_url$file_name --create-dirs
-  chmod +x $local_dir$file_name
-  exec $local_dir$file_name
 }
 
 
