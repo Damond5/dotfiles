@@ -40,6 +40,8 @@ Plug 'junegunn/gv.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+Plug 'preservim/tagbar'
+
 
 " Initialize plugin system
 call plug#end()

@@ -44,7 +44,6 @@ cd
 paru -S --needed --noconfirm fish
 sudo chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
-paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm timeshift
 paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm grub-btrfs
@@ -113,6 +112,7 @@ paru -S --needed --noconfirm qt6ct
 # DEVELOPMENT
 paru -S --needed --noconfirm base-devel
 paru -S --needed --noconfirm rustup
+paru -S --needed --noconfirm ctags
 
 
 # GAMING
