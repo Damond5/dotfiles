@@ -6,6 +6,8 @@
 !.config/alacritty
 !.config/lxqt
 !.config/fish
+!.config/rofi
+!.config/paru
 !.bashrc
 !.gitignore
 !.profile

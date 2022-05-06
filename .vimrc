@@ -75,13 +75,16 @@ highlight clear SignColumn
 set cursorline
 set breakindent
 
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set expandtab
+
+autocmd FileType lua setlocal tabstop=2
+autocmd FileType lua setlocal shiftwidth=2
 
 autocmd FileType html setlocal noexpandtab
 autocmd FileType urscript setlocal noexpandtab
-autocmd FileType java setlocal noexpandtab
+" autocmd FileType java setlocal noexpandtab
 " autocmd FileType xml setlocal noexpandtab
 autocmd FileType rust setlocal tabstop=2 shiftwidth=2 expandtab
 

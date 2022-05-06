@@ -264,8 +264,10 @@ hide_edge_borders both
 # alt tab
 bindsym $mod+Tab workspace next
 bindsym $mod+onehalf workspace prev
+bindsym $mod+Escape workspace prev
 bindsym $sub+Tab workspace next
 bindsym $sub+onehalf workspace prev
+bindsym $sub+Escape workspace prev
 
 # screenshot
 bindsym --release $mod+s exec scrot -sf ~/Pictures/
