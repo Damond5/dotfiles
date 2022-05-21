@@ -49,6 +49,7 @@ paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm grub-btrfs
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
+paru -S --needed --noconfirm ventoy
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
@@ -65,6 +66,8 @@ paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
+paru -S --needed --noconfirm popsicle
+paru -S --needed --noconfirm pizzara-bin
 paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
