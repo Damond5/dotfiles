@@ -115,6 +115,7 @@ paru -S --needed --noconfirm qt6ct
 # DEVELOPMENT
 paru -S --needed --noconfirm base-devel
 paru -S --needed --noconfirm rustup
+paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
 
 
