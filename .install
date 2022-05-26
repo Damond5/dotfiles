@@ -123,8 +123,15 @@ paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm steam-native-runtime
 paru -S --needed --noconfirm linux-steam-integration
+
+# appimages
 install_appimage WowUp WowUp WowUp
 install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
+curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
+cd ~/Applications
+unzip curseforge-latest-linux.zip
+rm curseforge-latest-linux.zip
+cd
 
 ## wine
 paru -S --needed --noconfirm dxvk-bin
