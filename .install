@@ -119,6 +119,15 @@ paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
 
 
+# MEDIA
+paru -S --needed --noconfirm nfs-utils
+paru -S --needed --noconfirm mariadb
+paru -S --needed --noconfirm kodi
+sudo mkdir /srv/nfs/videos
+sudo echo \n >> /etc/fstab
+sudo echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab
+
+
 # GAMING
 paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm steam-native-runtime
