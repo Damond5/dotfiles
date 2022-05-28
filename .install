@@ -122,6 +122,10 @@ paru -S --needed --noconfirm ctags
 # MEDIA
 paru -S --needed --noconfirm nfs-utils
 paru -S --needed --noconfirm mariadb
+sudo systemctl enable mysqld
+mysql -e "CREATE USER 'kodi' IDENTIFIED BY 'kodi';"
+mysql -e "GRANT ALL ON *.* TO 'kodi';"
+mysql -e "flush privileges;"
 paru -S --needed --noconfirm kodi
 sudo mkdir /srv/nfs/videos
 sudo echo \n >> /etc/fstab
