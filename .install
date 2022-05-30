@@ -13,18 +13,23 @@ function install_appimage {
     return
   fi
 
-  paru -S --needed --noconfirm jq
-
   api_url=https://api.github.com/repos/$user/$repo/releases/latest
 
-  tag_name=$(curl --silent $api_url | jq -r ".tag_name")
-  download_url=https://github.com/$user/$repo/releases/download/$tag_name/
-  
-  name=$(curl --silent $api_url | jq -r ".name")
-  file_name=$package-$name.AppImage
-  
-  echo "Downloading $download_url$file_name"
-  curl -fLo $local_dir$file_name $download_url$file_name --create-dirs
+  curl --silent $api_url | \
+  while read -r line
+  do
+    if [[ $line == *"name"*".AppImage"* ]]
+    then
+      name=${line:9:$((${#line} - 9 - 2))}
+    elif [[ $line == *"browser_download_url"*".AppImage"* ]]
+    then
+      browser_download_url=${line:25:$((${#line} - 25 - 1))}
+      echo "Downloading $browser_download_url"
+      curl -fLo $local_dir$name $browser_download_url --create-dirs
+      chmod +x $local_dir$name
+      break
+    fi
+  done
 }
 
 
