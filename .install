@@ -127,3 +127,4 @@ paru -S --needed --noconfirm ctags
 
 # TABLET
 # paru -S --needed --noconfirm onboard
+paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
