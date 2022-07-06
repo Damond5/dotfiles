@@ -47,7 +47,7 @@ cd
 
 # BASE
 paru -S --needed --noconfirm fish
-sudo chsh -s /bin/fish $whoami
+chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm timeshift
@@ -75,7 +75,7 @@ paru -S --needed --noconfirm evince
 paru -S --needed --noconfirm popsicle
 paru -S --needed --noconfirm pizzara-bin
 paru -S --needed --noconfirm firefox
-paru -S --needed --noconfirm qbittorrent
+# paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
 # paru -S --needed --noconfirm flatpak
@@ -106,16 +106,16 @@ paru -S --needed --noconfirm helix
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
-paru -S --needed --noconfirm adwaita-qt
-paru -S --needed --noconfirm adwaita-qt6
+# paru -S --needed --noconfirm adwaita-qt
+# paru -S --needed --noconfirm adwaita-qt6
 paru -S --needed --noconfirm papirus-icon-theme
 paru -S --needed --noconfirm vimix-cursors
 paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
-paru -S --needed --noconfirm lxappearance-gtk3
+# paru -S --needed --noconfirm lxappearance-gtk3
 # paru -S --needed --noconfirm kvantum
-paru -S --needed --noconfirm qt5ct
-paru -S --needed --noconfirm qt6ct
+# paru -S --needed --noconfirm qt5ct
+# paru -S --needed --noconfirm qt6ct
 
 
 # DEVELOPMENT
@@ -125,45 +125,5 @@ paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
 
 
-# MEDIA
-paru -S --needed --noconfirm nfs-utils
-paru -S --needed --noconfirm mariadb
-sudo systemctl enable mysqld
-mysql -e "CREATE USER 'kodi' IDENTIFIED BY 'kodi';"
-mysql -e "GRANT ALL ON *.* TO 'kodi';"
-mysql -e "flush privileges;"
-paru -S --needed --noconfirm kodi
-sudo mkdir /srv/nfs/videos
-sudo echo \n >> /etc/fstab
-sudo echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab
-
-
-# GAMING
-paru -S --needed --noconfirm gamemode
-paru -S --needed --noconfirm steam-native-runtime
-paru -S --needed --noconfirm linux-steam-integration
-
-# appimages
-install_appimage WowUp WowUp WowUp
-install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
-curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
-cd ~/Applications
-unzip curseforge-latest-linux.zip
-rm curseforge-latest-linux.zip
-cd
-
-## wine
-paru -S --needed --noconfirm dxvk-bin
-paru -S --needed --noconfirm lib32-vkd3d
-paru -S --needed --noconfirm vkd3d
-paru -S --needed --noconfirm wine-staging
-paru -S --needed --noconfirm wine-gecko
-paru -S --needed --noconfirm wine-mono
-paru -S --needed --noconfirm wine-nine
-paru -S --needed --noconfirm winetricks
-
-## lutris
-paru -S --needed --noconfirm lutris
-paru -S --needed --noconfirm lutris-battlenet-meta
-paru -S --needed --noconfirm lutris-wine-meta
-paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+# TABLET
+# paru -S --needed --noconfirm onboard
