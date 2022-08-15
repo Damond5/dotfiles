@@ -104,6 +104,7 @@ paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 paru -S --needed --noconfirm helix
+paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
 
 ## theme
