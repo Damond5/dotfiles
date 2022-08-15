@@ -7,7 +7,10 @@
 !.config/lxqt
 !.config/fish
 !.config/rofi
+!.config/rofi/config.rasi
 !.config/paru
+!.config/bat/
+!.config/helix/
 !.bashrc
 !.gitignore
 !.profile
