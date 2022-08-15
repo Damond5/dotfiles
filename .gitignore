@@ -8,6 +8,8 @@
 !.config/fish
 !.config/paru
 !.config/rofi/config.rasi
+!.config/bat/
+!.config/helix/
 !.bashrc
 !.gitignore
 !.profile
