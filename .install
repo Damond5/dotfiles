@@ -92,9 +92,10 @@ paru -S --needed --noconfirm networkmanager-dmenu
 
 ## modern utils
 paru -S --needed --noconfirm btop
-paru -S --needed --noconfirm gdu
+paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
-paru -S --needed --noconfirm duf
+paru -S --needed --noconfirm dust
+paru -S --needed --noconfirm lfs
 paru -S --needed --noconfirm tealdeer
 paru -S --needed --noconfirm exa
 paru -S --needed --noconfirm ripgrep-all
@@ -103,6 +104,7 @@ paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 paru -S --needed --noconfirm helix
+paru -S --needed --noconfirm gitui
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
