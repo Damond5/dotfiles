@@ -306,4 +306,10 @@ exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/w
 exec firefox
 exec flatpak run com.discordapp.Discord
 exec alacritty
+
+exec source ~/.profile
+
 exec sleep 5 && xmodmap ~/.Xmodmap
+
+# exec setxkbmap -option caps:swapescape
+exec setxkbmap -option caps:escape

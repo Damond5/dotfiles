@@ -13,6 +13,10 @@ alias du="du -h"                          # human-readable sizes
 alias date="date +'%T'"
 alias cal="cal -y"
 
+source ~/.profile
+
+set PATH "$PATH:$HOME/.cargo/bin/"
+
 # alias for qpdfview that also disowns the process
 function pdf
   command qpdfview $argv &; disown

@@ -39,6 +39,7 @@ yay -S --needed --noconfirm qtcreator
 
 # WORK
 yay -S --needed --noconfirm optimus-manager
+yay -S --needed --noconfirm battop
 
 # aubo
 yay -S --needed --noconfirm xf86-input-vmmouse
