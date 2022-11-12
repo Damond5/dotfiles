@@ -310,3 +310,5 @@ exec flatpak run com.discordapp.Discord
 # exec alacritty --class Videos --working-directory /home/nikv/Videos/
 
 exec sleep 5 && xmodmap ~/.Xmodmap
+
+exec source ~/.profile
