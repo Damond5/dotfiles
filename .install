@@ -106,6 +106,7 @@ sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
+paru -S --needed --noconfirm starship
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
