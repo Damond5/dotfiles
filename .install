@@ -56,6 +56,7 @@ paru -S --needed --noconfirm grub-btrfs
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy
+paru -S --needed --noconfirm fwupd
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
@@ -70,13 +71,14 @@ paru -S --needed --noconfirm scrot
 paru -S --needed --noconfirm eog
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
+paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
 paru -S --needed --noconfirm popsicle
 paru -S --needed --noconfirm pizzara-bin
 paru -S --needed --noconfirm firefox
 # paru -S --needed --noconfirm qbittorrent
-paru -S --needed --noconfirm appimagelauncher
+# paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
 # paru -S --needed --noconfirm flatpak
 # flatpak install -y discord
@@ -88,13 +90,14 @@ paru -S --needed --noconfirm pigz
 ## launcher
 paru -S --needed --noconfirm rofi
 paru -S --needed --noconfirm networkmanager-dmenu
-# paru -S --needed --noconfirm rofi-bluetooth-git
+paru -S --needed --noconfirm rofi-bluetooth-git
 
 ## modern utils
 paru -S --needed --noconfirm btop
-paru -S --needed --noconfirm gdu
+paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
-paru -S --needed --noconfirm duf
+paru -S --needed --noconfirm dust
+paru -S --needed --noconfirm lfs
 paru -S --needed --noconfirm tealdeer
 paru -S --needed --noconfirm exa
 paru -S --needed --noconfirm ripgrep-all
@@ -103,6 +106,10 @@ paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 paru -S --needed --noconfirm helix
+paru -S --needed --noconfirm lldb
+paru -S --needed --noconfirm gitui
+paru -S --needed --noconfirm starship
+# lfs dua
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
@@ -127,4 +134,38 @@ paru -S --needed --noconfirm ctags
 
 # TABLET
 # paru -S --needed --noconfirm onboard
-paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
+
+
+# PORTABLE
+paru -S --needed --noconfirm battop
+
+
+# WORK
+# paru -S --needed --noconfirm qt
+# paru -S --needed --noconfirm qtcreator
+# 
+# # aubo
+# paru -S --needed --noconfirm xf86-input-vmmouse
+# paru -S --needed --noconfirm xf86-video-vmware
+# paru -S --needed --noconfirm open-vm-tools
+# paru -S --needed --noconfirm vmware-workstation
+# sudo systemctl enable --now vmware-networks.service
+# sudo systemctl enable --now vmware-usbarbitrator.service
+# sudo systemctl enable --now vmware-hostd.service
+# 
+# # ur
+# paru -S --needed --noconfirm maven
+# 
+# # nlock
+# paru -S --needed --noconfirm boost
+# 
+# # weldmate
+# paru -S --needed --noconfirm eigen
+
+# google drive
+paru -S --needed --noconfirm opam
+opam init
+opam update
+opam install depext
+opam depext google-drive-ocamlfuse
+opam install google-drive-ocamlfuse
