@@ -299,14 +299,19 @@ exec picom
 exec autotiling
 
 # layouts
-exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
-exec --no-startup-id "i3-msg 'workspace 2; append_layout /home/nikv/.config/i3/workspace2.json'"
+# exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
+# exec --no-startup-id "i3-msg 'workspace 2; append_layout /home/nikv/.config/i3/workspace2.json'"
 # exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/workspace3.json'"
  
 # programs
-exec firefox
-exec flatpak run com.discordapp.Discord
+# exec firefox
+# exec flatpak run com.discordapp.Discord
 # exec qbittorrent -style adwaita-dark
 # exec alacritty --class Videos --working-directory /home/nikv/Videos/
+
+exec source ~/.profile
+
+# exec setxkbmap -option caps:swapescape
+exec setxkbmap -option caps:escape
 
 exec sleep 5 && xmodmap ~/.Xmodmap
