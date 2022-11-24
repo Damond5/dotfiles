@@ -8,13 +8,16 @@
 !.config/fish
 !.config/paru
 !.config/rofi/config.rasi
+!.config/bat/
+!.config/helix/
 !.bashrc
 !.gitignore
 !.profile
 !.vimrc
 !.Xmodmap
-!.series
-!installElvUI.sh
+!.gdfuse
+# !.series
+# !installElvUI.sh
 !.install
 !gdMount.sh
 !ugdMount.sh
@@ -25,3 +28,8 @@
 !uFatMount.sh
 !generateMavenProject.sh
 !ping.py
+!pi.ssh
+!tar-czf.sh
+!tar-xzf.sh
+!unzip.sh
+!targz.sh
