@@ -138,4 +138,4 @@ ex ()
   fi
 }
 
-# xmodmap /home/nikv/.Xmodmap
+alias pdf='evince'
