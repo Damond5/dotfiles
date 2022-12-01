@@ -27,6 +27,9 @@
 !fatMount.sh
 !uFatMount.sh
 !generateMavenProject.sh
+!iso-cat.sh
+!replace.sh
+!search-and-replace.sh
 !ping.py
 !pi.ssh
 !tar-czf.sh
