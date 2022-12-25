@@ -62,7 +62,7 @@ paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm i3-wm
 paru -S --needed --noconfirm autotiling
 paru -S --needed --noconfirm perl-anyevent-i3
-paru -S --needed --noconfirm autorandr
+paru -S --needed --noconfirm xlayoutdisplay
 paru -S --needed --noconfirm redshift
 paru -S --needed --noconfirm picom
 paru -S --needed --noconfirm alacritty
@@ -105,6 +105,8 @@ paru -S --needed --noconfirm fd
 paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
