@@ -133,6 +133,8 @@ paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm python-lsp-server
+paru -S --needed --noconfirm jdk-openjdk
+paru -S --needed --noconfirm jdtls
 
 
 # TABLET
