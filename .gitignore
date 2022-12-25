@@ -36,3 +36,11 @@
 !tar-xzf.sh
 !unzip.sh
 !targz.sh
+.config/fish/fishd.ubuntu-14-04.work
+.config/fish/fishd.ur.work
+.gdfuse/default/cache
+.gdfuse/shared/cache
+.gdfuse/shared/gdfuse.log
+.gdfuse/shared/state
+.gdfuse/default/gdfuse.log
+.gdfuse/default/state
