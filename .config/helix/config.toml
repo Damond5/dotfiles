@@ -1,4 +1,20 @@
-theme = "solarized_dark"
+theme = "solarized_dark-indent-guides"
 
 [editor]
 line-number = "relative"
+cursorline = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "block"
+
+[editor.file-picker]
+hidden = true
+
+[editor.statusline]
+center = ["file-type"]
+
+[editor.indent-guides]
+render = true
+character = "|"
