@@ -288,6 +288,10 @@ bindsym $sub+n exec --no-startup-id networkmanager_dmenu
 bindsym $mod+b exec --no-startup-id rofi-bluetooth
 bindsym $sub+b exec --no-startup-id rofi-bluetooth
 
+# brightness
+bindcode 232 exec --no-startup-id brightnessctl set 1%
+bindcode 233 exec --no-startup-id brightnessctl set 70%
+
 # disable focus on mouse hover
 focus_follows_mouse no
 
