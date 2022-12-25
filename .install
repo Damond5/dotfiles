@@ -132,6 +132,7 @@ paru -S --needed --noconfirm base-devel
 paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
+paru -S --needed --noconfirm python-lsp-server
 
 
 # TABLET
