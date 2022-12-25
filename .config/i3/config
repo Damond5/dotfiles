@@ -292,6 +292,10 @@ bindsym $sub+b exec --no-startup-id rofi-bluetooth
 bindcode 232 exec --no-startup-id brightnessctl set 1%
 bindcode 233 exec --no-startup-id brightnessctl set 70%
 
+# display
+bindsym $mod+m exec --no-startup-id xlayoutdisplay
+bindsym $sub+m exec --no-startup-id xlayoutdisplay
+
 # disable focus on mouse hover
 focus_follows_mouse no
 
