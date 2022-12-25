@@ -245,7 +245,7 @@ mode "resize" {
 # bindsym $mod+r mode "resize"
 # bindsym $sub+r mode "resize"
 
-bindsym $mod+r exec redshift -O 2500
+bindsym $mod+r exec redshift -O 3000
 
 bindsym $mod+Ctrl+h resize shrink width 1 px or 1 ppt
 bindsym $mod+Ctrl+j resize grow height 1 px or 1 ppt
@@ -294,7 +294,7 @@ focus_follows_mouse no
 # floating calculator
 for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
 
-exec redshift -O 2500
+exec redshift -O 3000
 exec picom
 exec autotiling
 
