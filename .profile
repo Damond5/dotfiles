@@ -8,3 +8,6 @@ alias ls exa
 alias cat bat
 alias du dust
 alias hx helix
+
+# rust cargo binaries
+export PATH="/home/nikv/.cargo/bin:$PATH"
