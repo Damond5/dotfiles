@@ -10,11 +10,6 @@ alias mv="mv -i"                          # confirm before overwriting something
 alias df="df -h"                          # human-readable sizes
 alias du="du -h"                          # human-readable sizes
 
-alias date="date +'%T'"
-alias cal="cal -y"
-alias ls="exa"
-alias hx="helix"
-
 # alias to open pdf that also disowns the process
 function pdf
   command evince $argv &; disown
