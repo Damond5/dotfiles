@@ -1,3 +1,16 @@
+# [[language]]
+# name = "python"
+# file-types = ["py", "script", "urscript", "ur"]
+
+
 [[language]]
-name = "python"
-file-types = ["py", "script", "urscript", "ur"]
+name = "urscript"
+scope = "source.urscript"
+# injection-regex = "^mylang$"
+roots = ["queue.script"]
+file-types = ["script", "urscript", "ur"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+language-server = { command = "urscript-language-server" }
+# formatter = { command = "mylang-formatter" , args = ["--stdin"] }
+grammar = "python"
