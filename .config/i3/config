@@ -302,6 +302,9 @@ focus_follows_mouse no
 # floating calculator
 for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
 
+exec setxkbmap -option caps:escape
+exec sleep 5 && xmodmap ~/.Xmodmap
+
 exec redshift -O 3000
 exec picom
 exec autotiling
@@ -316,10 +319,3 @@ exec autotiling
 # exec flatpak run com.discordapp.Discord
 # exec qbittorrent -style adwaita-dark
 # exec alacritty --class Videos --working-directory /home/nikv/Videos/
-
-exec source ~/.profile
-
-# exec setxkbmap -option caps:swapescape
-exec setxkbmap -option caps:escape
-
-exec sleep 5 && xmodmap ~/.Xmodmap

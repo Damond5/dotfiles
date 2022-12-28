@@ -4,16 +4,14 @@ set fish_greeting
 fish_vi_key_bindings
 
 
+source ~/.profile
+
+
 # ALIASES
 alias cp="cp -i"                          # confirm before overwriting something
 alias mv="mv -i"                          # confirm before overwriting something
 alias df="df -h"                          # human-readable sizes
 alias du="du -h"                          # human-readable sizes
-
-alias date="date +'%T'"
-alias cal="cal -y"
-
-source ~/.profile
 
 # alias to open pdf that also disowns the process
 function pdf
