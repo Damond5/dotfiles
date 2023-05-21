@@ -42,12 +42,14 @@ sudo pacman -S --needed --noconfirm git
 git clone https://aur.archlinux.org/paru-bin.git
 cd paru-bin
 makepkg -si --needed --noconfirm
+sudo rm -r paru-bin/
 cd
 
 
 # BASE
+paru -S --needed --noconfirm linux-headers
 paru -S --needed --noconfirm fish
-sudo chsh -s /bin/fish $whoami
+chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
 paru -S --needed --noconfirm timeshift
@@ -55,7 +57,7 @@ paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm grub-btrfs
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
-paru -S --needed --noconfirm ventoy
+paru -S --needed --noconfirm ventoy-bin
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
@@ -72,7 +74,7 @@ paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
-paru -S --needed --noconfirm popsicle
+paru -S --needed --noconfirm popsicle-bin
 paru -S --needed --noconfirm pizzara-bin
 paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
@@ -110,7 +112,7 @@ paru -S --needed --noconfirm starship
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
-paru -S --needed --noconfirm adwaita-qt
+paru -S --needed --noconfirm adwaita-qt5
 paru -S --needed --noconfirm adwaita-qt6
 paru -S --needed --noconfirm papirus-icon-theme
 paru -S --needed --noconfirm vimix-cursors
@@ -138,17 +140,20 @@ mysql -e "CREATE USER 'kodi' IDENTIFIED BY 'kodi';"
 mysql -e "GRANT ALL ON *.* TO 'kodi';"
 mysql -e "flush privileges;"
 paru -S --needed --noconfirm kodi
-sudo mkdir /srv/nfs/videos
-sudo echo \n >> /etc/fstab
-sudo echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab
+mkdir -p ~/Videos/movies
+mkdir -p ~/Videos/shows
+sudo mkdir -p /srv/nfs/videos
+sudo su -c "echo \n >> /etc/fstab"
+sudo su -c "echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab"
 
 
 # GAMING
 paru -S --needed --noconfirm gamemode
+paru -S --needed --noconfirm lib32-gamemode
 paru -S --needed --noconfirm steam-native-runtime
 paru -S --needed --noconfirm linux-steam-integration
 
-# appimages
+## appimages
 # install_appimage WowUp WowUp WowUp
 install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
 curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
@@ -171,4 +176,13 @@ paru -S --needed --noconfirm winetricks
 paru -S --needed --noconfirm lutris
 paru -S --needed --noconfirm lutris-battlenet-meta
 paru -S --needed --noconfirm lutris-wine-meta
-paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+### paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+paru -S --needed --noconfirm qpdf
+paru -S --needed --noconfirm cups
+paru -S --needed --noconfirm cups-filters
+paru -S --needed --noconfirm samba
+paru -S --needed --noconfirm lib32-nvidia-utils
+
+
+# NETWORK
+paru -S --needed --noconfirm rtl88xxau-aircrack-dkms-git

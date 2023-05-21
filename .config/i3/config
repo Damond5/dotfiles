@@ -37,7 +37,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+# exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -294,12 +294,15 @@ focus_follows_mouse no
 # floating calculator
 for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
 
-exec setxkbmap -option caps:escape
-exec sleep 5 && xmodmap ~/.Xmodmap
+exec --no-startup-id setxkbmap -option caps:escape
+exec --no-startup-id sleep 5 && xmodmap ~/.Xmodmap
 
-exec redshift -O 2500
-exec picom
-exec autotiling
+exec --no-startup-id redshift -O 2500
+exec --no-startup-id picom
+exec --no-startup-id autotiling
+
+# exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+# exec --no-startup-id dbus-launch --sh-syntax
 
 # layouts
 # exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
