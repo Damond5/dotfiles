@@ -80,6 +80,8 @@ paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
+# fixes long gtk app startup (dbus timeout)
+paru -Rcns --noconfirm flatpak
 # paru -S --needed --noconfirm flatpak
 # flatpak install -y discord
 
