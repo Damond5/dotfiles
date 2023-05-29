@@ -187,4 +187,5 @@ paru -S --needed --noconfirm lib32-nvidia-utils
 
 
 # NETWORK
-paru -S --needed --noconfirm rtl88xxau-aircrack-dkms-git
+# paru -S --needed --noconfirm rtl88xxau-aircrack-dkms-git
+paru -S --needed --noconfirm rtl8812au-dkms-git
