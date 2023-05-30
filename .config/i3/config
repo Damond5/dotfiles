@@ -291,6 +291,8 @@ bindsym $sub+b exec --no-startup-id rofi-bluetooth
 # brightness
 bindcode 232 exec --no-startup-id brightnessctl set 1%
 bindcode 233 exec --no-startup-id brightnessctl set 70%
+bindsym $mod+o exec --no-startup-id brightnessctl set 100%
+bindsym $sub+o exec --no-startup-id brightnessctl set 100%
 
 # display
 bindsym $mod+m exec --no-startup-id xlayoutdisplay
