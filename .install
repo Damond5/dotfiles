@@ -109,6 +109,7 @@ sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
 sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+sudo sd "maxSnapshots=3" "maxSnapshots=10" /etc/timeshift-autosnap.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
