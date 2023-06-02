@@ -107,6 +107,7 @@ paru -S --needed --noconfirm fd
 paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+sudo sd "maxSnapshots=3" "maxSnapshots=10" /etc/timeshift-autosnap.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
