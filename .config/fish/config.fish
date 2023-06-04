@@ -43,3 +43,6 @@ set -x MANPAGER '/bin/bash -c "vim -MRn -c \"set buftype=nofile showtabline=0 ft
 
 # PROMPT
 starship init fish | source
+
+# SSH-AGENT (GITUI)
+eval (ssh-agent -c)
