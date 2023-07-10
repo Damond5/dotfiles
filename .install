@@ -146,6 +146,14 @@ paru -S --needed --noconfirm jdtls
 
 # PORTABLE
 paru -S --needed --noconfirm battop
+paru -S --needed --noconfirm tlp
+paru -S --needed --noconfirm tlp-rdw
+sudo systemctl enable tlp.service
+sudo systemctl mask systemd-rfkill.service
+sudo systemctl mask systemd-rfkill.socket
+sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
+sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
 
 
 # WORK
