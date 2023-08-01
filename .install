@@ -57,6 +57,12 @@ paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy
 paru -S --needed --noconfirm fwupd
+paru -S --needed --noconfirm reflector
+echo "" | sudo tee --append /etc/xdg/reflector/reflector.conf
+echo "" | sudo tee --append /etc/xdg/reflector/reflector.conf
+echo "--country 'Denmark'" | sudo tee --append /etc/xdg/reflector/reflector.conf
+sudo systemctl enable reflector.service reflector.timer
+sudo systemctl start reflector.service reflector.timer
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
