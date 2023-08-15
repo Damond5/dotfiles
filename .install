@@ -80,7 +80,7 @@ paru -S --needed --noconfirm gnome-screenshot
 paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
-paru -S --needed --noconfirm popsicle
+paru -S --needed --noconfirm popsicle-bin
 paru -S --needed --noconfirm pizzara-bin
 paru -S --needed --noconfirm firefox
 # paru -S --needed --noconfirm qbittorrent
