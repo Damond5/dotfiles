@@ -52,9 +52,14 @@ paru -S --needed --noconfirm fish
 chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm nodejs
-paru -S --needed --noconfirm timeshift
-paru -S --needed --noconfirm timeshift-autosnap
 paru -S --needed --noconfirm grub-btrfs
+sudo systemctl enable grub-btrfsd.service
+sudo systemctl start grub-btrfsd.service
+paru -S --needed --noconfirm snapper
+sudo snapper -c root create-config /
+sudo snapper -c root create --description fresh
+paru -S --needed --noconfirm snapper-pac
+paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy-bin
@@ -106,7 +111,6 @@ paru -S --needed --noconfirm fd
 paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
-sudo sd "maxSnapshots=3" "maxSnapshots=10" /etc/timeshift-autosnap.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
