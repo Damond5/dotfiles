@@ -63,6 +63,10 @@ paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy-bin
+paru -S --needed --noconfirm reflector
+sudo systemctl start reflector.service
+sudo systemctl enable reflector.timer
+sudo systemctl start reflector.timer
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
