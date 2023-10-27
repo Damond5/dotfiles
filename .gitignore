@@ -44,3 +44,4 @@
 .gdfuse/shared/state
 .gdfuse/default/gdfuse.log
 .gdfuse/default/state
+.config/fish/fish_history
