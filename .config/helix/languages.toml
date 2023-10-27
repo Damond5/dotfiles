@@ -3,6 +3,10 @@
 # file-types = ["py", "script", "urscript", "ur"]
 
 
+[language-server.urscript-language-server]
+command = "urscript-language-server"
+
+
 [[language]]
 name = "urscript"
 scope = "source.urscript"
@@ -11,6 +15,6 @@ roots = ["queue.script"]
 file-types = ["script", "urscript", "ur"]
 comment-token = "#"
 indent = { tab-width = 4, unit = "    " }
-language-server = { command = "urscript-language-server" }
+language-servers = [{ name = "urscript-language-server" }]
 # formatter = { command = "mylang-formatter" , args = ["--stdin"] }
 grammar = "python"
