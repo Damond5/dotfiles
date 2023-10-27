@@ -15,3 +15,5 @@ alias hx helix
 
 # rust cargo binaries
 export PATH="/home/nikv/.cargo/bin:$PATH"
+# local
+export PATH="/home/nikv/.local/bin:$PATH"
