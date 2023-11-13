@@ -6,7 +6,6 @@
 [language-server.urscript-language-server]
 command = "urscript-language-server"
 
-
 [[language]]
 name = "urscript"
 scope = "source.urscript"
@@ -18,3 +17,9 @@ indent = { tab-width = 4, unit = "    " }
 language-servers = [{ name = "urscript-language-server" }]
 # formatter = { command = "mylang-formatter" , args = ["--stdin"] }
 grammar = "python"
+
+
+[[language]]
+name = "java"
+auto-format = true
+formatter = { command = "clang-format" , args = ["--assume-filename=source.java"] }
