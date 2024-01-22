@@ -104,6 +104,8 @@ paru -S --needed --noconfirm rofi
 # paru -S --needed --noconfirm rofi-bluetooth-git
 
 ## modern utils
+paru -S --needed --noconfirm rustup
+rustup install stable
 paru -S --needed --noconfirm btop
 paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
@@ -124,6 +126,7 @@ paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
+cargo install rusti-cal
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
@@ -141,8 +144,6 @@ paru -S --needed --noconfirm qt6ct
 
 # DEVELOPMENT
 paru -S --needed --noconfirm base-devel
-paru -S --needed --noconfirm rustup
-rustup install stable
 paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm mold
 paru -S --needed --noconfirm ctags
