@@ -101,6 +101,7 @@ paru -S --needed --noconfirm networkmanager-dmenu
 paru -S --needed --noconfirm rofi-bluetooth-git
 
 ## modern utils
+paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm btop
 paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
@@ -123,6 +124,7 @@ paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
+cargo install rusti-cal
 # lfs dua
 
 ## theme
@@ -141,7 +143,6 @@ paru -S --needed --noconfirm ttf-roboto-mono
 
 # DEVELOPMENT
 paru -S --needed --noconfirm base-devel
-paru -S --needed --noconfirm rustup
 paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm python-lsp-server

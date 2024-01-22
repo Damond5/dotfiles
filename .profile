@@ -4,14 +4,14 @@ export EDITOR=/usr/bin/helix
 export VISUAL=/usr/bin/helix
 
 # formatted output
-alias date="date +'%T'"
-alias cal="cal -y"
+alias date "date +'%T'"
 
 # modern utils
 alias ls exa
 alias cat bat
 alias du dust
 alias hx helix
+alias cal "rusti-cal -c -w --starting-day 1"
 
 # rust cargo binaries
 export PATH="/home/nikv/.cargo/bin:$PATH"
