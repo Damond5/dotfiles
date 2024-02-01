@@ -18,3 +18,6 @@ center = ["file-type"]
 [editor.indent-guides]
 render = true
 character = "|"
+
+[keys.normal.n]
+g = ":sh alacritty -e gitui"
