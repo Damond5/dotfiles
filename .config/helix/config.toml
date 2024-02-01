@@ -20,4 +20,4 @@ render = true
 character = "|"
 
 [keys.normal.n]
-g = ":sh alacritty -e gitui"
+g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
