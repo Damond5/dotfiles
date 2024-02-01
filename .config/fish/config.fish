@@ -46,3 +46,4 @@ starship init fish | source
 
 # SSH-AGENT (GITUI)
 eval (ssh-agent -c | head -n2)
+ssh-add -q
