@@ -15,7 +15,6 @@ file-types = ["script", "urscript", "ur"]
 comment-token = "#"
 indent = { tab-width = 4, unit = "    " }
 language-servers = [{ name = "urscript-language-server" }]
-# formatter = { command = "mylang-formatter" , args = ["--stdin"] }
 grammar = "python"
 
 
