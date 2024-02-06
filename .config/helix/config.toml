@@ -21,3 +21,4 @@ character = "|"
 
 [keys.normal.n]
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
+d = ":sh alacritty -e distrobox enter ursim"
