@@ -46,6 +46,7 @@ cd
 
 
 # BASE
+paru -S --needed --noconfirm man-db
 paru -S --needed --noconfirm fish
 chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
