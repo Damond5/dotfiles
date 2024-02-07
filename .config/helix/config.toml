@@ -19,6 +19,6 @@ center = ["file-type"]
 render = true
 character = "|"
 
-[keys.normal.n]
+[keys.normal."+"]
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
 d = ":sh alacritty -e distrobox enter ursim"
