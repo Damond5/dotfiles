@@ -90,8 +90,9 @@ paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 paru -S --needed --noconfirm discord
 # fixes long gtk app startup (dbus timeout)
-paru -Rcns --noconfirm flatpak
-# paru -S --needed --noconfirm flatpak
+# paru -Rcns --noconfirm flatpak
+paru -S --needed --noconfirm flatpak
+flatpak install -y com.github.tchx84.Flatseal
 # flatpak install -y discord
 
 ## scripts
@@ -118,6 +119,7 @@ sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 sudo sd "# --country France,Germany" "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "--latest 5" "--latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "--sort age" "--sort rate" /etc/xdg/reflector/reflector.conf
+sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
@@ -167,6 +169,8 @@ paru -S --needed --noconfirm gamemode
 paru -S --needed --noconfirm lib32-gamemode
 paru -S --needed --noconfirm steam-native-runtime
 paru -S --needed --noconfirm linux-steam-integration
+flatpak install -y com.usebottles.bottles
+flatpak install -y com.vysp3r.ProtonPlus
 
 ## appimages
 # install_appimage WowUp WowUp WowUp
