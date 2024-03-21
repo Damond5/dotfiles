@@ -109,7 +109,6 @@ rustup install stable
 paru -S --needed --noconfirm btop
 paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
-paru -S --needed --noconfirm dust
 paru -S --needed --noconfirm dysk
 paru -S --needed --noconfirm tealdeer
 paru -S --needed --noconfirm exa
