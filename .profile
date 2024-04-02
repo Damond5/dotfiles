@@ -17,3 +17,5 @@ alias cal "rusti-cal -c -w --starting-day 1"
 export PATH="/home/nikv/.cargo/bin:$PATH"
 # local
 export PATH="/home/nikv/.local/bin:$PATH"
+
+# . "$HOME/.cargo/env"

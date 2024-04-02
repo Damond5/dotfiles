@@ -141,3 +141,5 @@ ex ()
 alias pdf='evince'
 
 export URSIM_HOME="~/ursim-5.15.0.126572"
+
+. "$HOME/cargo/env"
