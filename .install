@@ -83,6 +83,7 @@ if [[ $update_only == false ]] then
   sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 fi
 paru -S --needed --noconfirm linux-headers
+paru -S --needed --noconfirm linux-lts-headers
 paru -S --needed --noconfirm man-db
 paru -S --needed --noconfirm fish
 if [[ $update_only == false ]] then
