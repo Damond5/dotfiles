@@ -109,9 +109,9 @@ paru -S --needed --noconfirm ventoy-bin
 paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm reflector
 if [[ $update_only == false ]] then
-  sudo sd "# --country France,Germany" "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
-  sudo sd "--latest 5" "--latest 10" /etc/xdg/reflector/reflector.conf
-  sudo sd "--sort age" "--sort rate" /etc/xdg/reflector/reflector.conf
+  sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
+  sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
+  sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
   sudo systemctl enable reflector.timer
   sudo systemctl start reflector.service reflector.timer
 fi
