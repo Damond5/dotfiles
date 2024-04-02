@@ -28,3 +28,4 @@
 !uFatMount.sh
 !generateMavenProject.sh
 !ping.py
+.config/helix/runtime

@@ -19,5 +19,5 @@ center = ["file-type"]
 render = true
 character = "|"
 
-[keys.normal.n]
+[keys.normal."space".n]
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
