@@ -48,6 +48,7 @@ cd
 
 # BASE
 paru -S --needed --noconfirm linux-headers
+paru -S --needed --noconfirm man-db
 paru -S --needed --noconfirm fish
 chsh -s /bin/fish $whoami
 paru -S --needed --noconfirm vim
@@ -63,16 +64,16 @@ paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy-bin
+paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm reflector
-sudo systemctl start reflector.service
-sudo systemctl enable reflector.timer
-sudo systemctl start reflector.timer
+sudo systemctl enable reflector.service reflector.timer
+sudo systemctl start reflector.service reflector.timer
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
 paru -S --needed --noconfirm autotiling
 paru -S --needed --noconfirm perl-anyevent-i3
-paru -S --needed --noconfirm autorandr
+paru -S --needed --noconfirm xlayoutdisplay
 paru -S --needed --noconfirm redshift
 paru -S --needed --noconfirm picom
 paru -S --needed --noconfirm alacritty
@@ -81,6 +82,7 @@ paru -S --needed --noconfirm scrot
 paru -S --needed --noconfirm eog
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
+paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
 paru -S --needed --noconfirm popsicle-bin
@@ -93,7 +95,6 @@ paru -S --needed --noconfirm discord
 # paru -Rcns --noconfirm flatpak
 paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
-# flatpak install -y discord
 
 ## scripts
 paru -S --needed --noconfirm pv
@@ -101,7 +102,8 @@ paru -S --needed --noconfirm pigz
 
 ## launcher
 paru -S --needed --noconfirm rofi
-# paru -S --needed --noconfirm rofi-bluetooth-git
+paru -S --needed --noconfirm networkmanager-dmenu
+paru -S --needed --noconfirm rofi-bluetooth-git
 
 ## modern utils
 paru -S --needed --noconfirm rustup
@@ -117,10 +119,12 @@ paru -S --needed --noconfirm fd
 paru -S --needed --noconfirm sd
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
+sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
 sudo sd "# --country France,Germany" "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "--latest 5" "--latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "--sort age" "--sort rate" /etc/xdg/reflector/reflector.conf
-sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
 paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
@@ -129,16 +133,14 @@ cargo install rusti-cal
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
-paru -S --needed --noconfirm adwaita-qt5
-paru -S --needed --noconfirm adwaita-qt6
 paru -S --needed --noconfirm papirus-icon-theme
 paru -S --needed --noconfirm vimix-cursors
 paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
 # paru -S --needed --noconfirm lxappearance-gtk3
 # paru -S --needed --noconfirm kvantum
-paru -S --needed --noconfirm qt5ct
-paru -S --needed --noconfirm qt6ct
+# paru -S --needed --noconfirm qt5ct
+# paru -S --needed --noconfirm qt6ct
 
 
 # DEVELOPMENT
@@ -147,21 +149,23 @@ paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm mold
 paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm python-lsp-server
+paru -S --needed --noconfirm jdk-openjdk
+paru -S --needed --noconfirm jdtls
 
 
-# MEDIA
-paru -S --needed --noconfirm nfs-utils
-paru -S --needed --noconfirm mariadb
-sudo systemctl enable mysqld
-mysql -e "CREATE USER 'kodi' IDENTIFIED BY 'kodi';"
-mysql -e "GRANT ALL ON *.* TO 'kodi';"
-mysql -e "flush privileges;"
-paru -S --needed --noconfirm kodi
-mkdir -p ~/Videos/movies
-mkdir -p ~/Videos/shows
-sudo mkdir -p /srv/nfs/videos
-sudo su -c "echo \n >> /etc/fstab"
-sudo su -c "echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab"
+# # MEDIA
+# paru -S --needed --noconfirm nfs-utils
+# paru -S --needed --noconfirm mariadb
+# sudo systemctl enable mysqld
+# mysql -e "CREATE USER 'kodi' IDENTIFIED BY 'kodi';"
+# mysql -e "GRANT ALL ON *.* TO 'kodi';"
+# mysql -e "flush privileges;"
+# paru -S --needed --noconfirm kodi
+# mkdir -p ~/Videos/movies
+# mkdir -p ~/Videos/shows
+# sudo mkdir -p /srv/nfs/videos
+# sudo su -c "echo \n >> /etc/fstab"
+# sudo su -c "echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab"
 
 
 # GAMING
@@ -193,9 +197,11 @@ paru -S --needed --noconfirm winetricks
 
 ## lutris
 paru -S --needed --noconfirm lutris
-paru -S --needed --noconfirm lutris-battlenet-meta
+# no longer exists?
+# paru -S --needed --noconfirm lutris-battlenet-meta
 paru -S --needed --noconfirm lutris-wine-meta
-### paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+# out of date?
+# paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
 paru -S --needed --noconfirm qpdf
 paru -S --needed --noconfirm cups
 paru -S --needed --noconfirm cups-filters
@@ -204,5 +210,29 @@ paru -S --needed --noconfirm lib32-nvidia-utils
 
 
 # NETWORK
-# paru -S --needed --noconfirm rtl88xxau-aircrack-dkms-git
 paru -S --needed --noconfirm rtl8812au-dkms-git
+
+
+# PORTABLE
+paru -S --needed --noconfirm battop
+paru -S --needed --noconfirm tlp
+paru -S --needed --noconfirm tlp-rdw
+sudo systemctl enable tlp.service
+sudo systemctl mask systemd-rfkill.service
+sudo systemctl mask systemd-rfkill.socket
+sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
+sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
+
+
+# WORK
+paru -S --needed --noconfirm qt
+paru -S --needed --noconfirm qtcreator
+
+# google drive
+paru -S --needed --noconfirm opam
+opam init
+opam update
+opam install depext
+opam depext google-drive-ocamlfuse
+opam install google-drive-ocamlfuse

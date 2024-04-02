@@ -19,5 +19,12 @@ center = ["file-type"]
 render = true
 character = "|"
 
-[keys.normal."space".n]
+[keys.normal.space."n"]
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
+d = ":sh alacritty -e distrobox enter ursim"
+t = ":sh alacritty"
+
+[keys.normal.space."n"."c"]
+r = ":sh alacritty -e cargo run"
+d = ":sh alacritty -e cargo build --debug"
+b = ":sh alacritty -e cargo build --release"

@@ -3,21 +3,26 @@
 # file-types = ["py", "script", "urscript", "ur"]
 
 
+[language-server.urscript-language-server]
+command = "urscript-language-server"
+
 [[language]]
 name = "urscript"
 scope = "source.urscript"
-injection-regex = "urscript"
+# injection-regex = "^mylang$"
 roots = ["queue.script"]
 file-types = ["script", "urscript", "ur"]
 comment-token = "#"
 indent = { tab-width = 4, unit = "    " }
-# language-servers = [{ name = "urscript-language-server" }]
 # formatter = { command = "mylang-formatter" , args = ["--stdin"] }
 grammar = "python"
-
-# [language-server.urscript-language-server]
-# command = "urscript-language-server"
-
 # [[grammar]]
 # name = "urscript"
 # source = { git = "https://github.com/tree-sitter/tree-sitter-python", rev = "4bfdd9033a2225cc95032ce77066b7aeca9e2efc" }
+language-servers = [{ name = "urscript-language-server" }]
+
+
+[[language]]
+name = "java"
+auto-format = true
+formatter = { command = "clang-format" , args = ["--assume-filename=source.java"] }
