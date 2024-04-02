@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+# INSTALL OPTIONS
+update_only=false
+read -p "Update only? (Y/n): " update_only_answer
+if [[ $update_only_answer != [nN] ]] then
+  update_only=true
+fi
+
+gaming=false
+work=false
+tablet=false
+read -p "Gaming, work or tablet? (g/w/t): " device
+if [[ $device == [gG] ]] then
+  gaming=true
+elif [[ $device == [wW] ]] then
+  work=true
+elif [[ $device == [tT] ]] then
+  tablet=true
+else
+  echo "No device chosen, exiting"
+  exit 1
+fi
+
+portable=false
+if [[ $work == true || $tablet == true ]] then
+  portable=true
+fi
+
+
 # FUNCTIONS
 function install_appimage {
   # install_appimage(user, repo, package)
@@ -35,39 +63,57 @@ function install_appimage {
 
 # MAINTENANCE
 sudo pacman -Syu --needed --noconfirm
-
-
-# AUR
 sudo pacman -S --needed --noconfirm git
-git clone https://aur.archlinux.org/paru-bin.git
-cd paru-bin
-makepkg -si --needed --noconfirm
-sudo rm -r paru-bin/
-cd
+
+
+if [[ $update_only == false ]] then
+  # AUR
+  git clone https://aur.archlinux.org/paru-bin.git
+  cd paru-bin
+  makepkg -si --needed --noconfirm
+  sudo rm -r paru-bin/
+  cd
+fi
 
 
 # BASE
+paru -S --needed --noconfirm sd
+if [[ $update_only == false ]] then
+  sudo sd "#Color" "Color" /etc/pacman.conf
+  sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+fi
 paru -S --needed --noconfirm linux-headers
 paru -S --needed --noconfirm man-db
 paru -S --needed --noconfirm fish
-chsh -s /bin/fish $whoami
-paru -S --needed --noconfirm vim
-paru -S --needed --noconfirm nodejs
+if [[ $update_only == false ]] then
+  chsh -s /bin/fish $whoami
+fi
+# paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm grub-btrfs
-sudo systemctl enable grub-btrfsd.service
-sudo systemctl start grub-btrfsd.service
+if [[ $update_only == false ]] then
+  sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
+  sudo systemctl enable grub-btrfsd.service
+  sudo systemctl start grub-btrfsd.service
+fi
 paru -S --needed --noconfirm snapper
-sudo snapper -c root create-config /
-sudo snapper -c root create --description fresh
-paru -S --needed --noconfirm snapper-pac
+if [[ $update_only == false ]] then
+  sudo snapper -c root create-config /
+  sudo snapper -c root create --description fresh
+fi
+paru -S --needed --noconfirm snap-pac
 paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm mlocate
 paru -S --needed --noconfirm neofetch
 paru -S --needed --noconfirm ventoy-bin
 paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm reflector
-sudo systemctl enable reflector.service reflector.timer
-sudo systemctl start reflector.service reflector.timer
+if [[ $update_only == false ]] then
+  sudo sd "# --country France,Germany" "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
+  sudo sd "--latest 5" "--latest 10" /etc/xdg/reflector/reflector.conf
+  sudo sd "--sort age" "--sort rate" /etc/xdg/reflector/reflector.conf
+  sudo systemctl enable reflector.service reflector.timer
+  sudo systemctl start reflector.service reflector.timer
+fi
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
@@ -79,14 +125,14 @@ paru -S --needed --noconfirm picom
 paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
-paru -S --needed --noconfirm eog
+paru -S --needed --noconfirm loupe
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
-paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
+# paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
-paru -S --needed --noconfirm popsicle-bin
-paru -S --needed --noconfirm pizzara-bin
+# paru -S --needed --noconfirm popsicle-bin
+paru -S --needed --noconfirm pizarra-bin
 paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
@@ -95,6 +141,7 @@ paru -S --needed --noconfirm discord
 # paru -Rcns --noconfirm flatpak
 paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
+paru -S --needed --noconfirm krita
 
 ## scripts
 paru -S --needed --noconfirm pv
@@ -113,20 +160,10 @@ paru -S --needed --noconfirm dua-cli
 paru -S --needed --noconfirm bat
 paru -S --needed --noconfirm dysk
 paru -S --needed --noconfirm tealdeer
-paru -S --needed --noconfirm exa
+paru -S --needed --noconfirm eza
 paru -S --needed --noconfirm ripgrep-all
 paru -S --needed --noconfirm fd
-paru -S --needed --noconfirm sd
-sudo sd "#Color" "Color" /etc/pacman.conf
-sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
-sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
-sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-sudo sd "# --country France,Germany" "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
-sudo sd "--latest 5" "--latest 10" /etc/xdg/reflector/reflector.conf
-sudo sd "--sort age" "--sort rate" /etc/xdg/reflector/reflector.conf
 paru -S --needed --noconfirm helix
-paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
 cargo install rusti-cal
@@ -149,8 +186,7 @@ paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm mold
 paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm python-lsp-server
-paru -S --needed --noconfirm jdk-openjdk
-paru -S --needed --noconfirm jdtls
+paru -S --needed --noconfirm lldb
 
 
 # # MEDIA
@@ -167,72 +203,87 @@ paru -S --needed --noconfirm jdtls
 # sudo su -c "echo \n >> /etc/fstab"
 # sudo su -c "echo /home/nikv/Videos /srv/nfs/videos none defaults,bind 0 0 >> /etc/fstab"
 
+if [[ $gaming == true ]] then
+  # GAMING
+  paru -S --needed --noconfirm gamemode
+  paru -S --needed --noconfirm lib32-gamemode
+  paru -S --needed --noconfirm steam-native-runtime
+  paru -S --needed --noconfirm linux-steam-integration
+  # flatpak install -y com.usebottles.bottles
+  flatpak install -y com.vysp3r.ProtonPlus
 
-# GAMING
-paru -S --needed --noconfirm gamemode
-paru -S --needed --noconfirm lib32-gamemode
-paru -S --needed --noconfirm steam-native-runtime
-paru -S --needed --noconfirm linux-steam-integration
-flatpak install -y com.usebottles.bottles
-flatpak install -y com.vysp3r.ProtonPlus
+  ## appimages
+  # install_appimage WowUp WowUp WowUp
+  install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
+  curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
+  cd ~/Applications
+  unzip curseforge-latest-linux.zip
+  rm curseforge-latest-linux.zip
+  cd
 
-## appimages
-# install_appimage WowUp WowUp WowUp
-install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
-curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
-cd ~/Applications
-unzip curseforge-latest-linux.zip
-rm curseforge-latest-linux.zip
-cd
+  ## wine
+  paru -S --needed --noconfirm dxvk-bin
+  paru -S --needed --noconfirm lib32-vkd3d
+  paru -S --needed --noconfirm vkd3d
+  paru -S --needed --noconfirm wine-staging
+  paru -S --needed --noconfirm wine-gecko
+  paru -S --needed --noconfirm wine-mono
+  paru -S --needed --noconfirm wine-nine
+  paru -S --needed --noconfirm winetricks
 
-## wine
-paru -S --needed --noconfirm dxvk-bin
-paru -S --needed --noconfirm lib32-vkd3d
-paru -S --needed --noconfirm vkd3d
-paru -S --needed --noconfirm wine-staging
-paru -S --needed --noconfirm wine-gecko
-paru -S --needed --noconfirm wine-mono
-paru -S --needed --noconfirm wine-nine
-paru -S --needed --noconfirm winetricks
-
-## lutris
-paru -S --needed --noconfirm lutris
-# no longer exists?
-# paru -S --needed --noconfirm lutris-battlenet-meta
-paru -S --needed --noconfirm lutris-wine-meta
-# out of date?
-# paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
-paru -S --needed --noconfirm qpdf
-paru -S --needed --noconfirm cups
-paru -S --needed --noconfirm cups-filters
-paru -S --needed --noconfirm samba
-paru -S --needed --noconfirm lib32-nvidia-utils
-
-
-# NETWORK
-paru -S --needed --noconfirm rtl8812au-dkms-git
+  ## lutris
+  paru -S --needed --noconfirm lutris
+  # no longer exists?
+  # paru -S --needed --noconfirm lutris-battlenet-meta
+  paru -S --needed --noconfirm lutris-wine-meta
+  # out of date?
+  # paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+  paru -S --needed --noconfirm qpdf
+  paru -S --needed --noconfirm cups
+  paru -S --needed --noconfirm cups-filters
+  paru -S --needed --noconfirm samba
+  paru -S --needed --noconfirm lib32-nvidia-utils
 
 
-# PORTABLE
-paru -S --needed --noconfirm battop
-paru -S --needed --noconfirm tlp
-paru -S --needed --noconfirm tlp-rdw
-sudo systemctl enable tlp.service
-sudo systemctl mask systemd-rfkill.service
-sudo systemctl mask systemd-rfkill.socket
-sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
-sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
-sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
+  # NETWORK
+  paru -S --needed --noconfirm rtl8812au-dkms-git
+fi
 
 
-# WORK
-paru -S --needed --noconfirm qt
-paru -S --needed --noconfirm qtcreator
+if [[ $portable == true ]] then
+  # PORTABLE
+  if [[ $update_only == false ]] then
+    sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+    sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+  fi
+  paru -S --needed --noconfirm battop
+  paru -S --needed --noconfirm tlp
+  paru -S --needed --noconfirm tlp-rdw
+  if [[ $update_only == false ]] then
+    sudo systemctl enable tlp.service
+    sudo systemctl mask systemd-rfkill.service
+    sudo systemctl mask systemd-rfkill.socket
+    sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
+    sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+    sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
+  fi
+fi
 
-# google drive
-paru -S --needed --noconfirm opam
-opam init
-opam update
-opam install depext
-opam depext google-drive-ocamlfuse
-opam install google-drive-ocamlfuse
+
+if [[ $work == true ]] then
+  # WORK
+  paru -S --needed --noconfirm qt
+  paru -S --needed --noconfirm qtcreator
+  paru -S --needed --noconfirm jdk-openjdk
+  paru -S --needed --noconfirm jdtls
+
+  # google drive
+  paru -S --needed --noconfirm opam
+  if [[ $update_only == false ]] then
+    opam init
+    opam update
+    opam install depext
+    opam depext google-drive-ocamlfuse
+    opam install google-drive-ocamlfuse
+  fi
+fi
