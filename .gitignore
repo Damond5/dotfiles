@@ -16,8 +16,9 @@
 !.profile
 !.vimrc
 !.Xmodmap
-!.series
-!installElvUI.sh
+!.gdfuse
+# !.series
+# !installElvUI.sh
 !.install
 !gdMount.sh
 !ugdMount.sh
@@ -27,5 +28,23 @@
 !fatMount.sh
 !uFatMount.sh
 !generateMavenProject.sh
+!iso-cat.sh
+!replace.sh
+!search-and-replace.sh
 !ping.py
 .config/helix/runtime
+!pi.ssh
+!tar-czf.sh
+!tar-xzf.sh
+!unzip.sh
+!targz.sh
+.config/fish/fishd.ubuntu-14-04.work
+.config/fish/fishd.ur.work
+.gdfuse/default/cache
+.gdfuse/shared/cache
+.gdfuse/shared/gdfuse.log
+.gdfuse/shared/state
+.gdfuse/default/gdfuse.log
+.gdfuse/default/state
+.config/fish/fish_history
+.config/fish/fishd.ursim.work

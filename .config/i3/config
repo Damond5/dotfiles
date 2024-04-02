@@ -245,7 +245,7 @@ mode "resize" {
 # bindsym $mod+r mode "resize"
 # bindsym $sub+r mode "resize"
 
-bindsym $mod+r exec redshift -O 2500
+bindsym $mod+r exec redshift -O 3000
 
 bindsym $mod+Ctrl+h resize shrink width 1 px or 1 ppt
 bindsym $mod+Ctrl+j resize grow height 1 px or 1 ppt
@@ -287,6 +287,16 @@ bindsym $sub+n exec --no-startup-id networkmanager_dmenu
 # rofi bluetooth
 bindsym $mod+b exec --no-startup-id rofi-bluetooth
 bindsym $sub+b exec --no-startup-id rofi-bluetooth
+
+# brightness
+bindcode 232 exec --no-startup-id brightnessctl set 1%
+bindcode 233 exec --no-startup-id brightnessctl set 70%
+bindsym $mod+o exec --no-startup-id brightnessctl set 100%
+bindsym $sub+o exec --no-startup-id brightnessctl set 100%
+
+# display
+bindsym $mod+m exec --no-startup-id xlayoutdisplay
+bindsym $sub+m exec --no-startup-id xlayoutdisplay
 
 # disable focus on mouse hover
 focus_follows_mouse no

@@ -25,7 +25,7 @@ end
 
 
 # # opam configuration
-# source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
+source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
 
 
 # run last command as sudo
@@ -40,6 +40,7 @@ end
 
 # MANPAGER
 # set -x MANPAGER '/bin/bash -c "vim -MRn -c \"set buftype=nofile showtabline=0 ft=man ts=8 nomod nolist norelativenumber nonu noma\" -c \"normal L\" -c \"nmap q :qa<CR>\"</dev/tty <(col -b)"'
+
 
 # PROMPT
 starship init fish | source
