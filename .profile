@@ -19,3 +19,5 @@ export PATH="/home/nikv/.cargo/bin:$PATH"
 export PATH="/home/nikv/.local/bin:$PATH"
 
 # . "$HOME/.cargo/env"
+
+# export GTK_THEME=Adwaita-dark

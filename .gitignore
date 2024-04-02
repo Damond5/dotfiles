@@ -11,6 +11,7 @@
 !.config/rofi/config.rasi
 !.config/bat/
 !.config/helix/
+!.config/xdg-desktop-portal/
 !.bashrc
 !.gitignore
 !.profile
