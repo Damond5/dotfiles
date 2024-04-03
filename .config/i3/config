@@ -307,7 +307,7 @@ for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enabl
 exec --no-startup-id setxkbmap -option caps:escape
 exec --no-startup-id sleep 5 && xmodmap ~/.Xmodmap
 
-exec --no-startup-id redshift -O 2500
+exec --no-startup-id ~/redshift.sh
 exec --no-startup-id picom
 exec --no-startup-id autotiling
 

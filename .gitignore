@@ -21,6 +21,7 @@
 # !.series
 # !installElvUI.sh
 !.install
+!redshift.sh
 !gdMount.sh
 !ugdMount.sh
 !pdftohtml.sh
