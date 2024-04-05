@@ -12,6 +12,7 @@
 !.config/bat/
 !.config/helix/
 !.config/xdg-desktop-portal/
+!.config/picom.conf
 !.bashrc
 !.gitignore
 !.profile
