@@ -82,6 +82,8 @@ paru -S --needed --noconfirm sd
 if [[ $update_only == false ]] then
   sudo sd "#Color" "Color" /etc/pacman.conf
   sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+  sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved\nGRUB_SAVEDEFAULT=true /etc/default/grub
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
 fi
 paru -S --needed --noconfirm linux-headers
 paru -S --needed --noconfirm linux-lts-headers
