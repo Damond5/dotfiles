@@ -8,33 +8,37 @@ source ~/.profile
 
 
 # ALIASES
-alias cp="cp -i"                          # confirm before overwriting something
-alias mv="mv -i"                          # confirm before overwriting something
-alias df="df -h"                          # human-readable sizes
-alias du="du -h"                          # human-readable sizes
+alias cp="cp -i" # confirm before overwriting something
+alias mv="mv -i" # confirm before overwriting something
+alias df="df -h" # human-readable sizes
+alias du="du -h" # human-readable sizes
 
 # alias to open pdf that also disowns the process
 function pdf
-  command evince $argv &; disown
+    command evince $argv &
+    disown
 end
 
 # alias to open image that also disowns the process
 function img
-  command eog $argv &; disown
+    command eog $argv &
+    disown
 end
 
 
 # # opam configuration
-source /home/nikv/.opam/opam-init/init.fish > /dev/null 2 > /dev/null; or true
+if test -e /home/nikv/.opam/opam-init/init.fish
+    source /home/nikv/.opam/opam-init/init.fish >/dev/null 2 >/dev/null; or true
+end
 
 
 # run last command as sudo
 function sudo
-  if test "$argv" = !!
-    eval command sudo $history[1]
-  else
-    command sudo $argv
-  end
+    if test "$argv" = !!
+        eval command sudo $history[1]
+    else
+        command sudo $argv
+    end
 end
 
 
