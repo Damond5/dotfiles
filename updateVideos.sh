@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-ls ~/Videos/shows/ > videos.txt
+cd ~/Videos/watched/
+
+rename 'y/A-Z/a-z/' *
+
+ls >> ~/videos.txt
