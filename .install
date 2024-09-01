@@ -182,8 +182,10 @@ paru -S --needed --noconfirm ttf-roboto
 paru -S --needed --noconfirm ttf-roboto-mono
 # paru -S --needed --noconfirm lxappearance-gtk3
 # paru -S --needed --noconfirm kvantum
-# paru -S --needed --noconfirm qt5ct
-# paru -S --needed --noconfirm qt6ct
+paru -S --needed --noconfirm qt5ct
+paru -S --needed --noconfirm qt6ct
+paru -S --needed --noconfirm adwaita-qt5-git
+paru -S --needed --noconfirm adwaita-qt6-git
 
 
 # DEVELOPMENT
