@@ -52,9 +52,7 @@ floating_modifier $sub
 
 # start a terminal
 bindsym $mod+Return exec alacritty
-bindsym $mod+t exec alacritty
 bindsym $sub+Return exec alacritty
-bindsym $sub+t exec alacritty
 bindsym Control+Mod1+t exec alacritty
 
 # kill focused window
@@ -297,6 +295,10 @@ bindsym $sub+o exec --no-startup-id brightnessctl set 100%
 # display
 bindsym $mod+m exec --no-startup-id xlayoutdisplay
 bindsym $sub+m exec --no-startup-id xlayoutdisplay
+bindsym $mod+g exec --no-startup-id ~/gamer.sh
+bindsym $sub+g exec --no-startup-id ~/gamer.sh
+bindsym $mod+t exec --no-startup-id ~/tv.sh
+bindsym $sub+t exec --no-startup-id ~/tv.sh
 
 # disable focus on mouse hover
 focus_follows_mouse no
