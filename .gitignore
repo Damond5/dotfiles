@@ -13,6 +13,7 @@
 !.config/helix/
 !.config/xdg-desktop-portal/
 !.config/picom.conf
+!.config/monitors.xml
 !.bashrc
 !.gitignore
 !.profile

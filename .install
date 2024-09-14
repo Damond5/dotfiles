@@ -256,6 +256,10 @@ if [[ $gaming == true ]] then
 
   # NETWORK
   paru -S --needed --noconfirm rtl8812au-dkms-git
+
+
+  # LOGIN
+  sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/
 fi
 
 
