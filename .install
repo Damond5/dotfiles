@@ -218,6 +218,7 @@ if [[ $gaming == true ]] then
   # GAMING
   paru -S --needed --noconfirm gamemode
   paru -S --needed --noconfirm lib32-gamemode
+  paru -S --needed --noconfirm mangohud
   paru -S --needed --noconfirm steam-native-runtime
   paru -S --needed --noconfirm linux-steam-integration
   # flatpak install -y com.usebottles.bottles
