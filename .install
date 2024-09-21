@@ -84,6 +84,8 @@ if [[ $update_only == false ]] then
   sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
   sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved\nGRUB_SAVEDEFAULT=true /etc/default/grub
   sudo grub-mkconfig -o /boot/grub/grub.cfg
+  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
   sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
   sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
 fi
@@ -109,7 +111,7 @@ fi
 paru -S --needed --noconfirm snap-pac
 paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm plocate
-paru -S --needed --noconfirm neofetch
+paru -S --needed --noconfirm fastfetch
 paru -S --needed --noconfirm ventoy-bin
 paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm reflector
