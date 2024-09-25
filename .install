@@ -176,6 +176,7 @@ paru -S --needed --noconfirm helix
 paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
 cargo install rusti-cal
+paru -S --needed --noconfirm yazi
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
