@@ -45,6 +45,7 @@
 !decode-ur-files.sh
 !gamer.sh
 !tv.sh
+!llm.sh
 .config/fish/fishd.ubuntu-14-04.work
 .config/fish/fishd.ur.work
 .gdfuse/default/cache

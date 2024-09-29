@@ -28,3 +28,9 @@ t = ":sh alacritty"
 r = ":sh alacritty -e cargo run"
 d = ":sh alacritty -e cargo build --debug"
 b = ":sh alacritty -e cargo build --release"
+
+[keys.normal.space."l"]
+r = ":pipe ~/llm.sh rust"
+p = ":pipe ~/llm.sh python"
+c = ":pipe ~/llm.sh c++"
+b = ":pipe ~/llm.sh bash"
