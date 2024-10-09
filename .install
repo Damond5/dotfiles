@@ -151,6 +151,7 @@ paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
 paru -S --needed --noconfirm krita
 paru -S --needed --noconfirm localsend-bin
+paru -S --needed --noconfirm p7zip
 
 ## scripts
 paru -S --needed --noconfirm pv
