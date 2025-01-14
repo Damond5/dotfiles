@@ -19,6 +19,9 @@ center = ["file-type"]
 render = true
 character = "|"
 
+[editor.soft-wrap]
+enable = true
+
 [keys.normal.space."n"]
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
 d = ":sh alacritty -e distrobox enter ursim"
