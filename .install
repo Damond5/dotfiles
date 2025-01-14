@@ -84,8 +84,8 @@ if [[ $update_only == false ]] then
   sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
   sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved\nGRUB_SAVEDEFAULT=true /etc/default/grub
   sudo grub-mkconfig -o /boot/grub/grub.cfg
-  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
+  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
   sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
   sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
 fi
@@ -251,6 +251,7 @@ if [[ $gaming == true ]] then
   paru -S --needed --noconfirm lutris-wine-meta
   # out of date?
   # paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
+  paru -S --needed --noconfirm umu-launcher
   paru -S --needed --noconfirm qpdf
   paru -S --needed --noconfirm cups
   paru -S --needed --noconfirm cups-filters
