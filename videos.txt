@@ -69,7 +69,7 @@ new.amsterdam.2018.s02e17.watched
 next.2020.s01e10.watched
 obliterated.s01e08.watched
 outer.range.s02e07.watched
-outlander.2014.s06e08.watched
+outlander.s07e16.watched
 percy.jackson.and.the.olympians.s01e07.watched
 pivoting.2022.s01e10.watched
 power.book.ii.ghost.s04e10.watched
@@ -81,6 +81,7 @@ raised.by.wolves.2020.s02e05.watched
 reacher.s02e08.watched
 resident.alien.s01e01.watched
 rick.and.morty.2013.s05e10.watched
+sas.rogue.heroes.s02e06.watched
 see.2019.s03e08.watched
 she-hulk.attorney.at.law.s01e02.watched
 snowpiercer.s04e10.watched
@@ -110,6 +111,7 @@ the.lazarus.project.s02e08.watched
 the.lord.of.the.rings.the.rings.of.power.s02e08.watched
 the.mandalorian.s02e08.watched
 the.man.who.fell.to.earth.s01e05.watched
+the.night.agent.s02e10.watched
 the.old.man.s02e08.watched
 the.orville.s03e03.watched
 the.right.stuff.s01e08.watched
