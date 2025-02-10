@@ -268,10 +268,6 @@ if [[ $gaming == true ]] then
 
   # LOGIN
   sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/
-
-
-  # AI
-  paru -S --needed --noconfirm ollama-cuda
 fi
 
 
@@ -307,8 +303,4 @@ if [[ $work == true ]] then
     opam depext google-drive-ocamlfuse
     opam install google-drive-ocamlfuse
   fi
-
-
-  # AI
-  paru -S --needed --noconfirm ollama
 fi

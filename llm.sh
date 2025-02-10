@@ -32,10 +32,16 @@ prompt="${prompt}$1"
 # prompt=${prompt}$'\n'
 # prompt="${prompt}function fibonacci, in c"
 
-# echo "$prompt"
+echo "$prompt"
 
 # ollama run llama3.1:latest "${prompt}" | sed 1d | head -n -2
 # ollama run llama3.1:latest "${prompt}"
 
-ollama run codegemma "${prompt}" | sed 1d | head -n -2
+# ollama run codegemma "${prompt}" | sed 1d | head -n -2
 # ollama run codegemma "${prompt}"
+
+# ollama run deepseek-r1:1.5b "${prompt}" | sed 1d | head -n -2
+# ollama run deepseek-r1:1.5b "${prompt}"
+
+# ollama run deepseek-coder "${prompt}" | sed 1d | head -n -2
+# ollama run deepseek-coder "${prompt}"
