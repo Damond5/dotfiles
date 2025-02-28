@@ -228,12 +228,12 @@ if [[ $gaming == true ]] then
 
   ## appimages
   # install_appimage WowUp WowUp WowUp
-  install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
-  curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
-  cd ~/Applications
-  unzip curseforge-latest-linux.zip
-  rm curseforge-latest-linux.zip
-  cd
+  # install_appimage RPGLogs Uploaders-warcraftlogs Warcraft-Logs-Uploader
+  # curl -fLo ~/Applications/curseforge-latest-linux.zip https://curseforge.overwolf.com/downloads/curseforge-latest-linux.zip --create-dirs
+  # cd ~/Applications
+  # unzip curseforge-latest-linux.zip
+  # rm curseforge-latest-linux.zip
+  # cd
 
   ## wine
   paru -S --needed --noconfirm dxvk-bin
