@@ -159,8 +159,6 @@ paru -S --needed --noconfirm pigz
 
 ## launcher
 paru -S --needed --noconfirm rofi
-paru -S --needed --noconfirm networkmanager-dmenu
-paru -S --needed --noconfirm rofi-bluetooth-git
 
 ## modern utils
 paru -S --needed --noconfirm rustup
