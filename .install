@@ -178,6 +178,7 @@ cargo install rusti-cal
 paru -S --needed --noconfirm yazi
 paru -S --needed --noconfirm bluetuith
 paru -S --needed --noconfirm difftastic
+paru -S --needed --noconfirm mermaid
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
