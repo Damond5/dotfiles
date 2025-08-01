@@ -122,6 +122,7 @@ if [[ $update_only == false ]] then
   sudo systemctl enable reflector.timer
   sudo systemctl start reflector.service reflector.timer
 fi
+paru -S --needed --noconfirm calc
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
