@@ -123,6 +123,7 @@ if [[ $update_only == false ]] then
   sudo systemctl enable reflector.timer
   sudo systemctl start reflector.service reflector.timer
 fi
+paru -S --needed --noconfirm calc
 
 ## desktop
 paru -S --needed --noconfirm i3-wm
@@ -178,6 +179,8 @@ paru -S --needed --noconfirm starship
 cargo install rusti-cal
 paru -S --needed --noconfirm yazi
 paru -S --needed --noconfirm bluetuith
+paru -S --needed --noconfirm difftastic
+paru -S --needed --noconfirm mermaid
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
@@ -198,6 +201,8 @@ paru -S --needed --noconfirm base-devel
 paru -S --needed --noconfirm rust-analyzer
 paru -S --needed --noconfirm mold
 paru -S --needed --noconfirm ctags
+paru -S --needed --noconfirm uv
+paru -S --needed --noconfirm ruff
 paru -S --needed --noconfirm python-lsp-server
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm bash-language-server

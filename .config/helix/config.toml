@@ -37,3 +37,6 @@ r = ":pipe ~/llm.sh rust"
 p = ":pipe ~/llm.sh python"
 c = ":pipe ~/llm.sh c++"
 b = ":pipe ~/llm.sh bash"
+
+[keys.normal.space."m"]
+f = ":sh mmdc -i *.mmd -o flowchart.png && loupe flowchart.png"
