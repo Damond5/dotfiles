@@ -82,7 +82,8 @@ paru -S --needed --noconfirm sd
 if [[ $update_only == false ]] then
   sudo sd "#Color" "Color" /etc/pacman.conf
   sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
-  sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved\nGRUB_SAVEDEFAULT=true /etc/default/grub
+  sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
+  sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
   sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
@@ -144,11 +145,11 @@ paru -S --needed --noconfirm pizarra-bin
 paru -S --needed --noconfirm firefox
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
-paru -S --needed --noconfirm discord
+# paru -S --needed --noconfirm discord
 # fixes long gtk app startup (dbus timeout)
-# paru -Rcns --noconfirm flatpak
 paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
+flatpak install -y com.discordapp.Discord
 paru -S --needed --noconfirm krita
 paru -S --needed --noconfirm localsend-bin
 paru -S --needed --noconfirm p7zip
@@ -221,10 +222,18 @@ if [[ $gaming == true ]] then
   paru -S --needed --noconfirm gamemode
   paru -S --needed --noconfirm lib32-gamemode
   paru -S --needed --noconfirm mangohud
+  paru -S --needed --noconfirm gamescope
+  paru -S --needed --noconfirm lib32-vulkan-radeon
+  paru -S --needed --noconfirm lib32-vulkan-mesa-layers
+  paru -S --needed --noconfirm amdvlk
+  paru -S --needed --noconfirm lib32-amdvlk
+  flatpak install -y com.vysp3r.ProtonPlus
+
+  ## steam
   paru -S --needed --noconfirm steam-native-runtime
   paru -S --needed --noconfirm linux-steam-integration
+
   # flatpak install -y com.usebottles.bottles
-  flatpak install -y com.vysp3r.ProtonPlus
 
   ## appimages
   # install_appimage WowUp WowUp WowUp
@@ -259,9 +268,8 @@ if [[ $gaming == true ]] then
   paru -S --needed --noconfirm samba
   paru -S --needed --noconfirm lib32-nvidia-utils
 
-
-  # NETWORK
-  paru -S --needed --noconfirm rtl8812au-dkms-git
+  ## heroic
+  paru -S --needed --noconfirm heroic-games-launcher-bin
 
 
   # LOGIN
