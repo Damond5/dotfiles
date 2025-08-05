@@ -180,7 +180,7 @@ cargo install rusti-cal
 paru -S --needed --noconfirm yazi
 paru -S --needed --noconfirm bluetuith
 paru -S --needed --noconfirm difftastic
-paru -S --needed --noconfirm mermaid
+paru -S --needed --noconfirm mermaid-cli
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
@@ -194,6 +194,9 @@ paru -S --needed --noconfirm qt5ct
 paru -S --needed --noconfirm qt6ct
 paru -S --needed --noconfirm adwaita-qt5-git
 paru -S --needed --noconfirm adwaita-qt6-git
+if [[ $update_only == false ]] then
+  gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+fi
 
 
 # DEVELOPMENT
