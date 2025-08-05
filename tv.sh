@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-xrandr --output DP-0 --off
+xrandr --output DisplayPort-0 --off
 
-xrandr --output USB-C-0 --mode 1920x1080 --rate 60
+# xrandr --output HDMI-A-0 --mode 3840x2160 --rate 60 --scale 0.4x0.4
+xrandr --output HDMI-A-0 --mode 1920x1080 --rate 60
 
 hdmi_sink="$(pactl list sinks short | grep hdmi | awk '{print $1;}')"
 pactl set-default-sink $hdmi_sink
