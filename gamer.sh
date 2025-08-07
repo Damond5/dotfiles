@@ -6,3 +6,6 @@ xrandr --output DisplayPort-0 --mode 3440x1440 --rate 144
 
 game_sink="$(pactl list sinks short | grep game | awk '{print $1;}')"
 pactl set-default-sink $game_sink
+
+setxkbmap -option caps:escape
+xmodmap .Xmodmap
