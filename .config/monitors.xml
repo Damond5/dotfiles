@@ -85,24 +85,6 @@
       <x>0</x>
       <y>0</y>
       <scale>1</scale>
-      <monitor>
-        <monitorspec>
-          <connector>DP-1</connector>
-          <vendor>AOC</vendor>
-          <product>U34G2G4R3</product>
-          <serial>0x0000a49e</serial>
-        </monitorspec>
-        <mode>
-          <width>3440</width>
-          <height>1440</height>
-          <rate>144.001</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-    <logicalmonitor>
-      <x>3440</x>
-      <y>0</y>
-      <scale>1</scale>
       <primary>yes</primary>
       <monitor>
         <monitorspec>
@@ -115,6 +97,19 @@
           <width>1920</width>
           <height>1080</height>
           <rate>60.000</rate>
+        </mode>
+      </monitor>
+      <monitor>
+        <monitorspec>
+          <connector>DP-1</connector>
+          <vendor>AOC</vendor>
+          <product>U34G2G4R3</product>
+          <serial>0x0000a49e</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>143.882</rate>
         </mode>
       </monitor>
     </logicalmonitor>
