@@ -121,6 +121,7 @@ paru -S --needed --noconfirm autotiling
 paru -S --needed --noconfirm perl-anyevent-i3
 paru -S --needed --noconfirm xlayoutdisplay
 paru -S --needed --noconfirm redshift
+paru -S --needed --noconfirm brightnessctl
 paru -S --needed --noconfirm picom
 paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
