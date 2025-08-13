@@ -69,27 +69,23 @@ sudo pacman -S --needed --noconfirm git
 if [[ $update_only == false ]] then
   # AUR
   git clone https://aur.archlinux.org/paru-bin.git
-  cd paru-bin
+  cd paru-bin/
   git pull
   makepkg -si --needed --noconfirm
+  cd ../
   sudo rm -r paru-bin/
-  cd
 fi
 
 
 # BASE
 paru -S --needed --noconfirm sd
-if [[ $update_only == false ]] then
-  sudo sd "#Color" "Color" /etc/pacman.conf
-  sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
-  sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
-  sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
-  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-  sudo sd "Identifier \"libinput keyboard catchall\"" "Identifier \"libinput keyboard catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-  sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-  sudo sd "Identifier \"libinput touchpad catchall\"" "Identifier \"libinput touchpad catchall\"\n        Option \"Tapping\" \"on\"" /usr/share/X11/xorg.conf.d/40-libinput.conf
-fi
+sudo sd "#Color" "Color" /etc/pacman.conf
+sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
+sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo sd "Identifier \"libinput keyboard catchall\"\n        MatchIsKeyboard \"on\"\n" "Identifier \"libinput keyboard catchall\"\n        Option \"NaturalScrolling\" \"True\"\n        Option \"Tapping\" \"on\"\n        MatchIsKeyboard \"on\"\n" /usr/share/X11/xorg.conf.d/40-libinput.conf
+sudo sd "Identifier \"libinput touchpad catchall\"\n        MatchIsTouchpad \"on\"\n" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"\n        Option \"Tapping\" \"on\"\n        MatchIsTouchpad \"on\"\n" /usr/share/X11/xorg.conf.d/40-libinput.conf
 paru -S --needed --noconfirm linux-headers
 paru -S --needed --noconfirm linux-lts-headers
 paru -S --needed --noconfirm man-db
@@ -99,16 +95,12 @@ if [[ $update_only == false ]] then
 fi
 # paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm grub-btrfs
-if [[ $update_only == false ]] then
-  sudo sd "fsck" "fsck grub-btrfs-overlayfs" /etc/mkinitcpio.conf
-  sudo systemctl enable grub-btrfsd.service
-  sudo systemctl start grub-btrfsd.service
-fi
+sudo sd "fsck\)" "fsck grub-btrfs-overlayfs)" /etc/mkinitcpio.conf
+sudo systemctl enable grub-btrfsd.service
+sudo systemctl start grub-btrfsd.service
 paru -S --needed --noconfirm snapper
-if [[ $update_only == false ]] then
-  sudo snapper -c root create-config /
-  sudo snapper -c root create --description fresh
-fi
+sudo snapper -c root create-config /
+sudo snapper -c root create --description fresh
 paru -S --needed --noconfirm snap-pac
 paru -S --needed --noconfirm inotify-tools
 paru -S --needed --noconfirm plocate
@@ -116,13 +108,11 @@ paru -S --needed --noconfirm fastfetch
 paru -S --needed --noconfirm ventoy-bin
 paru -S --needed --noconfirm fwupd
 paru -S --needed --noconfirm reflector
-if [[ $update_only == false ]] then
-  sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
-  sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
-  sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
-  sudo systemctl enable reflector.timer
-  sudo systemctl start reflector.service reflector.timer
-fi
+sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
+sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
+sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
+sudo systemctl enable reflector.timer
+sudo systemctl start reflector.service reflector.timer
 paru -S --needed --noconfirm calc
 
 ## desktop
@@ -194,9 +184,7 @@ paru -S --needed --noconfirm qt5ct
 paru -S --needed --noconfirm qt6ct
 paru -S --needed --noconfirm adwaita-qt5-git
 paru -S --needed --noconfirm adwaita-qt6-git
-if [[ $update_only == false ]] then
-  gsettings set org.gnome.desktop.interface color-scheme prefer-dark
-fi
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 
 
 # DEVELOPMENT
@@ -290,14 +278,12 @@ if [[ $portable == true ]] then
   paru -S --needed --noconfirm battop
   paru -S --needed --noconfirm tlp
   paru -S --needed --noconfirm tlp-rdw
-  if [[ $update_only == false ]] then
-    sudo systemctl enable tlp.service
-    sudo systemctl mask systemd-rfkill.service
-    sudo systemctl mask systemd-rfkill.socket
-    sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
-    sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
-    sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
-  fi
+  sudo systemctl enable tlp.service
+  sudo systemctl mask systemd-rfkill.service
+  sudo systemctl mask systemd-rfkill.socket
+  sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
+  sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+  sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
 fi
 
 
