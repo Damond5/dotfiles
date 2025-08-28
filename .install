@@ -143,7 +143,10 @@ paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
 # paru -S --needed --noconfirm popsicle-bin
 paru -S --needed --noconfirm pizarra-bin
+paru -S --needed --noconfirm tor
+sudo systemctl enable tor
 paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm proton-vpn-gtk-app
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
 # paru -S --needed --noconfirm discord
