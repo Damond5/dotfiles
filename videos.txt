@@ -41,7 +41,7 @@ filthy.rich.us.s01e10.watched
 final.space.s03e13.watched
 find_strikeback_episode
 for.all.mankind.s04e10.watched
-foundation.2021.s01e10.watched
+foundation.2021.s03e10.watched
 halo.s02e08.watched
 hanna.2019.s03e06.watched
 hawkeye.2021.s01e02.watched
@@ -93,7 +93,7 @@ stargirl.s02e06.watched
 star.trek.discovery.s05e10.watched
 star.trek.lower.decks.s01e10.watched
 star.trek.picard.2020.s02e10.watched
-star.trek.strange.new.worlds.s01e10.watched
+star.trek.strange.new.worlds.s03e10.watched
 supergirl.s06e09.watched
 superman.and.lois.s04e10.watched
 supernatural.academy.2022
