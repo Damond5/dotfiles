@@ -26,6 +26,7 @@ enable = true
 g = ":sh alacritty -o 'window.startup_mode=\"fullscreen\"' -e gitui"
 d = ":sh alacritty -e distrobox enter ursim"
 t = ":sh alacritty"
+n = ":sh bash notes.sh"
 
 [keys.normal.space."n"."c"]
 r = ":sh alacritty -e cargo run"
