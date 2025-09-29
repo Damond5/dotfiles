@@ -176,6 +176,7 @@ paru -S --needed --noconfirm yazi
 paru -S --needed --noconfirm bluetuith
 paru -S --needed --noconfirm difftastic
 paru -S --needed --noconfirm mermaid-cli
+paru -S --needed --noconfirm xan
 
 ## theme
 paru -S --needed --noconfirm gnome-themes-extra
