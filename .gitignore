@@ -60,5 +60,7 @@
 .config/gtk-4.0/servers
 
 # AI AGENTS
+!.gemini/
+.gemini/*
 !.gemini/GEMINI.md
 !.gemini/settings.json
