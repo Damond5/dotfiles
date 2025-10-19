@@ -123,6 +123,7 @@ paru -S --needed --noconfirm xlayoutdisplay
 paru -S --needed --noconfirm redshift
 paru -S --needed --noconfirm brightnessctl
 paru -S --needed --noconfirm picom
+paru -S --needed --noconfirm dunst
 paru -S --needed --noconfirm alacritty
 paru -S --needed --noconfirm mpv
 paru -S --needed --noconfirm scrot
