@@ -64,3 +64,4 @@
 .gemini/*
 !.gemini/GEMINI.md
 !.gemini/settings.json
+!.config/opencode/

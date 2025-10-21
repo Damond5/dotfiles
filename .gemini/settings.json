@@ -8,5 +8,8 @@
     "auth": {
       "selectedType": "oauth-personal"
     }
+  },
+  "general": {
+    "vimMode": false
   }
 }
