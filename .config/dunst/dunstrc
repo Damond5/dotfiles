@@ -4,26 +4,27 @@
     close_all = "ctrl+shift+space"
 
     # Beautification settings
-    font = "DejaVu Sans 10"
-    width = 300
-    height = 100
+    font = "DejaVu Sans 14"
+    line_height = 10
+    width = 400
+    height = 140
     origin = top-right
     offset = 10x50
-    transparency = 10
-    frame_width = 2
+    transparency = 0
+    frame_width = 4
     frame_color = "#ffffff"
-    separator_height = 1
-    separator_color = "#ffffff"
-    padding = 10
-    horizontal_padding = 10
-    text_icon_padding = 5
-    corner_radius = 10
+    separator_height = 2
+separator_color = "#ffffff"
+ padding = 20
+    horizontal_padding = 20
+    text_icon_padding = 10
+    corner_radius = 15
     corners = all
     icon_position = left
     enable_recursive_icon_lookup = true
     icon_theme = "Adwaita"
-    min_icon_size = 32
-    max_icon_size = 64
+    min_icon_size = 64
+    max_icon_size = 128
 
 [urgency_low]
     timeout = 0
