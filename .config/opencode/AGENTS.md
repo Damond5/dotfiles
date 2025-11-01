@@ -14,3 +14,7 @@ Example: "complete all the tasks in the todo.md file"
   2. Make a plan to complete the task.
     - If applicaple this plan should include an initial step to refacture the code base, such that subagents can work in parallel with minimum interferance.
   3. Execute the plan.
+
+## Host system information
+- **Operation system**: Arch Linux
+- **Package manager**: paru
