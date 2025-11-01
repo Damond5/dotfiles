@@ -21,3 +21,7 @@ export PATH="/home/nikv/.local/bin:$PATH"
 # . "$HOME/.cargo/env"
 
 # export GTK_THEME=Adwaita-dark
+
+# Android SDK
+export ANDROID_HOME=/opt/android-sdk
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/latest/bin"

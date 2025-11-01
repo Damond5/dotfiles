@@ -276,6 +276,24 @@ if [[ $gaming == true ]] then
   ## heroic
   paru -S --needed --noconfirm heroic-games-launcher-bin
 
+  ## Android SDK (for building and running on real device)
+  paru -S --needed --noconfirm jdk17-openjdk
+  sudo archlinux-java set java-17-openjdk
+  paru -S --needed --noconfirm android-sdk-cmdline-tools-latest android-sdk-platform-tools android-sdk-build-tools
+  sudo chown -R $USER:$USER /opt/android-sdk
+  # Set environment variables for session (persistence handled in .profile)
+  export ANDROID_HOME=/opt/android-sdk
+  export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/latest/bin
+  # Accept licenses (auto-accept)
+  if ! yes | sdkmanager --licenses; then
+    echo "Failed to accept Android SDK licenses" >&2
+    exit 1
+  fi
+  # Install default platform
+  if ! sdkmanager "platforms;android-34"; then
+    echo "Failed to install Android platform 34" >&2
+    exit 1
+  fi
 
   # LOGIN
   sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/
