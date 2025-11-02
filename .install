@@ -202,6 +202,8 @@ paru -S --needed --noconfirm ctags
 paru -S --needed --noconfirm uv
 paru -S --needed --noconfirm ruff
 paru -S --needed --noconfirm python-lsp-server
+paru -S --needed --noconfirm dart
+paru -S --needed --noconfirm fvm
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm bash-language-server
 paru -S --needed --noconfirm npm
