@@ -5,7 +5,7 @@
 - Always update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
 - Always update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
 - Always update @CHANGELOG.md according to www.keepachangelog.com, using the @docs-writer subagent.
-- You can use context7 to look up documentation.
+- Always use @docs-lookup subagent to look up any documentation.
 
 ## Large, complex and/or multistep tasks
 Example: "complete all the tasks in the todo.md file"
