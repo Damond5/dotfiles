@@ -10,5 +10,22 @@
         "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
       }
     }
+  },
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3-coder": {
+          "tools": true
+        },
+        "gpt-oss": {
+          "tools": true
+        }
+      }
+    }
   }
 }
