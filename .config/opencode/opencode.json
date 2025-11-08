@@ -20,10 +20,11 @@
       },
       "models": {
         "qwen3-coder": {
-          "tools": true
+          "tool_call": true
         },
         "gpt-oss": {
-          "tools": true
+          "tool_call": true,
+          "reasoning": true
         }
       }
     }
