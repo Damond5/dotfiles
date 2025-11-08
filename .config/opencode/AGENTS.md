@@ -1,8 +1,9 @@
 # Global instructions
+- Never start implementation, unless asked to do so directly.
 - Always create tests for new functionality.
 - Always review code, using the @review subagent and then implement changes based on the review, before considering a task completed.
 - Always fix warnings immediately.
-- Always update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
+- Always, unless the project uses OpenSpec, update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
 - Always update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
 - Always update @CHANGELOG.md according to www.keepachangelog.com, using the @docs-writer subagent.
 - Always use @docs-lookup subagent to look up any documentation.
