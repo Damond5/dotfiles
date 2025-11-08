@@ -1,17 +1,19 @@
 # Global instructions
-- Never start implementation, unless asked to do so directly.
-- Always create tests for new functionality.
-- Always review code, using the @review subagent and then implement changes based on the review, before considering a task completed.
-- Always fix warnings immediately.
-- Always, unless the project uses OpenSpec, update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
-- Always update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
-- Always update @CHANGELOG.md according to www.keepachangelog.com, using the @docs-writer subagent.
-- Always use @docs-lookup subagent to look up any documentation.
+- You MUST NOT start implementation, unless asked to do so directly.
+- You MUST create tests for new functionality.
+- You MUST review code when making changes or writing new code, using the @review subagent and then implement changes based on the review.
+- You MUST fix warnings immediately.
+- You MUST, unless the project uses OpenSpec, update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
+- You MUST update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
+- You MUST update @CHANGELOG.md according to www.keepachangelog.com, using the @docs-writer subagent, when you make changes.
+- When looking up documentation you MUST use the @docs-lookup subagent.
+- When making reviews you MUST use the @review subagent.
 
 ## Large, complex and/or multistep tasks
 Example: "complete all the tasks in the todo.md file"
-- Always complete large and/or complex tasks in steps:
+- You MUST complete large and/or complex tasks in steps:
   1. Assess if the task can be completed in parallel, by subagents.
+    - You MUST choose the appropriate subagent for each task.
   2. Make a plan to complete the task.
     - If applicaple this plan should include an initial step to refacture the code base, such that subagents can work in parallel with minimum interferance.
   3. Execute the plan.
