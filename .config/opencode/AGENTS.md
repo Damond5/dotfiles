@@ -5,7 +5,7 @@
 - You MUST fix warnings immediately.
 - You MUST, unless the project uses OpenSpec, update the projects @AGENTS.md with new design choices, using the @docs-writer subagent.
 - You MUST update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
-- You MUST update @CHANGELOG.md according to www.keepachangelog.com, using the @docs-writer subagent, when you make changes.
+- You MUST update @CHANGELOG.md according to www.keepachangelog.com and www.semver.org, using the @docs-writer subagent, when you make changes.
 - When looking up documentation you MUST use the @docs-lookup subagent.
 - When making reviews you MUST use the @review subagent.
 
