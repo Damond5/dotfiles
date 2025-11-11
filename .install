@@ -314,6 +314,8 @@ if [[ $portable == true ]] then
   sudo systemctl mask systemd-rfkill.socket
   sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
   sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+  sudo sd "#START_CHARGE_THRESH_BAT1=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
+  sudo sd "#STOP_CHARGE_THRESH_BAT1=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
   sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
 fi
 
