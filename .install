@@ -208,7 +208,7 @@ paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm bash-language-server
 paru -S --needed --noconfirm npm
 sudo npm install -g @google/gemini-cli
-paru -S --needed --noconfirm opencode
+paru -S --needed --noconfirm opencode-bin
 paru -S --needed --noconfirm openspec
 
 
