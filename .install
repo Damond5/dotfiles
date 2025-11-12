@@ -326,7 +326,7 @@ if [[ $work == true ]] then
   paru -S --needed --noconfirm qtcreator
   paru -S --needed --noconfirm jdk-openjdk
   paru -S --needed --noconfirm jdtls
-  paru -S --needed --noconfirm docker
+  paru -S --needed --noconfirm podman
   paru -S --needed --noconfirm distrobox
   paru -S --needed --noconfirm freecad
 
