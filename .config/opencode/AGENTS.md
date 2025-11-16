@@ -1,7 +1,7 @@
 # Global instructions
 **CRITICAL**: When making proposals, plans and/or tasks you MUST follow the points below:
 - You MUST NOT start implementation, unless asked to do so directly.
-- You MUST create tests for new functionality.
+- You MUST create tests for new functionality, both unit tests and integration tests.
 - You MUST review new code, using the @review subagent and then implement changes based on the review.
 - You MUST fully build the project.
 - You MUST fully test the project.
