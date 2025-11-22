@@ -59,6 +59,7 @@
 .config/fish/fishd.ursim.work
 .config/gtk-4.0/servers
 !.config/dunst/
+!.config/yazi/keymap.toml
 
 # AI AGENTS
 !.gemini/

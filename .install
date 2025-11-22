@@ -150,7 +150,6 @@ paru -S --needed --noconfirm krita
 paru -S --needed --noconfirm localsend-bin
 paru -S --needed --noconfirm p7zip
 paru -S --needed --noconfirm zip
-paru -S --needed --noconfirm udiskie
 
 ## scripts
 paru -S --needed --noconfirm pv
@@ -175,6 +174,7 @@ paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
 cargo install rusti-cal
 paru -S --needed --noconfirm yazi
+ya pkg add yazi-rs/plugins:mount
 paru -S --needed --noconfirm ueberzugpp
 paru -S --needed --noconfirm bluetuith
 paru -S --needed --noconfirm difftastic
