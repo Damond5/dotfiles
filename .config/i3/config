@@ -306,26 +306,25 @@ focus_follows_mouse no
 # floating calculator
 for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
 
+# keyboard config
 exec --no-startup-id setxkbmap -option caps:escape
 exec --no-startup-id sleep 5 && xmodmap ~/.Xmodmap
 
 exec --no-startup-id ~/redshift.sh
+
+# compositor
 # exec --no-startup-id picom
+
 exec --no-startup-id autotiling
+
+# no screen timeout
 exec --no-startup-id xset -dpms
 
+# notifications
 exec --no-startup-id dunst
+
+# external media auto mounting
+exec --no-startup-id udiskie
 
 # exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # exec --no-startup-id dbus-launch --sh-syntax
-
-# layouts
-# exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/nikv/.config/i3/workspace1.json'"
-# exec --no-startup-id "i3-msg 'workspace 2; append_layout /home/nikv/.config/i3/workspace2.json'"
-# exec --no-startup-id "i3-msg 'workspace 3; append_layout /home/nikv/.config/i3/workspace3.json'"
- 
-# programs
-# exec firefox
-# exec flatpak run com.discordapp.Discord
-# exec qbittorrent -style adwaita-dark
-# exec alacritty --class Videos --working-directory /home/nikv/Videos/
