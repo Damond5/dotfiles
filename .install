@@ -329,8 +329,11 @@ if [[ $work == true ]] then
   paru -S --needed --noconfirm jdk-openjdk
   paru -S --needed --noconfirm jdtls
   paru -S --needed --noconfirm podman
-  paru -S --needed --noconfirm distrobox
   paru -S --needed --noconfirm freecad
+  paru -S --needed --noconfirm distrobox
+  # xhost needed for distrobox
+  paru -S --needed --noconfirm xhost
+  xhost +si:localuser:$USER
   # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
   # paru -S --needed --noconfirm teamviewer
 
