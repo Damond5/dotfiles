@@ -336,6 +336,7 @@ if [[ $work == true ]] then
   xhost +si:localuser:$USER
   # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
   # paru -S --needed --noconfirm teamviewer
+  paru -S --needed --noconfirm bats
 
   # google drive
   paru -S --needed --noconfirm opam
