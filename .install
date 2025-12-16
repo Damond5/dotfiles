@@ -337,6 +337,9 @@ if [[ $work == true ]] then
   # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
   # paru -S --needed --noconfirm teamviewer
   paru -S --needed --noconfirm bats
+  paru -S --needed --noconfirm bats-assert
+  paru -S --needed --noconfirm bats-file
+  paru -S --needed --noconfirm bats-support
 
   # google drive
   paru -S --needed --noconfirm opam
