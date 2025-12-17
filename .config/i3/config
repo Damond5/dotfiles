@@ -323,5 +323,8 @@ exec --no-startup-id xset -dpms
 # notifications
 exec --no-startup-id dunst
 
+# auto mount usb
+exec --no-startup-id udiskie -a -n
+
 # exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # exec --no-startup-id dbus-launch --sh-syntax

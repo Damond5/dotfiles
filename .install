@@ -150,6 +150,7 @@ paru -S --needed --noconfirm krita
 paru -S --needed --noconfirm localsend-bin
 paru -S --needed --noconfirm p7zip
 paru -S --needed --noconfirm zip
+paru -S --needed --noconfirm udiskie
 
 ## scripts
 paru -S --needed --noconfirm pv
