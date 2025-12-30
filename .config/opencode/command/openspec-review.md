@@ -26,7 +26,7 @@ The user has requested the following change proposal be reviewed.
   - The updteas to documentation MUST be done using the @docs-writer subagent.
 
 **Steps**
-1. Based on the openspec instructions, use @code-review to review the change proposal and implement improvements.
+1. Based on the openspec instructions, use @openspec-review to review the change proposal and implement improvements.
 
 **Reference**
 - Use `openspec show <id> --json --deltas-only` or `openspec show <spec> --type spec` to inspect details when validation fails.
