@@ -1,4 +1,7 @@
 # Global instructions
+- You MUST use the @docs-lookup subagent when looking up documentation.
+- You MUST use the @code-review subagent when making code reviews.
+
 **CRITICAL**: When making proposals, plans and/or tasks you MUST follow the points below:
 - You MUST NOT start implementation, unless asked to do so directly.
 - You MUST complete ALL tasks in order.
@@ -12,8 +15,6 @@
 **CRITICAL**: When making implementations you MUST follow to the points below:
 - You MUST review code when making changes or writing new code, using the @code-review subagent and then implement changes based on the review.
 - You MUST fix warnings immediately.
-- When looking up documentation you MUST use the @docs-lookup subagent.
-- When making reviews you MUST use the @code-review subagent.
 
 ## Large, complex and/or multistep tasks
 Example: "complete all the tasks in the @TODO.md file"
