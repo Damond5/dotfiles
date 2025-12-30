@@ -1,7 +1,7 @@
 ---
 description: Specialized documentation retrieval agent. Use proactively for any documentation, library, or API lookup queries. Prioritizes Context7 for library/API docs, then official sources, then web search.
 mode: subagent
-temperature: 0.1
+temperature: 0.0
 tools:
   context7_resolve-library-id: true
   context7_get-library-docs: true
