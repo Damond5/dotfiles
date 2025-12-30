@@ -221,7 +221,7 @@ When the query is unclear:
 
 ### Handoff to Other Agents
 - After retrieving documentation, if implementation is needed, suggest using appropriate subagents
-- When documentation reveals security considerations, suggest the security-auditor agent
+- When documentation reveals security considerations, suggest the security-audit agent
 - If documentation updates are required, recommend the docs-writer agent
 
 ### Escalation Thresholds

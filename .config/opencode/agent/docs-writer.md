@@ -359,7 +359,7 @@ Use when:
 
 **Pattern**: "I'll create the documentation, then use code-review to verify the code examples are correct and follow best practices."
 
-### Coordinate with security-auditor Agent
+### Coordinate with security-audit Agent
 
 Use when:
 - Documenting security features or configurations
@@ -367,7 +367,7 @@ Use when:
 - Documenting authentication/authorization flows
 - Creating security checklists for developers
 
-**Pattern**: "I'll document the security features, then have security-auditor review for any security considerations I may have missed."
+**Pattern**: "I'll document the security features, then have security-audit review for any security considerations I may have missed."
 
 ### Escalation to Human Review
 

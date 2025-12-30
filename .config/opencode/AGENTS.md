@@ -7,7 +7,7 @@
 - You MUST fully build the project.
 - You MUST fully test the project.
 - You MUST update the projects @README.md with changes to any of the information it includes or new information that makes sense to put there, using the @docs-writer subagent.
-- You MUST update @CHANGELOG.md according to www.keepachangelog.com and www.semver.org, using the @docs-writer subagent, when you make changes.
+- You MUST update @CHANGELOG.md (if one exists) according to www.keepachangelog.com and www.semver.org, using the @docs-writer subagent, when you make changes.
 
 **CRITICAL**: When making implementations you MUST follow to the points below:
 - You MUST review code when making changes or writing new code, using the @code-review subagent and then implement changes based on the review.
