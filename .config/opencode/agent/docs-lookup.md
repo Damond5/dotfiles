@@ -4,7 +4,7 @@ mode: subagent
 temperature: 0.0
 tools:
   context7_resolve-library-id: true
-  context7_get-library-docs: true
+  context7_query-docs: true
   webfetch: true
   bash: false
   write: false

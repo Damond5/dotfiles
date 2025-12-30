@@ -3,12 +3,23 @@ description: Reviews OpenSpec change proposals for quality and suggests improvem
 mode: subagent
 temperature: 0.0
 tools:
-  write: false
-  edit: false
-  bash: true
   read: true
   glob: true
   grep: true
+  list: true
+  write: false
+  edit: false
+  bash: true
+  webfetch: true
+permission:
+  bash:
+    "openspec validate": allow
+    "openspec show": allow
+    "openspec list": allow
+    "openspec spec": allow
+    "openspec change": allow
+    "openspec archive": allow
+    "*": deny
 ---
 
 You are an OpenSpec change proposal reviewer. Focus on identifying issues that impact quality, completeness, and alignment with the codebase.
