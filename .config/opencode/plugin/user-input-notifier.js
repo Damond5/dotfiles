@@ -1,5 +1,4 @@
 export const UserInputNotifier = async ({ $, directory }) => {
-  // Check if notify-send is available
   let notifyAvailable = false;
   try {
     await $`test -x /usr/bin/notify-send`;
@@ -10,13 +9,15 @@ export const UserInputNotifier = async ({ $, directory }) => {
 
   return {
     event: async ({ event }) => {
-      if (!event || event.type !== "input.required") return;
       if (!notifyAvailable) return;
 
-      try {
-        await $`notify-send "OpenCode" "User input required" --urgency=normal`;
-      } catch (error) {
-        console.error("Failed to send input notification:", error.message);
+      if (event.type === "permission.updated") {
+        const { action, target } = event.data || event.properties || {};
+        try {
+          await $`notify-send "OpenCode" "Permission required for ${action} on ${target}" --urgency=normal`;
+        } catch (error) {
+          console.error("Failed to send notification:", error.message);
+        }
       }
     },
   };
