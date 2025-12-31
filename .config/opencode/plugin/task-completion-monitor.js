@@ -1,18 +1,61 @@
 export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const PASSWORD_COMPLETED = "TASK_COMPLETED_OK";
   const PASSWORD_BLOCKED = "TASK_BLOCKED_NO_CONTINUE";
+  const BUILD_MODE = 'build';
+  const LONG_RUNNING_CALL_THRESHOLD = 10;
   const abortedSessions = new Set();
   const promptedSessions = new Set();
+  const toolCallsBySession = new Map();
+  const bashCommandsBySession = new Map();
+
+  const debugLogPath = '/tmp/task-completion-monitor-debug.log';
+
+  const debugLog = async (message) => {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
+    try {
+      await Bun.write(debugLogPath, logMessage, { createPath: true });
+    } catch (error) {
+      console.error('Failed to write debug log:', error);
+    }
+  };
+
+  const trackToolCall = (sessionID, callID) => {
+    if (!toolCallsBySession.has(sessionID)) {
+      toolCallsBySession.set(sessionID, new Set());
+    }
+    toolCallsBySession.get(sessionID).add(callID);
+  };
+
+  const trackBashCommand = (sessionID, messageID) => {
+    if (!bashCommandsBySession.has(sessionID)) {
+      bashCommandsBySession.set(sessionID, new Set());
+    }
+    bashCommandsBySession.get(sessionID).add(messageID);
+  };
+
+  const getExecutionCount = (sessionID) => {
+    const toolCount = toolCallsBySession.get(sessionID)?.size || 0;
+    const bashCount = bashCommandsBySession.get(sessionID)?.size || 0;
+    return toolCount + bashCount;
+  };
+
+  const cleanupSessionTracking = async (sessionID) => {
+    toolCallsBySession.delete(sessionID);
+    bashCommandsBySession.delete(sessionID);
+    await debugLog(`Cleaned up tracking for session ${sessionID.substring(0, 8)}`);
+  };
 
   return {
     event: async ({ event }) => {
       if (!event) return;
-      
+
       if (event.type === "session.error") {
         const { sessionID, error } = event.properties;
         if (sessionID && error?.name === "MessageAbortedError") {
           abortedSessions.add(sessionID);
           promptedSessions.delete(sessionID);
+          await cleanupSessionTracking(sessionID);
           await client.tui.showToast({
             body: {
               message: `Session ${sessionID.substring(0, 8)} interrupted - tracking for skip`,
@@ -22,7 +65,25 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
         }
         return;
       }
-      
+
+      if (event.type === "message.part.updated") {
+        const part = event.properties.part;
+        if (part?.type === 'tool') {
+          trackToolCall(part.sessionID, part.callID);
+          await debugLog(`Tool call tracked: ${part.tool} for session ${part.sessionID.substring(0, 8)} (callID: ${part.callID.substring(0, 8)})`);
+        }
+        return;
+      }
+
+      if (event.type === "command.executed") {
+        const { sessionID, messageID, name } = event.properties;
+        if (sessionID && messageID) {
+          trackBashCommand(sessionID, messageID);
+          await debugLog(`Bash command executed: ${name} for session ${sessionID.substring(0, 8)} (messageID: ${messageID.substring(0, 8)})`);
+        }
+        return;
+      }
+
       if (event.type !== "session.idle") return;
 
       const { sessionID } = event.properties;
@@ -34,6 +95,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           }
         });
         abortedSessions.delete(sessionID);
+        await cleanupSessionTracking(sessionID);
         return;
       }
 
@@ -52,6 +114,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
         if (parentID) {
           console.log("Skipping subagent session");
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
@@ -61,12 +124,14 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
         if (!messagesResult || !messagesResult.data) {
           console.log("No messages result found in session");
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
         const messages = messagesResult.data;
         if (!Array.isArray(messages) || messages.length === 0) {
           console.log("No messages array found in session");
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
@@ -76,6 +141,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
         if (!lastAssistantMessage) {
           console.log("No assistant message found in session");
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
@@ -98,6 +164,22 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
               variant: "info"
             }
           });
+          await cleanupSessionTracking(sessionID);
+          return;
+        }
+
+        if (lastMessageMode !== BUILD_MODE) {
+          await debugLog(`Session ${sessionID.substring(0, 8)} is in '${lastMessageMode}' mode (not build) - skipping task completion analysis`);
+          await cleanupSessionTracking(sessionID);
+          return;
+        }
+
+        const executionCount = getExecutionCount(sessionID);
+        await debugLog(`Session ${sessionID.substring(0, 8)} has ${executionCount} tool/bash calls (threshold: ${LONG_RUNNING_CALL_THRESHOLD})`);
+
+        if (executionCount < LONG_RUNNING_CALL_THRESHOLD) {
+          await debugLog(`Session ${sessionID.substring(0, 8)} has ${executionCount} tool/bash calls (< ${LONG_RUNNING_CALL_THRESHOLD}) - skipping task completion analysis`);
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
@@ -151,6 +233,8 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           const notification = createNotificationMessage('completed', taskSummary);
           await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
           promptedSessions.delete(sessionID);
+          await cleanupSessionTracking(sessionID);
+          await debugLog(`Session ${sessionID.substring(0, 8)} completed successfully`);
           return;
         }
 
@@ -159,6 +243,8 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           const notification = createNotificationMessage('blocked', taskSummary);
           await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=critical`;
           promptedSessions.delete(sessionID);
+          await cleanupSessionTracking(sessionID);
+          await debugLog(`Session ${sessionID.substring(0, 8)} blocked - cannot continue`);
           return;
         }
 
@@ -175,6 +261,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
         if (promptedSessions.has(sessionID)) {
           console.log(`Session ${sessionID.substring(0, 8)} already prompted - skipping`);
+          await cleanupSessionTracking(sessionID);
           return;
         }
 
@@ -223,6 +310,8 @@ IMPORTANT: Only include the password at the very end of your final response, not
         });
 
         promptedSessions.delete(sessionID);
+        await cleanupSessionTracking(sessionID);
+        await debugLog(`Session ${sessionID.substring(0, 8)} task analysis prompt triggered`);
 
       } catch (error) {
         console.error("Task completion monitor error:", {
