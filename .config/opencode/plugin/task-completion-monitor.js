@@ -28,18 +28,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
     return null;
   };
 
-  const debugLogPath = '/tmp/task-completion-monitor-debug.log';
-
-  const debugLog = async (message) => {
-    const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] ${message}\n`;
-    try {
-      await Bun.write(debugLogPath, logMessage, { createPath: true });
-    } catch (error) {
-      console.error('Failed to write debug log:', error);
-    }
-  };
-
   const trackToolCall = (sessionID, callID) => {
     if (!toolCallsBySession.has(sessionID)) {
       toolCallsBySession.set(sessionID, new Set());
@@ -63,7 +51,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const cleanupSessionTracking = async (sessionID) => {
     toolCallsBySession.delete(sessionID);
     bashCommandsBySession.delete(sessionID);
-    await debugLog(`Cleaned up tracking for session ${sessionID.substring(0, 8)}`);
   };
 
   return {
@@ -90,7 +77,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
         const part = event.properties.part;
         if (part?.type === 'tool') {
           trackToolCall(part.sessionID, part.callID);
-          await debugLog(`Tool call tracked: ${part.tool} for session ${part.sessionID.substring(0, 8)} (callID: ${part.callID.substring(0, 8)})`);
         }
         return;
       }
@@ -99,7 +85,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
         const { sessionID, messageID, name } = event.properties;
         if (sessionID && messageID) {
           trackBashCommand(sessionID, messageID);
-          await debugLog(`Bash command executed: ${name} for session ${sessionID.substring(0, 8)} (messageID: ${messageID.substring(0, 8)})`);
         }
         return;
       }
@@ -176,33 +161,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           .map(part => part.text)
           .join('\n') || '';
 
-        const lastMessageMode = lastAssistantMessage?.info?.mode || lastAssistantMessage?.mode;
-        if (lastMessageMode === 'plan') {
-          await client.tui.showToast({
-            body: {
-              message: `Session ${sessionID.substring(0, 8)} currently in plan mode - skipping task completion analysis`,
-              variant: "info"
-            }
-          });
-          await cleanupSessionTracking(sessionID);
-          return;
-        }
-
-        if (lastMessageMode !== BUILD_MODE) {
-          await debugLog(`Session ${sessionID.substring(0, 8)} is in '${lastMessageMode}' mode (not build) - skipping task completion analysis`);
-          await cleanupSessionTracking(sessionID);
-          return;
-        }
-
-        const executionCount = getExecutionCount(sessionID);
-        await debugLog(`Session ${sessionID.substring(0, 8)} has ${executionCount} tool/bash calls (threshold: ${LONG_RUNNING_CALL_THRESHOLD})`);
-
-        if (executionCount < LONG_RUNNING_CALL_THRESHOLD) {
-          await debugLog(`Session ${sessionID.substring(0, 8)} has ${executionCount} tool/bash calls (< ${LONG_RUNNING_CALL_THRESHOLD}) - skipping task completion analysis`);
-          await cleanupSessionTracking(sessionID);
-          return;
-        }
-
         const extractTaskSummary = (text, maxLength = 80) => {
           const lines = text.split('\n');
           const validLines = [];
@@ -241,12 +199,46 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
         const getSessionShortId = (id) => id ? id.substring(0, 8) : 'unknown';
 
-        const createNotificationMessage = (type, summary) => {
+        const createNotificationMessage = (type, summary, reason = null) => {
           const emoji = type === 'completed' ? '✅' : '⏸️';
           const status = type === 'completed' ? 'Completed' : 'Blocked';
           const sessionId = getSessionShortId(sessionID);
-          return `${emoji} ${status}: ${summary} [${sessionId}]`;
+          const reasonText = reason ? ` (${reason})` : '';
+          return `${emoji} ${status}${reasonText}: ${summary} [${sessionId}]`;
         };
+
+        const sendTaskCompletionNotification = async (summary, reason = null) => {
+          const notification = createNotificationMessage('completed', summary, reason);
+          await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
+        };
+
+        const lastMessageMode = lastAssistantMessage?.info?.mode || lastAssistantMessage?.mode;
+        if (lastMessageMode === 'plan') {
+          await client.tui.showToast({
+            body: {
+              message: `Session ${sessionID.substring(0, 8)} currently in plan mode - skipping task completion analysis`,
+              variant: "info"
+            }
+          });
+          const taskSummary = extractTaskSummary(firstUserText);
+          await sendTaskCompletionNotification(taskSummary, 'plan mode');
+          await cleanupSessionTracking(sessionID);
+          return;
+        }
+
+        if (lastMessageMode !== BUILD_MODE) {
+          await cleanupSessionTracking(sessionID);
+          return;
+        }
+
+        const executionCount = getExecutionCount(sessionID);
+
+        if (executionCount < LONG_RUNNING_CALL_THRESHOLD) {
+          const taskSummary = extractTaskSummary(firstUserText);
+          await sendTaskCompletionNotification(taskSummary, 'low execution count');
+          await cleanupSessionTracking(sessionID);
+          return;
+        }
 
         const passwordMatch = messageText.match(/TASK_[a-f0-9]{12}/);
 
@@ -262,21 +254,17 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
 
               if (messageText.includes('TASK_COMPLETED')) {
                 const taskSummary = extractTaskSummary(firstUserText);
-                const notification = createNotificationMessage('completed', taskSummary);
-                await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
+                await sendTaskCompletionNotification(taskSummary);
                 await cleanupSessionTracking(sessionID);
-                await debugLog(`Session ${sessionID.substring(0, 8)} completed (${timeDiff}ms)`);
                 return;
               } else if (messageText.includes('TASK_BLOCKED')) {
                 const taskSummary = extractTaskSummary(firstUserText);
                 const notification = createNotificationMessage('blocked', taskSummary);
                 await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=critical`;
                 await cleanupSessionTracking(sessionID);
-                await debugLog(`Session ${sessionID.substring(0, 8)} blocked (${timeDiff}ms)`);
                 return;
               }
             } else {
-              await debugLog(`Session ${sessionID.substring(0, 8)} password expired (${timeDiff}ms > ${PASSWORD_VALIDITY_MS}ms)`);
               promptedSessions.delete(sessionID);
             }
           }
@@ -348,7 +336,6 @@ IMPORTANT: You must include the password exactly as shown above to verify your r
           password,
           timestamp: promptTimestamp
         });
-        await debugLog(`Session ${sessionID.substring(0, 8)} prompted with password verification`);
 
       } catch (error) {
         console.error("Task completion monitor error:", {
