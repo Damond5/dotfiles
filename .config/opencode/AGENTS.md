@@ -1,5 +1,6 @@
 # Global instructions
 - You MUST use the @docs-lookup subagent when looking up documentation.
+- You MUST use @docs-lookup BEFORE creating plans or implementing features that require knowledge of APIs, libraries, or frameworks you haven't used before.
 - You MUST use the @code-review subagent when making code reviews.
 
 **CRITICAL**: When making proposals, plans and/or tasks you MUST follow the points below:
