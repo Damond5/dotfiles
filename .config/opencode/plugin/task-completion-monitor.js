@@ -1,12 +1,30 @@
 export const TaskCompletionMonitor = async ({ $, directory, client }) => {
-  const PASSWORD_COMPLETED = "TASK_COMPLETED_OK";
-  const PASSWORD_BLOCKED = "TASK_BLOCKED_NO_CONTINUE";
   const BUILD_MODE = 'build';
   const LONG_RUNNING_CALL_THRESHOLD = 10;
   const abortedSessions = new Set();
   const promptedSessions = new Set();
   const toolCallsBySession = new Map();
   const bashCommandsBySession = new Map();
+  const passwordMap = new Map();
+
+  const generatePassword = (sessionID, type, store = true) => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2);
+    const data = sessionID + timestamp + type + random;
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    const password = `${type}_${Math.abs(hash).toString(16).padStart(12, '0')}`;
+
+    if (store) {
+      passwordMap.set(sessionID, password);
+    }
+
+    return password;
+  };
 
   const debugLogPath = '/tmp/task-completion-monitor-debug.log';
 
@@ -43,6 +61,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const cleanupSessionTracking = async (sessionID) => {
     toolCallsBySession.delete(sessionID);
     bashCommandsBySession.delete(sessionID);
+    passwordMap.delete(sessionID);
     await debugLog(`Cleaned up tracking for session ${sessionID.substring(0, 8)}`);
   };
 
@@ -228,23 +247,17 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           return `${emoji} ${status}: ${summary} [${sessionId}]`;
         };
 
-        if (messageText.includes(PASSWORD_COMPLETED)) {
-          const taskSummary = extractTaskSummary(firstUserText);
-          const notification = createNotificationMessage('completed', taskSummary);
-          await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
-          promptedSessions.delete(sessionID);
-          await cleanupSessionTracking(sessionID);
-          await debugLog(`Session ${sessionID.substring(0, 8)} completed successfully`);
-          return;
-        }
+        const storedPassword = passwordMap.get(sessionID);
 
-        if (messageText.includes(PASSWORD_BLOCKED)) {
+        if (storedPassword && messageText.includes(storedPassword)) {
           const taskSummary = extractTaskSummary(firstUserText);
-          const notification = createNotificationMessage('blocked', taskSummary);
-          await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=critical`;
+          const type = storedPassword.startsWith('TASK_COMPLETED') ? 'completed' : 'blocked';
+          const notification = createNotificationMessage(type, taskSummary);
+          await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=${type === 'completed' ? 'normal' : 'critical'}`;
+          passwordMap.delete(sessionID);
           promptedSessions.delete(sessionID);
           await cleanupSessionTracking(sessionID);
-          await debugLog(`Session ${sessionID.substring(0, 8)} blocked - cannot continue`);
+          await debugLog(`Session ${sessionID.substring(0, 8)} ${type}`);
           return;
         }
 
@@ -273,6 +286,9 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
             variant: "info"
           }
         });
+
+        const PASSWORD_COMPLETED = generatePassword(sessionID, 'TASK_COMPLETED');
+        const PASSWORD_BLOCKED = generatePassword(sessionID, 'TASK_BLOCKED');
 
         await client.session.prompt({
           path: { id: sessionID },
