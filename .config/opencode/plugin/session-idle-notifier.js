@@ -26,7 +26,7 @@ export const SessionIdleNotifier = async ({ $, directory }) => {
         }
 
         const idDisplay = sessionID || 'no ID';
-        console.log(`Main agent session ${idDisplay} is idle`);
+        // console.log(`Main agent session ${idDisplay} is idle`);
         await $`notify-send "OpenCode" "Session is idle" --urgency=normal`;
       } catch (error) {
         console.error(`Failed to send idle notification:`, {
