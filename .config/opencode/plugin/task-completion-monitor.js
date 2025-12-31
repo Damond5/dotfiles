@@ -2,28 +2,30 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const BUILD_MODE = 'build';
   const LONG_RUNNING_CALL_THRESHOLD = 10;
   const abortedSessions = new Set();
-  const promptedSessions = new Set();
+  const promptedSessions = new Map();
   const toolCallsBySession = new Map();
   const bashCommandsBySession = new Map();
-  const passwordMap = new Map();
+  const PASSWORD_VALIDITY_MS = 60000;
+  const SALT = 'opencode_task_monitor_2025_secret';
 
-  const generatePassword = (sessionID, type, store = true) => {
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2);
-    const data = sessionID + timestamp + type + random;
+  const generatePassword = (sessionID, timestamp) => {
+    const data = sessionID + timestamp + SALT;
     let hash = 0;
     for (let i = 0; i < data.length; i++) {
       const char = data.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
     }
-    const password = `${type}_${Math.abs(hash).toString(16).padStart(12, '0')}`;
+    return `TASK_${Math.abs(hash).toString(16).padStart(12, '0')}`;
+  };
 
-    if (store) {
-      passwordMap.set(sessionID, password);
+  const determineTaskStatus = (text) => {
+    if (text.includes('TASK_COMPLETED')) {
+      return 'completed';
+    } else if (text.includes('TASK_BLOCKED')) {
+      return 'blocked';
     }
-
-    return password;
+    return null;
   };
 
   const debugLogPath = '/tmp/task-completion-monitor-debug.log';
@@ -61,7 +63,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const cleanupSessionTracking = async (sessionID) => {
     toolCallsBySession.delete(sessionID);
     bashCommandsBySession.delete(sessionID);
-    passwordMap.delete(sessionID);
     await debugLog(`Cleaned up tracking for session ${sessionID.substring(0, 8)}`);
   };
 
@@ -247,18 +248,38 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           return `${emoji} ${status}: ${summary} [${sessionId}]`;
         };
 
-        const storedPassword = passwordMap.get(sessionID);
+        const passwordMatch = messageText.match(/TASK_[a-f0-9]{12}/);
 
-        if (storedPassword && messageText.includes(storedPassword)) {
-          const taskSummary = extractTaskSummary(firstUserText);
-          const type = storedPassword.startsWith('TASK_COMPLETED') ? 'completed' : 'blocked';
-          const notification = createNotificationMessage(type, taskSummary);
-          await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=${type === 'completed' ? 'normal' : 'critical'}`;
-          passwordMap.delete(sessionID);
-          promptedSessions.delete(sessionID);
-          await cleanupSessionTracking(sessionID);
-          await debugLog(`Session ${sessionID.substring(0, 8)} ${type}`);
-          return;
+        if (passwordMatch) {
+          const password = passwordMatch[0];
+          const pendingCheck = promptedSessions.get(sessionID);
+
+          if (pendingCheck && pendingCheck.password === password) {
+            const timeDiff = Date.now() - pendingCheck.timestamp;
+
+            if (timeDiff <= PASSWORD_VALIDITY_MS) {
+              promptedSessions.delete(sessionID);
+
+              if (messageText.includes('TASK_COMPLETED')) {
+                const taskSummary = extractTaskSummary(firstUserText);
+                const notification = createNotificationMessage('completed', taskSummary);
+                await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
+                await cleanupSessionTracking(sessionID);
+                await debugLog(`Session ${sessionID.substring(0, 8)} completed (${timeDiff}ms)`);
+                return;
+              } else if (messageText.includes('TASK_BLOCKED')) {
+                const taskSummary = extractTaskSummary(firstUserText);
+                const notification = createNotificationMessage('blocked', taskSummary);
+                await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=critical`;
+                await cleanupSessionTracking(sessionID);
+                await debugLog(`Session ${sessionID.substring(0, 8)} blocked (${timeDiff}ms)`);
+                return;
+              }
+            } else {
+              await debugLog(`Session ${sessionID.substring(0, 8)} password expired (${timeDiff}ms > ${PASSWORD_VALIDITY_MS}ms)`);
+              promptedSessions.delete(sessionID);
+            }
+          }
         }
 
         if (abortedSessions.has(sessionID)) {
@@ -278,8 +299,6 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           return;
         }
 
-        promptedSessions.add(sessionID);
-
         await client.tui.showToast({
           body: {
             message: "No completion password found - triggering task analysis...",
@@ -287,8 +306,8 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           }
         });
 
-        const PASSWORD_COMPLETED = generatePassword(sessionID, 'TASK_COMPLETED');
-        const PASSWORD_BLOCKED = generatePassword(sessionID, 'TASK_BLOCKED');
+        const promptTimestamp = Date.now();
+        const password = generatePassword(sessionID, promptTimestamp);
 
         await client.session.prompt({
           path: { id: sessionID },
@@ -312,22 +331,24 @@ Based on your analysis:
 
 **If tasks are NOT fully completed and CANNOT continue:**
 - Output your EXACT last message above (your last assistant response before this analysis), word-for-word, without any changes
-- After that exact message, on a new line, add only: ${PASSWORD_BLOCKED}
+- After that exact message, on a new line, add: ${password} TASK_BLOCKED
 - DO NOT explain missing info, DO NOT modify the last message, DO NOT add any other text
 
 **If tasks ARE fully completed:**
 - Output your EXACT last message above (your last assistant response before this analysis), word-for-word, without any changes
-- After that exact message, on a new line, add only: ${PASSWORD_COMPLETED}
+- After that exact message, on a new line, add: ${password} TASK_COMPLETED
 - DO NOT write any summary, DO NOT modify the last message, DO NOT add any other text
 
-IMPORTANT: Only include the password at the very end of your final response, not during the continuation process.`
+IMPORTANT: You must include the password exactly as shown above to verify your response. Only include this at the very end of your final response.`
             }]
           }
         });
 
-        promptedSessions.delete(sessionID);
-        await cleanupSessionTracking(sessionID);
-        await debugLog(`Session ${sessionID.substring(0, 8)} task analysis prompt triggered`);
+        promptedSessions.set(sessionID, {
+          password,
+          timestamp: promptTimestamp
+        });
+        await debugLog(`Session ${sessionID.substring(0, 8)} prompted with password verification`);
 
       } catch (error) {
         console.error("Task completion monitor error:", {
