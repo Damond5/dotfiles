@@ -2,6 +2,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
   const PASSWORD_COMPLETED = "TASK_COMPLETED_OK";
   const PASSWORD_BLOCKED = "TASK_BLOCKED_NO_CONTINUE";
   const abortedSessions = new Set();
+  const promptedSessions = new Set();
 
   return {
     event: async ({ event }) => {
@@ -11,6 +12,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
         const { sessionID, error } = event.properties;
         if (sessionID && error?.name === "MessageAbortedError") {
           abortedSessions.add(sessionID);
+          promptedSessions.delete(sessionID);
           await client.tui.showToast({
             body: {
               message: `Session ${sessionID.substring(0, 8)} interrupted - tracking for skip`,
@@ -36,13 +38,20 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
       }
 
       try {
-        const props = event.properties || {};
+        const sessionResult = await client.session.get({
+          path: { id: sessionID }
+        });
 
-        const parentID = props.parentID;
-        const agentMode = props.agent?.mode;
-        const isSubagent = parentID || agentMode === 'subagent';
+        if (!sessionResult || !sessionResult.data) {
+          console.log("No session found");
+          return;
+        }
 
-        if (isSubagent) {
+        const session = sessionResult.data;
+        const parentID = session.parentID;
+
+        if (parentID) {
+          console.log("Skipping subagent session");
           return;
         }
 
@@ -130,6 +139,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           const taskSummary = extractTaskSummary(firstUserText);
           const notification = createNotificationMessage('completed', taskSummary);
           await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=normal`;
+          promptedSessions.delete(sessionID);
           return;
         }
 
@@ -137,8 +147,27 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           const taskSummary = extractTaskSummary(firstUserText);
           const notification = createNotificationMessage('blocked', taskSummary);
           await $`notify-send "OpenCode Task Monitor" "${notification}" --urgency=critical`;
+          promptedSessions.delete(sessionID);
           return;
         }
+
+        if (abortedSessions.has(sessionID)) {
+          await client.tui.showToast({
+            body: {
+              message: `Session ${sessionID.substring(0, 8)} interrupted - skipping task analysis`,
+              variant: "info"
+            }
+          });
+          abortedSessions.delete(sessionID);
+          return;
+        }
+
+        if (promptedSessions.has(sessionID)) {
+          console.log(`Session ${sessionID.substring(0, 8)} already prompted - skipping`);
+          return;
+        }
+
+        promptedSessions.add(sessionID);
 
         await client.tui.showToast({
           body: {
@@ -150,6 +179,7 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
         await client.session.prompt({
           path: { id: sessionID },
           body: {
+            agent: lastAssistantMessage.mode,
             parts: [{
               type: "text",
               text: `## Task Completion Analysis
@@ -167,17 +197,21 @@ Based on your analysis:
 - Work through all remaining tasks until fully complete
 
 **If tasks are NOT fully completed and CANNOT continue:**
-- Explain what information or context is missing
-- At the very end of your response, include: ${PASSWORD_BLOCKED}
+- Output your EXACT last message above (your last assistant response before this analysis), word-for-word, without any changes
+- After that exact message, on a new line, add only: ${PASSWORD_BLOCKED}
+- DO NOT explain missing info, DO NOT modify the last message, DO NOT add any other text
 
 **If tasks ARE fully completed:**
-- Summarize what was completed
-- At the very end of your response, include: ${PASSWORD_COMPLETED}
+- Output your EXACT last message above (your last assistant response before this analysis), word-for-word, without any changes
+- After that exact message, on a new line, add only: ${PASSWORD_COMPLETED}
+- DO NOT write any summary, DO NOT modify the last message, DO NOT add any other text
 
 IMPORTANT: Only include the password at the very end of your final response, not during the continuation process.`
             }]
           }
         });
+
+        promptedSessions.delete(sessionID);
 
       } catch (error) {
         console.error("Task completion monitor error:", {
