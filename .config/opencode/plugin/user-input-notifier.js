@@ -12,9 +12,11 @@ export const UserInputNotifier = async ({ $, directory }) => {
       if (!notifyAvailable) return;
 
       if (event.type === "permission.updated") {
-        const { action, target } = event.data || event.properties || {};
+        const { type, title, pattern } = event.properties || {};
+        if (!type) return;
+        const message = title || pattern || type;
         try {
-          await $`notify-send "OpenCode" "Permission required for ${action} on ${target}" --urgency=normal`;
+          await $`notify-send "OpenCode" "Permission required: ${type} - ${message}" --urgency=normal`;
         } catch (error) {
           console.error("Failed to send notification:", error.message);
         }
