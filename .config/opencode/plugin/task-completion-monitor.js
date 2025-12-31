@@ -90,6 +90,17 @@ export const TaskCompletionMonitor = async ({ $, directory, client }) => {
           .map(part => part.text)
           .join('\n') || '';
 
+        const lastMessageMode = lastAssistantMessage?.info?.mode || lastAssistantMessage?.mode;
+        if (lastMessageMode === 'plan') {
+          await client.tui.showToast({
+            body: {
+              message: `Session ${sessionID.substring(0, 8)} currently in plan mode - skipping task completion analysis`,
+              variant: "info"
+            }
+          });
+          return;
+        }
+
         const extractTaskSummary = (text, maxLength = 80) => {
           const lines = text.split('\n');
           const validLines = [];
