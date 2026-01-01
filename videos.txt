@@ -96,6 +96,7 @@ star.trek.discovery.s05e10.watched
 star.trek.lower.decks.s01e10.watched
 star.trek.picard.2020.s02e10.watched
 star.trek.strange.new.worlds.s03e10.watched
+stranger.things.s05e08.watched
 supergirl.s06e09.watched
 superman.and.lois.s04e10.watched
 supernatural.academy.2022
