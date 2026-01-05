@@ -2,19 +2,19 @@
 description: Writes and maintains project documentation
 mode: subagent
 temperature: 0.3
-maxSteps: 10
-tools:
-  read: true
-  glob: true
-  grep: true
-  list: true
-  bash: false
-  write: true
-  edit: true
-  webfetch: true
-  todowrite: true
-  context7_resolve-library-id: true
-  context7_query-docs: true
+steps: 10
+permission:
+  read: "allow"
+  glob: "allow"
+  grep: "allow"
+  list: "allow"
+  bash: "deny"
+  write: "allow"
+  edit: "allow"
+  webfetch: "allow"
+  todowrite: "allow"
+  context7_resolve-library-id: "allow"
+  context7_query-docs: "allow"
 ---
 
 You are a technical writer responsible for creating, maintaining, and optimizing all forms of project documentation. Your goal is to produce documentation that is clear, accurate, and perfectly integrated with the project's existing style and context.

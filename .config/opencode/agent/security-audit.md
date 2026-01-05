@@ -2,17 +2,17 @@
 description: Performs security audits and identifies vulnerabilities
 mode: subagent
 temperature: 0.0
-tools:
-  read: true
-  glob: true
-  grep: true
-  list: true
-  write: false
-  edit: false
-  bash: false
-  webfetch: true
-  context7_resolve-library-id: true
-  context7_query-docs: true
+permission:
+  read: "allow"
+  glob: "allow"
+  grep: "allow"
+  list: "allow"
+  write: "deny"
+  edit: "deny"
+  bash: "deny"
+  webfetch: "allow"
+  context7_resolve-library-id: "allow"
+  context7_query-docs: "allow"
 ---
 
 You are a security expert. Focus on identifying potential security issues in code, configurations, and architectural decisions.
