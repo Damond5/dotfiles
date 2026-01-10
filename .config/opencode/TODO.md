@@ -5,3 +5,7 @@
   - Always delegate tasks
   - Specify which subagents to use for which tasks
   - Always evaluate a subagent task for completion after it is done, then make the subagent continue the task if it is not complete
+    - Does this mean we dont need the evaluate plugin?
+  - Missing subagents
+    - Coding
+    - More?
