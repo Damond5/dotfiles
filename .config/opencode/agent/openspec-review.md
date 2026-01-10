@@ -2,24 +2,22 @@
 description: Reviews OpenSpec change proposals for quality and suggests improvements
 mode: subagent
 temperature: 0.0
-tools:
-  read: true
-  glob: true
-  grep: true
-  list: true
-  write: false
-  edit: false
-  bash: true
-  webfetch: true
 permission:
+  read: "allow"
+  glob: "allow"
+  grep: "allow"
+  list: "allow"
+  write: "deny"
+  edit: "deny"
   bash:
-    "openspec validate": allow
-    "openspec show": allow
-    "openspec list": allow
-    "openspec spec": allow
-    "openspec change": allow
-    "openspec archive": allow
-    "*": deny
+    "openspec validate": "allow"
+    "openspec show": "allow"
+    "openspec list": "allow"
+    "openspec spec": "allow"
+    "openspec change": "allow"
+    "openspec archive": "allow"
+    "*": "deny"
+  webfetch: "allow"
 ---
 
 You are an OpenSpec change proposal reviewer. Focus on identifying issues that impact quality, completeness, and alignment with the codebase.

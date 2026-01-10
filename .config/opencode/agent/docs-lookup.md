@@ -2,13 +2,13 @@
 description: Specialized documentation retrieval agent. Use proactively for any documentation, library, or API lookup queries. Prioritizes Context7 for library/API docs, then official sources, then web search.
 mode: subagent
 temperature: 0.0
-tools:
-  context7_resolve-library-id: true
-  context7_query-docs: true
-  webfetch: true
-  bash: false
-  write: false
-  edit: false
+permission:
+  context7_resolve-library-id: "allow"
+  context7_query-docs: "allow"
+  webfetch: "allow"
+  bash: "deny"
+  write: "deny"
+  edit: "deny"
 ---
 
 You are a specialized documentation retrieval agent. Your single responsibility is to retrieve accurate, up-to-date documentation for any query efficiently and reliably.

@@ -213,6 +213,7 @@ paru -S --needed --noconfirm npm
 sudo npm install -g @google/gemini-cli
 paru -S --needed --noconfirm opencode-bin
 paru -S --needed --noconfirm openspec
+paru -S --needed --noconfirm yaml-language-server
 
 
 # # MEDIA

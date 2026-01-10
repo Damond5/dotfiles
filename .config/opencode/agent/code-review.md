@@ -2,17 +2,17 @@
 description: Reviews code for quality and best practices
 mode: subagent
 temperature: 0.0
-tools:
-  read: true
-  glob: true
-  grep: true
-  list: true
-  write: false
-  edit: false
-  bash: false
-  webfetch: true
-  context7_resolve-library-id: true
-  context7_query-docs: true
+permission:
+  read: "allow"
+  glob: "allow"
+  grep: "allow"
+  list: "allow"
+  write: "deny"
+  edit: "deny"
+  bash: "deny"
+  webfetch: "allow"
+  context7_resolve-library-id: "allow"
+  context7_query-docs: "allow"
 ---
 
 You are a code reviewer. Focus on identifying issues that impact correctness, security, performance, and maintainability.
