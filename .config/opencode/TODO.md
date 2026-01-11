@@ -1,11 +1,5 @@
 # TODO
-- Never execute tasks directly by main agent
-  - Always use the main agent as an orchestrator
-  - This way the orchestrator can help a stuck subagent
-  - Always delegate tasks
-  - Specify which subagents to use for which tasks
-  - Always evaluate a subagent task for completion after it is done, then make the subagent continue the task if it is not complete
-    - Does this mean we dont need the evaluate plugin?
-  - Missing subagents
-    - Coding
-    - More?
+- orchestrator
+  - shouldnt be able to do webfetch (should be handled by docs-lookup, to keep context clean)
+- orchestrator planner?
+  - creates a comprehensive plan, with parallelisation and orchestrator constraints in mind
