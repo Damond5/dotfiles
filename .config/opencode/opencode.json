@@ -28,5 +28,25 @@
         }
       }
     }
+  },
+  "agent": {
+    "explore": {
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "list": true,
+        "bash": true
+      },
+      "permission": {
+        "bash": {
+          "*": "deny",
+          "find *": "allow",
+          "git status": "allow",
+          "git log *": "allow",
+          "ls *": "allow"
+        }
+      }
+    }
   }
 }
