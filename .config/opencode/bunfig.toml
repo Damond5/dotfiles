@@ -1,0 +1,20 @@
+# Bun Test Runner Configuration
+# Bun automatically discovers test files, so this is minimal configuration
+
+# Test file patterns (default: **/*.{test,spec}.{js,ts})
+# testFiles = ["tests/**/*.test.js"]
+
+# Enable coverage reporting
+# coverage = true
+
+# Coverage exclude patterns
+# coverageExclude = ["node_modules/**", "tests/**"]
+
+# Test timeout in milliseconds (default: 10000)
+# timeout = 30000
+
+# Bail on first test failure
+# bail = true
+
+# Run tests in parallel (default: true)
+# parallel = true
