@@ -1,5 +1,4 @@
 ---
-agent: build
 description: Review an OpenSpec change and implement improvements.
 ---
 The user has requested the following change proposal be reviewed.

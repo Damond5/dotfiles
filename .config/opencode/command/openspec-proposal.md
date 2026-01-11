@@ -1,5 +1,4 @@
 ---
-agent: build
 description: Scaffold a new OpenSpec change and validate strictly.
 ---
 The user has requested the following change proposal. Use the openspec instructions to create their change proposal.
