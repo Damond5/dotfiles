@@ -34,7 +34,6 @@ export const SessionIdleNotifier = async ({ $, directory, client }) => {
           const parentID = session.parentID;
 
           if (parentID) {
-            console.log("Skipping subagent session:", sessionID);
             return;
           }
         } catch (apiError) {
