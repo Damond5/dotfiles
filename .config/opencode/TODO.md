@@ -1,4 +1,7 @@
 # TODO
+- force code review BEFORE running tests
+- user action needed notification for questions
+  - see new opencode changelog
 - better subagent descriptions, so orchestrator doesnt choose the wrong one
 - make openspec-review command automatically implement changes based on the review
 - make openspec-review command add step to update tasks.md to mark all tasks done
