@@ -17,15 +17,6 @@
 - You MUST review code when making changes or writing new code, using the @code-review subagent and then implement changes based on the review.
 - You MUST fix warnings immediately.
 
-## Large, complex and/or multistep tasks
-Example: "complete all the tasks in the @TODO.md file"
-- You MUST complete large and/or complex tasks in steps:
-  1. Assess if the task can be completed in parallel, by subagents.
-    - You MUST choose the appropriate subagent for each task.
-  2. Make a plan to complete the task.
-    - If applicaple this plan should include an initial step to refacture the code base, such that subagents can work in parallel with minimum interferance.
-  3. Execute the plan.
-
 ## Host system information
 - **Operation system**: Arch Linux
 - **Package manager**: paru
