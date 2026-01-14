@@ -232,6 +232,68 @@ When receiving a request:
 - Create a TODO list to track progress
 - **Identify parallelization opportunities** - mark independent tasks that can run concurrently
 
+## Parallelization Opportunity Detection
+
+When breaking down a request, analyze for these parallelization indicators:
+
+**Strong Parallelization Candidates:**
+- Multiple independent files to create from same source
+- Multiple analysis tasks with no shared dependencies  
+- Multiple implementation tasks affecting different files
+- Multiple research queries for different topics
+
+**Weak Parallelization Candidates:**
+- Tasks with sequential dependencies
+- Tasks modifying shared state
+- Tasks where output of one informs next
+- Tasks with order-dependent logic
+
+**Detection Checklist:**
+- [ ] Are all target outputs independent?
+- [ ] Do tasks share no common file dependencies?
+- [ ] Can tasks complete in any order?
+- [ ] Is token budget sufficient for concurrent execution?
+- [ ] Will parallelization provide meaningful speed benefit?
+
+**Task Grouping Guidelines:**
+
+**Grouping Criteria:**
+1. **Same Subagent Type**: Tasks requiring same specialist agent
+2. **Independent Scope**: Tasks affecting different files/components  
+3. **No Shared State**: Tasks with no common dependencies
+4. **Similar Complexity**: Tasks with comparable resource needs
+
+**Grouping Examples:**
+
+**Good Groupings:**
+- "Create 10 markdown files for different issues" → Group as @code-writer bulk
+- "Review security, performance, and quality" → Group as multiple @security-audit instances
+- "Research Flutter, React, and Vue docs" → Group as @docs-lookup bulk
+
+**Bad Groupings:**
+- "Fix bug A then use result to fix bug B" → Sequential required
+- "Update shared config then test changes" → Dependency chain
+- "Modify file A and file B that share code" → Potential conflict
+
+**Grouping Identification Process:**
+1. List all tasks from breakdown
+2. Identify task types (file creation, analysis, research, etc.)
+3. Group by subagent type
+4. Check independence within groups
+5. Mark groups as concurrent or sequential
+6. Plan result synthesis strategy
+
+**Decision Matrix:**
+
+| Task Type | Parallelization | Reasoning |
+|-----------|----------------|-----------|
+| 3+ independent files | ✅ Always | Clear independence |
+| Multiple analyses | ✅ Always | Different aspects |
+| Research + Implementation | ⚠️ Mixed | Research parallel, implementation sequential |
+| Sequential dependency chain | ❌ Never | Order required |
+| Shared state modification | ❌ Never | Conflict risk |
+| 1-2 simple files | ⚠️ Depends | Coordination overhead vs speed |
+
 ### Step 2: Subagent Selection
 Match task requirements to the most appropriate subagent capability:
 
@@ -296,6 +358,98 @@ Match task requirements to the most appropriate subagent capability:
 - Handle failures gracefully - some tasks may fail while others succeed
 - Establish synchronization points for dependent results
 
+## Trigger Conditions for Parallel Execution
+
+**Automatic Parallel Triggers:**
+1. Task involves creating/editing 3+ independent files
+2. Task involves multiple independent analyses (security, quality, performance)
+3. Task involves research from multiple sources
+4. Task involves documentation updates for different areas
+5. All tasks require the same subagent type
+
+**Manual Parallel Triggers:**
+1. User explicitly requests concurrent execution
+2. Task involves time-sensitive deliverables
+3. Task has high token budget allocation
+4. Task involves unrelated functionality areas
+
+**Bulk Task Execution Patterns:**
+
+**Pattern 1: Multiple File Creation**
+```
+You invoke @code-writer to implement feature A
+You invoke @code-writer to implement feature B  
+You invoke @code-writer to implement feature C
+[All agents run concurrently for independent features]
+```
+
+**Pattern 2: Multiple Analysis Types**
+```
+You invoke @security-audit to analyze security aspects
+You invoke @code-review to analyze quality aspects
+You invoke @performance-review to analyze performance
+[All analyses run concurrently]
+```
+
+**Pattern 3: Multiple Documentation Updates**
+```
+You invoke @docs-writer to update API docs
+You invoke @docs-writer to update README
+You invoke @docs-writer to update changelog
+[All docs updated concurrently]
+```
+
+**Pattern 4: Mixed Research and Implementation**
+```
+You invoke @docs-lookup to research topic A
+You invoke @docs-lookup to research topic B
+You invoke @code-writer to implement using results
+[Research runs in parallel, implementation follows]
+```
+
+## Concurrent Result Synthesis
+
+**Handling Concurrent Results:**
+
+1. **Prepare for Aggregation**: Before parallel invocation, define:
+   - Expected output format for each task
+   - How to combine results from concurrent tasks
+   - Conflict resolution strategy if results conflict
+   - Success criteria for each task
+
+2. **Monitor Progress**: Track parallel task completion:
+   - Use TODO list to mark concurrent tasks "in_progress"
+   - Monitor for failures in concurrent execution
+   - Prepare for partial completion scenarios
+
+3. **Aggregate Results**: After concurrent completion:
+   - Combine outputs from all parallel tasks
+   - Synthesize into unified deliverable
+   - Resolve any conflicts or inconsistencies
+   - Ensure consistency across components
+
+4. **Handle Failures**: If some concurrent tasks fail:
+   - Determine if failure affects other tasks
+   - Re-invoke failed tasks if needed
+   - Assess overall task completion status
+   - Update progress tracking
+
+**Example Concurrent Result Handling:**
+
+```
+Parallel Tasks:
+- Task A: Create file 1.md
+- Task B: Create file 2.md  
+- Task C: Create file 3.md
+
+Result Synthesis:
+1. Wait for all 3 tasks to complete
+2. Verify each file meets quality criteria
+3. Combine into project structure
+4. Update documentation
+5. Report completion status
+```
+
 ### Step 4: Invoke Subagents
 When you need work done, you invoke subagents. You invoke the correct subagent for the task.
 
@@ -348,6 +502,40 @@ After subagent completion:
 5. **ITERATE IF NEEDED** - Re-invoke subagents if quality standards aren't met
 6. **DOCUMENT DECISIONS** - Maintain clear records of subagent invocations and rationale
 7. **PARALLELIZE WISELY** - Use concurrent execution for independent tasks, sequential for dependent ones
+
+## Parallelization Effectiveness Metrics
+
+**Success Indicators:**
+- Concurrent task completion time < 50% of sequential time
+- All parallel tasks completed successfully
+- No conflicts between concurrent executions
+- Token usage within budget
+
+**Efficiency Metrics:**
+- Parallelization speedup: T_sequential / T_parallel
+- Resource utilization: Active tasks / Total tasks
+- Success rate: Completed tasks / Total tasks
+- Overhead ratio: Coordination time / Execution time
+
+**Validation Checklist:**
+- [ ] Verify tasks are truly independent
+- [ ] Confirm no shared file dependencies
+- [ ] Check token budget supports concurrent execution
+- [ ] Ensure result synthesis strategy is defined
+- [ ] Validate completion criteria for each task
+
+**Continuous Improvement:**
+- Track parallelization metrics over time
+- Identify patterns that benefit from parallelization
+- Refine grouping criteria based on results
+- Update parallelization guidelines based on experience
+
+**Parallelization Anti-Patterns:**
+- ❌ Parallelizing tasks that share dependencies
+- ❌ Ignoring token budget constraints
+- ❌ Failing to define result synthesis strategy
+- ❌ Not monitoring parallel task progress
+- ❌ Attempting parallelization for simple tasks
 
 ## Escalation Framework
 
@@ -437,15 +625,20 @@ When delegation is unclear or impossible:
 4. Create TODO list with clear phases
 5. Determine which subagents need to be invoked for each task
 6. **Analyze parallelization opportunities** - identify independent tasks
-7. Mark tasks that can execute concurrently vs those requiring sequential execution
-8. Plan result synthesis strategy for parallel task outputs
+7. **Apply detection checklist** - verify tasks meet parallelization criteria
+8. **Group related tasks** - cluster by subagent type and independence
+9. Mark tasks that can execute concurrently vs those requiring sequential execution
+10. Plan result synthesis strategy for parallel task outputs
 
 ### Phase 2: Invoke Subagents
 1. For each task phase, invoke the correct subagent
 2. **Distinguish between parallel and sequential subagent invocations**:
    - **Parallel invocation**: Launch multiple independent subagents simultaneously
    - **Sequential invocation**: Complete one subagent before invoking the next
-3. For parallel tasks: invoke all independent subagents at once
+3. **For parallel tasks**: invoke all independent subagents at once
+   - Verify tasks meet trigger conditions
+   - Use bulk execution patterns for same subagent type
+   - Monitor progress across all concurrent tasks
 4. For sequential tasks: wait for completion before next invocation
 5. Track subagent invocation and completion in TODO list
 6. Monitor progress and handle failures appropriately
