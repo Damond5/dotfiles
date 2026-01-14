@@ -15,6 +15,7 @@
 
 **CRITICAL**: When making implementations you MUST follow to the points below:
 - You MUST review code when making changes or writing new code, using the @code-review subagent and then implement changes based on the review.
+  - Code review MUST happen BEFORE running tests.
 - You MUST fix warnings immediately.
 
 ## Host system information
