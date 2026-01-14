@@ -1,34 +1,63 @@
 ---
-description: Review an OpenSpec change and implement improvements.
+description: Review an OpenSpec change proposal and update design documents based on feedback.
 ---
 The user has requested the following change proposal be reviewed.
 <UserRequest>
   $ARGUMENTS
 </UserRequest>
 <!-- OPENSPEC:START -->
+**IMPORTANT: This command ONLY reviews proposals and updates design documents**
+
+**Review Scope**
+- **DO**: Analyze and evaluate change proposals
+- **DO**: Update design documents (proposal.md, tasks.md, design.md, spec deltas) based on feedback
+- **DO NOT**: Write code (implementation happens in a separate apply phase)
+- **DO NOT**: Write tests (tests are part of the implementation phase)
+- **DO NOT**: Update general documentation beyond design documents (general docs are handled separately)
+- **DO NOT**: Build or verify the project (that's for the implementation phase)
+
 **Guardrails**
+- This command ONLY reviews proposals and updates design documents.
+- Implementation, tests, documentation updates, and building happen in a separate apply phase.
+- NO code writing, NO test creation, NO documentation updates beyond design docs, NO building.
 - Favor straightforward, minimal implementations first and add complexity only when it is requested or clearly required.
 - Keep changes tightly scoped to the requested outcome.
 - Refer to `openspec/AGENTS.md` (located inside the `openspec/` directory—run `ls openspec` or `openspec update` if you don't see it) if you need additional OpenSpec conventions or clarifications.
 - Identify any vague or ambiguous details and ask the necessary follow-up questions before editing files.
-- Do not write any code or documentation during the proposal review stage. Only create design documents (proposal.md, tasks.md, design.md, and spec deltas). Implementation happens in the apply stage after approval.
 
 **Requirements**
-- The change proposals @tasks.md MUST include writing tests for the proposed changes.
-  - The tests written MUST consider both unit tests and integration tests.
-- The change proposals @tasks.md MUST include a code review of the implementation.
-  - The code review MUST be done using the @code-review subagent.
-  - ALL suggestions from the code review MUST be implemented.
-- The change proposals @tasks.md MUST include running all tests.
-- The change proposals @tasks.md MUST include updates to documentation.
-  - The updates to documentation MUST include, but is not limited to @CHANGELOG.md and @README.md.
-  - The updteas to documentation MUST be done using the @docs-writer subagent.
+- **Phase 1: Review** - Review the change proposal and analyze it thoroughly.
+- **Phase 2: Design Document Updates** - Update design documents based on review feedback:
+  - `proposal.md` - Update high-level overview and scope based on feedback
+  - `tasks.md` - Update task breakdown for implementation (but do NOT include implementation details)
+  - `design.md` - Update technical design approach based on feedback
+  - `spec deltas` - Update specification changes based on review findings
+- ALL feedback and suggestions from the review MUST be systematically incorporated into the design documents.
+- The design documents should be ready for implementation in a separate apply phase.
 
 **Steps**
-1. Based on the openspec instructions, use @openspec-review to review the change proposal and implement improvements.
+1. **Review Phase** - Analyze the change proposal:
+   - Evaluate the proposal's completeness and clarity
+   - Identify any gaps, ambiguities, or issues in the proposal
+   - Assess feasibility and potential challenges
+   - Gather all necessary context from the codebase
+   - Document review findings and feedback
+
+2. **Design Document Updates** - Update design documents based on review feedback:
+   - **Update `proposal.md`**: Refine the high-level overview, scope, and objectives based on review findings
+   - **Update `tasks.md`**: Adjust the task breakdown to reflect any changes needed (focus on WHAT needs to be done, not HOW)
+   - **Update `design.md`**: Revise the technical design approach based on feedback and identified issues
+   - **Update `spec deltas`**: Modify specification changes to address review findings
+
+3. **Completion** - Ensure all review feedback is incorporated:
+   - Verify all identified issues are addressed in the design documents
+   - Ensure the design documents are ready for a separate implementation phase
+   - Document any unresolved items that need attention in the implementation phase
 
 **Reference**
 - Use `openspec show <id> --json --deltas-only` or `openspec show <spec> --type spec` to inspect details when validation fails.
-- Search existing requirements with `rg -n "Requirement:|Scenario:" openspec/specs` before writing new ones.
+- Search existing requirements with `rg -n "Requirement:|Scenario:" openspec/specs` before writing new requirements.
 - Explore the codebase with `rg <keyword>`, `ls`, or direct file reads so proposals align with current implementation realities.
+- The design documents updated by this command should be ready for implementation in a separate apply phase.
+- This command focuses purely on review and design document updates—no implementation work.
 <!-- OPENSPEC:END -->
