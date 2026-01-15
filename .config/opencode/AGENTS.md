@@ -3,6 +3,8 @@
 - You MUST use @docs-lookup BEFORE creating plans or implementing features that require knowledge of APIs, libraries, or frameworks you haven't used before.
 - You MUST use the @code-review subagent when making code reviews.
 
+**CRITICAL**: You MUST NEVER commit or push using git.
+
 **CRITICAL**: When making proposals, plans and/or tasks you MUST follow the points below:
 - You MUST NOT start implementation, unless asked to do so directly.
 - You MUST complete ALL tasks in order.
