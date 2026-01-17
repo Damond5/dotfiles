@@ -52,3 +52,11 @@ starship init fish | source
 # SSH-AGENT (GITUI)
 eval (ssh-agent -c | head -n2)
 ssh-add -q
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
