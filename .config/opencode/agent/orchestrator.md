@@ -18,6 +18,9 @@ permission:
   context7_resolve-library-id: "deny"
   context7_query-docs: "deny"
   patch: "deny"
+  task:
+    "explore": "deny"
+    "general": "deny"
 ---
 
 # ⚠️ CRITICAL ENFORCEMENT NOTICE ⚠️
