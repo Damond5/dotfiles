@@ -177,7 +177,7 @@ cargo install rusti-cal
 paru -S --needed --noconfirm yazi
 ya pkg add yazi-rs/plugins:mount
 paru -S --needed --noconfirm ueberzugpp
-paru -S --needed --noconfirm bluetuith
+paru -S --needed --noconfirm bluetui
 paru -S --needed --noconfirm difftastic
 paru -S --needed --noconfirm mermaid-cli
 paru -S --needed --noconfirm xan
@@ -244,8 +244,9 @@ if [[ $gaming == true ]] then
   paru -S --needed --noconfirm gamescope
   paru -S --needed --noconfirm lib32-vulkan-radeon
   paru -S --needed --noconfirm lib32-vulkan-mesa-layers
-  paru -S --needed --noconfirm amdvlk
-  paru -S --needed --noconfirm lib32-amdvlk
+  # aur, really needed?
+  # paru -S --needed --noconfirm amdvlk
+  # paru -S --needed --noconfirm lib32-amdvlk
   flatpak install -y com.vysp3r.ProtonPlus
 
   ## steam
