@@ -313,7 +313,7 @@ exec --no-startup-id sleep 5 && xmodmap ~/.Xmodmap
 exec --no-startup-id ~/redshift.sh
 
 # compositor
-exec --no-startup-id picom
+# exec --no-startup-id picom
 
 exec --no-startup-id autotiling
 

@@ -9,3 +9,6 @@ ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4
 
 # Unmount all USB drives
 udiskie-umount -a
+
+# Tip 
+Run docker run -it --rm ghcr.io/anomalyco/opencode for containerized use
