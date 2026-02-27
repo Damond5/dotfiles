@@ -1,7 +1,9 @@
 # TODO
+- find a way to make sure subagents stick to the task given and ONLY the task given
+  - should hand back to manager for further work
 - global instructions to escalate issues that are causing trouble to the manager
-- global instructions to escalate to the manager, instead of asking for permissions
-- plugin that detects if the same thing is being attempted more than once in a row
+- global instructions to escalate to the manager, instead of asking for permissions?
+- plugin that detects if the same thing is being attempted more than once in a row?
 - code-writer should be able to use context7?
 - better subagent descriptions, so orchestrator doesnt choose the wrong one
 - orchestrator planner?
