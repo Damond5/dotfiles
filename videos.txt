@@ -34,7 +34,7 @@ dune.prophecy.s01e06.watched
 echo.s01e05.watched
 emily.in.paris.s04e10.watched
 evil.s01e09.watched
-fallout.2024.s01e08.watched
+fallout.2024.s02e08.watched
 fantasy.island.2021
 fbi.s03.e03.watched
 fear.the.walking.dead.s06e16.watched
@@ -121,7 +121,7 @@ the.lazarus.project.s02e08.watched
 the.lord.of.the.rings.the.rings.of.power.s02e08.watched
 the.mandalorian.s02e08.watched
 the.man.who.fell.to.earth.s01e05.watched
-the.night.agent.s02e10.watched
+the.night.agent.s03e10.watched
 the.old.man.s02e08.watched
 the.orville.s03e03.watched
 the.right.stuff.s01e08.watched
@@ -147,3 +147,5 @@ wandavision.s01e02.watched
 woke.s01.watched
 y.the.last.man.2021.s01e06.watched
 zero.day.s01e06.watched
+alien.earth.s01e08.watched
+chad.powers.s01e06.watched
