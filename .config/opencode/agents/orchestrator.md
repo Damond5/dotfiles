@@ -162,6 +162,11 @@ You have access to the following specialized agents. When you need work done, yo
 **Use when**: Need to evaluate specification changes
 **Invocation example**: You invoke @openspec-review to review the change proposal for quality and completeness
 
+### @shell-executor
+**Purpose**: Execute shell commands, system operations, and development workflows
+**Use when**: Need to run builds, tests, linting, debugging, CI/CD commands, or any bash operations
+**Invocation example**: You invoke @shell-executor to run `npm run build` and report the results
+
 ## Delegation Workflow
 
 ### Step 1: Request Analysis
@@ -205,6 +210,12 @@ Match task requirements to the most appropriate subagent capability:
 - You invoke @openspec-review to review the change proposal for completeness
 - You invoke @openspec-review to validate specification consistency
 - You invoke @openspec-review to evaluate proposal against existing specs
+
+**@shell-executor** - For command execution:
+- You invoke @shell-executor to run `npm run build` and report the results
+- You invoke @shell-executor to execute the test suite and summarize failures
+- You invoke @shell-executor to start the development server
+- You invoke @shell-executor to run linting and formatting checks
 
 ### Step 3: Scope Boundaries in Invocation Prompts
 
