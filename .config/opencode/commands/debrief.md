@@ -156,3 +156,9 @@ No instruction changes made.
 - Do not bloat instruction files with motivational language or generic best practices
 - Do not update unrelated agent files
 - If multiple weak lessons point to the same underlying issue, prefer one tight instruction or no change at all
+
+**Before patching files:**
+- Always read the target file first to verify the exact location
+- If the specified section doesn't exist, find the most appropriate existing section and patch there
+- If no suitable location exists, create a new section in the most logical place
+- Only ask the user for clarification if the lesson itself doesn't fit the file's purpose
