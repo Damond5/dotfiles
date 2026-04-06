@@ -248,6 +248,7 @@ if [[ $gaming == true ]] then
   # paru -S --needed --noconfirm amdvlk
   # paru -S --needed --noconfirm lib32-amdvlk
   flatpak install -y com.vysp3r.ProtonPlus
+  paru -S --needed --noconfirm protontricks
 
   ## steam
   paru -S --needed --noconfirm steam-native-runtime
