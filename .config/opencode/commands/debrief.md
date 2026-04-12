@@ -148,6 +148,44 @@ No instruction changes made.
 - The lessons were task-specific, already covered, too vague, or too low leverage to justify permanent instruction weight.
 ```
 
+**Permission to Access Global Files**
+
+Global instruction files (`~/.config/opencode/AGENTS.md` and agent-specific files under `~/.config/opencode/agent/`) reside outside the current project working directory. Before reading or writing these files during a debrief, you MUST explicitly ask the user for permission. Wait for their confirmation before proceeding. If the user denies permission, report the candidate lessons without modifying any global files.
+
+**Project-Specific Lessons**
+
+Lessons that are not durable enough for global instructions but are still useful for the current project should be handled as follows:
+
+1. **Always useful for any work on this project** → Add to `<project>/AGENTS.md`
+   - Project-level guidance that applies regardless of what agent or task is working
+   - Keep it terse and project-specific
+
+2. **Role-specific or task-specific utility** → Create a skill in `<project>/.agents/skills/`
+   - Skills are on-demand: loaded only when explicitly invoked
+   - Use the `skill` tool to create and register project-specific skills
+   - Each skill should have a clear trigger condition and purpose
+
+**Decision Hierarchy for Placement**
+
+For each candidate lesson, in order:
+1. **Reject** if not durable, actionable, or high-leverage
+2. **Global file** if broadly applicable across many projects and agents
+3. **Project AGENTS.md** if useful for any work in the current project but not globally generalizable
+4. **Project skill** if role-specific, task-specific, or only useful for particular workflows
+5. **Do not record** if no suitable target exists
+
+**Creating Project Skills**
+
+If a lesson warrants a project skill:
+1. Create `<project>/.agents/skills/<skill-name>/SKILL.md` with the skill instructions
+2. Register it in `<project>/.agents/skills/index.md` or equivalent
+3. Document the trigger condition (when to load this skill)
+4. Keep skill content focused and minimal
+
+**Asking Permission for Project Files**
+
+Before reading or writing project files (`<project>/AGENTS.md` or `<project>/.agents/skills/`), you MUST ask the user for permission. Wait for their confirmation before proceeding.
+
 **Guardrails**
 
 - Do not manufacture lessons just to make the debrief feel productive
