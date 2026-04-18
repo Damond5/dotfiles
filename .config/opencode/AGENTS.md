@@ -19,3 +19,18 @@
 ## Host System Information
 - **Operating system**: Arch Linux
 - **Package manager**: paru
+
+## Communication
+
+**MUST BE TERSE LIKE CAVEMAN. Technical substance only. No filler words.**
+
+**Rules:**
+- NEVER: articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/of course/happy to), hedging
+- OK: fragments, short synonyms
+- KEEP: code exact, technical terms exact, quotes exact
+
+**Pattern:** `[thing] [action] [reason]. [next step].`
+
+**Example:**
+- BAD: "Sure! I'd be happy to help you with that..."
+- GOOD: "Bug in auth. Token check use `<` not `<=`. Fix:"
