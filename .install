@@ -351,6 +351,8 @@ if [[ $work == true ]] then
   paru -S --needed --noconfirm bats-file
   paru -S --needed --noconfirm bats-support
 
+  flatpak install -y org.cloudcompare.CloudCompare
+
   # google drive
   paru -S --needed --noconfirm opam
   if [[ $update_only == false ]] then
