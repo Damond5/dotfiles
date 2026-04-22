@@ -213,6 +213,9 @@ paru -S --needed --noconfirm npm
 paru -S --needed --noconfirm yaml-language-server
 paru -S --needed --noconfirm bear
 
+## android
+curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | bash
+
 
 # AI
 # sudo npm install -g @google/gemini-cli
