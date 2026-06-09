@@ -1,6 +1,7 @@
 3.body.problem.s01e08.watched
 4400.2021.s01e09.watched
 age.of.the.living.dead.2021
+alien.earth.s01e08.watched
 all.rise.s02e05.watched
 almost.paradise.s01e10.watched
 andor.s01e11.watched
@@ -17,7 +18,9 @@ blindspot.s03.watched
 blood.and.treasure.s02e01.watched
 brave.new.world.2020.s01.watched
 bull.2016.s05e16.watched
+chad.powers.s01e06.watched
 charmed.2018.s03e06.watched
+citadel.s02e07.watched
 condor.s02e10.watched
 countdown.s01e13.watched
 cursed.s01e10.watched
@@ -71,7 +74,7 @@ new.amsterdam.2018.s02e17.watched
 next.2020.s01e10.watched
 obliterated.s01e08.watched
 outer.range.s02e07.watched
-outlander.s07e16.watched
+outlander.s08e10.watched
 peacemaker.s02.e08.watched
 percy.jackson.and.the.olympians.s01e07.watched
 pivoting.2022.s01e10.watched
@@ -96,6 +99,7 @@ stargirl.s02e06.watched
 star.trek.discovery.s05e10.watched
 star.trek.lower.decks.s01e10.watched
 star.trek.picard.2020.s02e10.watched
+star.trek.starfleet.academy.s01e10.watched
 star.trek.strange.new.worlds.s03e10.watched
 stranger.things.s05e08.watched
 supergirl.s06e09.watched
@@ -106,7 +110,7 @@ surrealestate.s01e06.watched
 the.100.s07e16.watched
 the.acolyte.s01e07.watched
 the.book.of.boba.fett.2021.s01e07.watched
-the.boys.s04e07.watched
+the.boys.s05e08.watched
 the.cleaning.lady.s04.e12.watched
 the.code.series.netflix
 the.copenhagen.test.s01e08.watched
@@ -115,7 +119,7 @@ the.expanse.2015.s06e06.watched
 the.falcon.and.the.winter.soldier.s01e06.watched
 the.flash.2014.s07e18.watched
 the.flight.attendant.2020.s02e08.watched
-the.hunting.party.s01e10.watched
+the.hunting.party.s02e13.watched
 the.last.kingdom.s05.watched
 the.lazarus.project.s02e08.watched
 the.lord.of.the.rings.the.rings.of.power.s02e08.watched
@@ -124,6 +128,7 @@ the.man.who.fell.to.earth.s01e05.watched
 the.night.agent.s03e10.watched
 the.old.man.s02e08.watched
 the.orville.s03e03.watched
+the.pendragon.cycle.rise.of.the.merlin.s01e07.watched
 the.right.stuff.s01e08.watched
 the.sandman.s02e12.watched
 the.terminal.list.s01e08.watched
@@ -138,7 +143,7 @@ the.winter.king.s01e10.watched
 the.witcher.s04.e08.watched
 those.about.to.die.s01e10.watched
 tom.clancys.jack.ryan.2018.s03e08.watched
-tracker.2024.s02e20.watched
+tracker.2024.s03e22.watched
 two.weeks.to.live.s01.watched
 vikings.s06e20.watched
 vikings.valhalla.s03e08.watched
@@ -147,5 +152,3 @@ wandavision.s01e02.watched
 woke.s01.watched
 y.the.last.man.2021.s01e06.watched
 zero.day.s01e06.watched
-alien.earth.s01e08.watched
-chad.powers.s01e06.watched
