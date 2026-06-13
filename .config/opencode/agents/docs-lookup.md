@@ -5,6 +5,7 @@ temperature: 0.0
 permission:
   context7_resolve-library-id: "allow"
   context7_query-docs: "allow"
+  websearch: "allow"
   webfetch: "allow"
   bash: "deny"
   write: "deny"
