@@ -219,8 +219,8 @@ curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | ba
 
 # AI
 # sudo npm install -g @google/gemini-cli
-paru -S --needed --noconfirm opencode-bin
-paru -S --needed --noconfirm openspec
+paru -S --needed --noconfirm opencode
+# paru -S --needed --noconfirm openspec
 sudo npm i -g agent-browser
 agent-browser install
 
