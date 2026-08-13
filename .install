@@ -221,7 +221,7 @@ curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | ba
 # AI
 paru -S --needed --noconfirm opencode
 # paru -S --needed --noconfirm openspec
-paru -S --needed --noconfirm agent-browser
+paru -S --needed --noconfirm agent-browser-bin
 agent-browser install
 bunx skills add vercel-labs/agent-browser -y -g
 
