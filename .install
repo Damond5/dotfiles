@@ -138,6 +138,7 @@ paru -S --needed --noconfirm pizarra-bin
 paru -S --needed --noconfirm tor
 sudo systemctl enable tor
 paru -S --needed --noconfirm firefox
+paru -S --needed --noconfirm chromium
 paru -S --needed --noconfirm proton-vpn-gtk-app
 paru -S --needed --noconfirm qbittorrent
 paru -S --needed --noconfirm appimagelauncher
@@ -209,7 +210,7 @@ paru -S --needed --noconfirm dart
 paru -S --needed --noconfirm fvm
 paru -S --needed --noconfirm lldb
 paru -S --needed --noconfirm bash-language-server
-paru -S --needed --noconfirm npm
+paru -S --needed --noconfirm bun
 paru -S --needed --noconfirm yaml-language-server
 paru -S --needed --noconfirm bear
 
@@ -218,11 +219,11 @@ curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | ba
 
 
 # AI
-# sudo npm install -g @google/gemini-cli
-paru -S --needed --noconfirm opencode-bin
-paru -S --needed --noconfirm openspec
-sudo npm i -g agent-browser
+paru -S --needed --noconfirm opencode
+# paru -S --needed --noconfirm openspec
+paru -S --needed --noconfirm agent-browser
 agent-browser install
+bunx skills add vercel-labs/agent-browser -y -g
 
 
 # # MEDIA
