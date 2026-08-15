@@ -21,3 +21,9 @@ dysk
 
 # Hardware and process monitor
 btop
+
+# Compile a Mermaid flowchart
+mmdc -i flowchart.mmd -o flowchart.svg
+
+# Watch a file for changes and run a command (Mermaid flowchart example)
+echo flowchart.mmd | entr mmdc -i flowchart.mmd -o flowchart.svg
