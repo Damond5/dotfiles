@@ -12,3 +12,12 @@ udiskie-umount -a
 
 # Tip 
 Run docker run -it --rm ghcr.io/anomalyco/opencode for containerized use
+
+# Disk usage analyzis and cleanup
+dua i
+
+# Disk space
+dysk
+
+# Hardware and process monitor
+btop
