@@ -213,6 +213,7 @@ paru -S --needed --noconfirm bash-language-server
 paru -S --needed --noconfirm bun
 paru -S --needed --noconfirm yaml-language-server
 paru -S --needed --noconfirm bear
+paru -S --needed --noconfirm markdown-oxide
 
 ## android
 curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | bash
