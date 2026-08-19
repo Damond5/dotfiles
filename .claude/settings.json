@@ -1,4 +1,9 @@
 {
+  "model": "opus[1m]",
+  "effortLevel": "medium",
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "editorMode": "vim",
   "hooks": {
     "Notification": [
       {
