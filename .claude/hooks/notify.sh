@@ -70,11 +70,16 @@ def main():
     except Exception:
         data = {}
 
-
     if event == "Stop":
         # Equivalent of opencode's session.idle.  Claude Code only fires Stop for
         # the top-level agent (subagents get SubagentStop, unhooked), which is what
         # session-idle-notifier.js achieves via its parentID check.
+        #
+        # But Stop also fires when the turn merely yields while background work
+        # (subagents, background bash) keeps running -- not idle, no attention
+        # needed.  A later Stop fires once that work reports back.
+        if any(t.get("status") == "running" for t in (data.get("background_tasks") or [])):
+            return
         notify("Session is idle")
 
     elif event == "Question":
