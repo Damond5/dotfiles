@@ -12,9 +12,17 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 APP = "Claude Code"
 NOTIFY = "/usr/bin/notify-send"
+
+# AskUserQuestion fires PreToolUse *and* a generic permission_prompt Notification
+# whose payload carries no tool name, so the two can't be told apart by matcher.
+# The Question branch drops this marker; the permission branch consumes it and
+# stays quiet, leaving only the richer question notification.
+MARKER = "/tmp/claude-notify-question.marker"
+MARKER_TTL = 10
 
 
 def notify(message, urgency="normal"):
@@ -62,6 +70,7 @@ def main():
     except Exception:
         data = {}
 
+
     if event == "Stop":
         # Equivalent of opencode's session.idle.  Claude Code only fires Stop for
         # the top-level agent (subagents get SubagentStop, unhooked), which is what
@@ -72,6 +81,7 @@ def main():
         # Equivalent of opencode's question.asked.
         questions = (data.get("tool_input") or {}).get("questions")
         if isinstance(questions, list) and questions:
+            open(MARKER, "w").close()
             notify(build_question_message(questions, data.get("tool_name")))
 
     else:
@@ -81,6 +91,12 @@ def main():
         message = data.get("message") or ""
         title = data.get("title") or ""
         ntype = data.get("notification_type") or ""
+
+        if os.path.exists(MARKER):
+            fresh = time.time() - os.path.getmtime(MARKER) < MARKER_TTL
+            os.unlink(MARKER)
+            if fresh:
+                return
 
         if ntype.startswith("elicitation"):
             body = message or title or "Input requested"
