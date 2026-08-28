@@ -319,9 +319,13 @@ exec --no-startup-id autotiling
 
 # no screen timeout
 exec --no-startup-id xset -dpms
+exec --no-startup-id xset s off
 
 # notifications
 exec --no-startup-id dunst
+
+# polkit authentication agent
+exec --no-startup-id /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
 
 # auto mount usb
 exec --no-startup-id udiskie -a -n

@@ -356,8 +356,44 @@ if [[ $work == true ]] then
   paru -S --needed --noconfirm bats-assert
   paru -S --needed --noconfirm bats-file
   paru -S --needed --noconfirm bats-support
-
   flatpak install -y org.cloudcompare.CloudCompare
+
+  ## nordbo vpn (tailscale via self-hosted headscale)
+  paru -S --needed --noconfirm tailscale
+  sudo systemctl enable tailscaled
+  sudo systemctl start tailscaled
+  if [[ $update_only == false ]] then
+    if tailscale status &>/dev/null; then
+      echo "Tailscale already registered"
+    else
+      echo "Create a pre-auth key at headscale.nordbo.io/admin (Pre-Auth Keys)."
+      echo "IMPORTANT: leave tags empty, or the node is owned by tagged-devices and gets no network access."
+      read -sp "Headscale pre-auth key (blank to skip): " hskey
+      echo
+      if [[ -n $hskey ]] then
+        sudo tailscale up --login-server=https://headscale.nordbo.io --authkey=$hskey --accept-routes --accept-dns
+        tailscale status | head -1
+      else
+        echo "Skipped. Run later:"
+        echo "  sudo tailscale up --login-server=https://headscale.nordbo.io --authkey=<key> --accept-routes --accept-dns"
+      fi
+    fi
+  fi
+
+  ## universal robots
+  bun install -g @devcontainers/cli
+  fish_add_path "/home/nikv/.bun/bin"
+  paru -S --needed --noconfirm docker
+  paru -S --needed --noconfirm docker-buildx
+  paru -S --needed --noconfirm docker-compose
+
+  ## virtual machine
+  paru -S --needed --noconfirm qemu-desktop
+  paru -S --needed --noconfirm libvirt
+  paru -S --needed --noconfirm virt-manager
+  paru -S --needed --noconfirm dnsmasq
+  paru -S --needed --noconfirm iptables-nft
+  paru -S --needed --noconfirm mate-polkit
 
   # google drive
   paru -S --needed --noconfirm opam
