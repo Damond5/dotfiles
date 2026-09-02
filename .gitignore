@@ -77,3 +77,4 @@
 !.config/opencode/
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
+!.config/agents/
