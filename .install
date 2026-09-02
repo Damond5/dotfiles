@@ -176,7 +176,7 @@ paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
 cargo install rusti-cal
 paru -S --needed --noconfirm yazi
-ya pkg add yazi-rs/plugins:mount
+paru -S --needed --noconfirm 7zip
 paru -S --needed --noconfirm ueberzugpp
 paru -S --needed --noconfirm bluetui
 paru -S --needed --noconfirm difftastic
