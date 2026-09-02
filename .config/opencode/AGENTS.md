@@ -3,7 +3,7 @@
 - **CRITICAL** You MUST ALWAYS respond short and accurate
 
 ## Coding
-- Follow YAGNI principles and prefer one-liner solutions
+- Follow YAGNI + KISS principles and prefer one-liner solutions
 
 ## Documentation Lookup
 - You MUST use the @docs-lookup subagent when looking up documentation
