@@ -1,0 +1,1 @@
+/home/nikv/workspace/memory/global/commands/memory-update-user.md

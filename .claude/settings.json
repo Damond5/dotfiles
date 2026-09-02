@@ -39,7 +39,7 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
-            "timeout": 15,
+            "timeout": 5,
             "statusMessage": "Recalling memory..."
           }
         ]
@@ -52,7 +52,18 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
-            "timeout": 15
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 5
           }
         ]
       }
