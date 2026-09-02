@@ -1,9 +1,5 @@
 {
   "model": "opus[1m]",
-  "effortLevel": "medium",
-  "promptSuggestionEnabled": false,
-  "awaySummaryEnabled": false,
-  "editorMode": "vim",
   "hooks": {
     "Notification": [
       {
@@ -36,6 +32,37 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 15,
+            "statusMessage": "Recalling memory..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 15
+          }
+        ]
+      }
     ]
-  }
+  },
+  "workflowKeywordTriggerEnabled": false,
+  "effortLevel": "medium",
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "editorMode": "vim",
+  "verbose": false,
+  "preferredNotifChannel": "auto"
 }

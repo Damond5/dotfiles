@@ -69,8 +69,11 @@
 !.gemini/settings.json
 !.claude/
 .claude/*
+!.claude/CLAUDE.md
 !.claude/settings.json
 !.claude/hooks/
+!.claude/commands/
+!.claude/tools/
 !.config/opencode/
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
