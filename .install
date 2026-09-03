@@ -148,7 +148,7 @@ paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
 flatpak install -y com.discordapp.Discord
 paru -S --needed --noconfirm krita
-paru -S --needed --noconfirm localsend-bin
+flatpak install -y org.localsend.localsend_app
 paru -S --needed --noconfirm p7zip
 paru -S --needed --noconfirm zip
 paru -S --needed --noconfirm udiskie
