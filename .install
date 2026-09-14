@@ -353,7 +353,9 @@ fi
 if [[ $work == true ]] then
   # WORK
   paru -S --needed --noconfirm claude-code
-  paru -S --needed --noconfirm bubblewrap # sandbox backend for claude-code
+  # sandbox backend for claude-code
+  paru -S --needed --noconfirm bubblewrap
+  paru -S --needed --noconfirm socat
   paru -S --needed --noconfirm qt
   paru -S --needed --noconfirm qtcreator
   paru -S --needed --noconfirm jdk-openjdk
