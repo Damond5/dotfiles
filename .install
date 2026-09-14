@@ -86,14 +86,15 @@ sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 # Input tweaks live in /etc so xf86-input-libinput upgrades cannot revert them
 # (40-libinput.conf in /usr/share is package-owned).
-# Scroll direction stays at the libinput default (traditional) - do not add
-# Option "NaturalScrolling" here.
+# Mice stay at the libinput default (traditional scrolling); only the touchpad
+# scrolls naturally - do not add a MatchIsPointer section, it catches the mice.
 sudo tee /etc/X11/xorg.conf.d/50-scroll.conf >/dev/null <<'EOF'
 Section "InputClass"
-    Identifier "touchpad tapping"
+    Identifier "touchpad natural scrolling"
     MatchIsTouchpad "on"
     MatchDevicePath "/dev/input/event*"
     Driver "libinput"
+    Option "NaturalScrolling" "true"
     Option "Tapping" "on"
 EndSection
 EOF
