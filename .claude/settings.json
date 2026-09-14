@@ -75,5 +75,8 @@
   "awaySummaryEnabled": false,
   "editorMode": "vim",
   "verbose": false,
-  "preferredNotifChannel": "auto"
+  "preferredNotifChannel": "auto",
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true
+  }
 }
