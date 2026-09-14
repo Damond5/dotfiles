@@ -19,6 +19,12 @@
 - The user negotiates interface details directly with the customer's automation contractor over email and writes those mails themselves, so expect requests to draft or update a reply in an existing thread; match the structure and notation of their own earlier mails in that thread rather than imposing a new format, and keep proposed values flagged as assumptions until the contractor confirms them.
 - Their mail client appends a signature automatically as a tracked HTML block, so a prepared draft must end with the body text and no hand-written sign-off, which would otherwise appear twice.
 
+## Arch Workstation Sudo And SSH Prompts
+
+- On the user's Arch workstation, `sudo` has no way to prompt during a tool call, so `paru -S` and anything else needing root fails with "a terminal is required to read the password". Treat a missing package as a fixed constraint to work around, not something to install — `sshpass`, for one, is absent and cannot be added.
+- Password-authenticated `ssh`/`scp` from that workstation works by pointing `SSH_ASKPASS` at an executable helper script, setting `SSH_ASKPASS_REQUIRE=force`, and wrapping the call in `setsid -w`. On the far end, a `sudo` that must run without a tty needs `SUDO_ASKPASS` exported plus one `sudo -A -v` to prime the timestamp.
+
 ## Recall Engine Invocation
 
 - The memory engine is a command-line program installed at `~/.claude/tools/memory/memory.py`, serving whichever root it is pointed at. Options come *after* the subcommand — `memory.py search --root <path> "query"`, likewise `index` — because it parses flags only from the arguments following the command. Reversing them makes the flag itself the command; as of 2026-09-02 that prints a usage line on stderr and exits 2, so an empty result with no message can be trusted to mean no memories matched.
+- `~/.claude/tools/memory` is a symlink to `~/workspace/memory/global/tools/memory`, so a plain `find ~/.claude -name memory.py` does not descend into it and wrongly reports the engine missing. Invoke the recorded path directly, or pass `find -L`, rather than concluding from a failed search that recall is unavailable.
