@@ -27,4 +27,10 @@
 ## Recall Engine Invocation
 
 - The memory engine is a command-line program installed at `~/.claude/tools/memory/memory.py`, serving whichever root it is pointed at. Options come *after* the subcommand — `memory.py search --root <path> "query"`, likewise `index` — because it parses flags only from the arguments following the command. Reversing them makes the flag itself the command; as of 2026-09-02 that prints a usage line on stderr and exits 2, so an empty result with no message can be trusted to mean no memories matched.
+- The engine reaches its worker over a Unix domain socket, which the default Bash sandbox denies. A `search` or `index` run inside it dies with a traceback ending in `socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)`, and the very first call may instead report the script itself as missing. Either symptom means the sandbox blocked the call, not that the engine is broken or absent — distinct from the flag-order failure above, which prints a usage line.
 - `~/.claude/tools/memory` is a symlink to `~/workspace/memory/global/tools/memory`, so a plain `find ~/.claude -name memory.py` does not descend into it and wrongly reports the engine missing. Invoke the recorded path directly, or pass `find -L`, rather than concluding from a failed search that recall is unavailable.
+
+## Oversized Connector Results
+
+- A tool result past the context cap is not truncated but written to a file under `~/.claude/projects/<project>/<session>/tool-results/`, and that directory sits outside the sandbox's read allowlist, so opening it from a sandboxed command fails as if the file did not exist.
+- Messages from the Gmail connector's `get_thread` carry their text in `plaintextBody`, camelCase. Reading a snake_case `plaintext_body` returns an empty string for every message rather than raising, which looks exactly like a thread whose messages have no content — check one message's keys before concluding a search over a thread found nothing.
