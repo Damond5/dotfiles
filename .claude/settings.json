@@ -92,6 +92,9 @@
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "filesystem": {
+      "allowRead": [
+        "/home/nikv/.claude/tools/**"
+      ],
       "allowWrite": [
         "/tmp/**",
         "/home/nikv/.config/agents/**"
