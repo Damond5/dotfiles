@@ -1,20 +1,41 @@
 ---
 description: Write and maintain project documentation
 mode: subagent
-temperature: 0.3
 steps: 10
-permission:
-  read: "allow"
-  glob: "allow"
-  grep: "allow"
-  list: "allow"
-  bash: "deny"
-  write: "allow"
-  edit: "allow"
-  webfetch: "allow"
-  todowrite: "allow"
-  context7_resolve-library-id: "allow"
-  context7_query-docs: "allow"
+permissions:
+- action: read
+  resource: '*'
+  effect: allow
+- action: glob
+  resource: '*'
+  effect: allow
+- action: grep
+  resource: '*'
+  effect: allow
+- action: list
+  resource: '*'
+  effect: allow
+- action: shell
+  resource: '*'
+  effect: deny
+- action: edit
+  resource: '*'
+  effect: allow
+- action: webfetch
+  resource: '*'
+  effect: allow
+- action: todowrite
+  resource: '*'
+  effect: allow
+- action: context7_resolve-library-id
+  resource: '*'
+  effect: allow
+- action: context7_query-docs
+  resource: '*'
+  effect: allow
+request:
+  body:
+    temperature: 0.3
 ---
 
 ## Scope Discipline — CRITICAL

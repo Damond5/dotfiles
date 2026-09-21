@@ -1,26 +1,58 @@
 ---
-description: Coordinate specialized subagents for software tasks. Analyze requests, invoke subagents for implementation and review work, and synthesize results into final deliverables. DIRECT IMPLEMENTATION IS IMPOSSIBLE - ALL file operations, bash commands, and code execution MUST invoke subagents.
+description: Coordinate specialized subagents for software tasks. Analyze requests,
+  invoke subagents for implementation and review work, and synthesize results into
+  final deliverables. DIRECT IMPLEMENTATION IS IMPOSSIBLE - ALL file operations, bash
+  commands, and code execution MUST invoke subagents.
 mode: primary
-temperature: 0.2
-permission:
-  read: "deny"
-  write: "deny"
-  edit: "deny"
-  bash: "deny"
-  glob: "deny"
-  grep: "deny"
-  todowrite: "allow"
-  todoread: "allow"
-  question: "allow"
-  webfetch: "deny"
-  websearch: "deny"
-  codesearch: "deny"
-  context7_resolve-library-id: "deny"
-  context7_query-docs: "deny"
-  patch: "deny"
-  task:
-    "explore": "deny"
-    "general": "deny"
+permissions:
+- action: read
+  resource: '*'
+  effect: deny
+- action: edit
+  resource: '*'
+  effect: deny
+- action: shell
+  resource: '*'
+  effect: deny
+- action: glob
+  resource: '*'
+  effect: deny
+- action: grep
+  resource: '*'
+  effect: deny
+- action: todowrite
+  resource: '*'
+  effect: allow
+- action: todoread
+  resource: '*'
+  effect: allow
+- action: question
+  resource: '*'
+  effect: allow
+- action: webfetch
+  resource: '*'
+  effect: deny
+- action: websearch
+  resource: '*'
+  effect: deny
+- action: codesearch
+  resource: '*'
+  effect: deny
+- action: context7_resolve-library-id
+  resource: '*'
+  effect: deny
+- action: context7_query-docs
+  resource: '*'
+  effect: deny
+- action: subagent
+  resource: explore
+  effect: deny
+- action: subagent
+  resource: general
+  effect: deny
+request:
+  body:
+    temperature: 0.2
 ---
 
 # ⚠️ CRITICAL ENFORCEMENT NOTICE ⚠️

@@ -1,18 +1,37 @@
 ---
 description: Review code for quality and best practices
 mode: subagent
-temperature: 0.0
-permission:
-  read: "allow"
-  glob: "allow"
-  grep: "allow"
-  list: "allow"
-  write: "deny"
-  edit: "deny"
-  bash: "deny"
-  webfetch: "allow"
-  context7_resolve-library-id: "allow"
-  context7_query-docs: "allow"
+permissions:
+- action: read
+  resource: '*'
+  effect: allow
+- action: glob
+  resource: '*'
+  effect: allow
+- action: grep
+  resource: '*'
+  effect: allow
+- action: list
+  resource: '*'
+  effect: allow
+- action: edit
+  resource: '*'
+  effect: deny
+- action: shell
+  resource: '*'
+  effect: deny
+- action: webfetch
+  resource: '*'
+  effect: allow
+- action: context7_resolve-library-id
+  resource: '*'
+  effect: allow
+- action: context7_query-docs
+  resource: '*'
+  effect: allow
+request:
+  body:
+    temperature: 0.0
 ---
 
 ## Scope Discipline — CRITICAL

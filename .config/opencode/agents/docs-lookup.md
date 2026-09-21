@@ -1,15 +1,29 @@
 ---
-description: Retrieve documentation for library, API, and technical lookup queries. Prioritize Context7 for library/API docs, then official sources, then web search.
+description: Retrieve documentation for library, API, and technical lookup queries.
+  Prioritize Context7 for library/API docs, then official sources, then web search.
 mode: subagent
-temperature: 0.0
-permission:
-  context7_resolve-library-id: "allow"
-  context7_query-docs: "allow"
-  websearch: "allow"
-  webfetch: "allow"
-  bash: "deny"
-  write: "deny"
-  edit: "deny"
+permissions:
+- action: context7_resolve-library-id
+  resource: '*'
+  effect: allow
+- action: context7_query-docs
+  resource: '*'
+  effect: allow
+- action: websearch
+  resource: '*'
+  effect: allow
+- action: webfetch
+  resource: '*'
+  effect: allow
+- action: shell
+  resource: '*'
+  effect: deny
+- action: edit
+  resource: '*'
+  effect: deny
+request:
+  body:
+    temperature: 0.0
 ---
 
 ## Scope Discipline — CRITICAL

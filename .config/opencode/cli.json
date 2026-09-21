@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "theme": {
+    "name": "solarized"
+  },
+  "diffs": {
+    "wrap": "word",
+    "view": "auto",
+    "single": false
+  },
+  "session": {
+    "sidebar": "auto",
+    "scrollbar": false,
+    "thinking": "hide",
+    "permissions": "prompt"
+  },
+  "animations": true,
+  "attention": {
+    "notifications": true
+  },
+  "tabs": {
+    "enabled": false,
+    "scope": "cwd",
+    "layout": "horizontal",
+    "indicators": "status"
+  },
+  "prompt": {
+    "image_preview": true
+  },
+  "terminal": {
+    "copy": "select"
+  }
+}

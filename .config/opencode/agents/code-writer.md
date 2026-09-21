@@ -1,20 +1,43 @@
 ---
 description: Write high-quality, secure, and maintainable code
 mode: subagent
-temperature: 0.2
-permission:
-  read: "allow"
-  write: "allow"
-  edit: "allow"
-  glob: "allow"
-  grep: "allow"
-  bash: "allow"
-  todowrite: "allow"
-  todoread: "allow"
-  webfetch: "allow"
-  codesearch: "allow"
-  context7_resolve-library-id: "allow"
-  context7_query-docs: "allow"
+permissions:
+- action: read
+  resource: '*'
+  effect: allow
+- action: edit
+  resource: '*'
+  effect: allow
+- action: glob
+  resource: '*'
+  effect: allow
+- action: grep
+  resource: '*'
+  effect: allow
+- action: shell
+  resource: '*'
+  effect: allow
+- action: todowrite
+  resource: '*'
+  effect: allow
+- action: todoread
+  resource: '*'
+  effect: allow
+- action: webfetch
+  resource: '*'
+  effect: allow
+- action: codesearch
+  resource: '*'
+  effect: allow
+- action: context7_resolve-library-id
+  resource: '*'
+  effect: allow
+- action: context7_query-docs
+  resource: '*'
+  effect: allow
+request:
+  body:
+    temperature: 0.2
 ---
 
 ## Scope Discipline — CRITICAL

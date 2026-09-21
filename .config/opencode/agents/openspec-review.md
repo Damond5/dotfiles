@@ -1,23 +1,49 @@
 ---
 description: Review OpenSpec change proposals for quality and suggest improvements
 mode: subagent
-temperature: 0.0
-permission:
-  read: "allow"
-  glob: "allow"
-  grep: "allow"
-  list: "allow"
-  write: "deny"
-  edit: "deny"
-  bash:
-    "openspec validate": "allow"
-    "openspec show": "allow"
-    "openspec list": "allow"
-    "openspec spec": "allow"
-    "openspec change": "allow"
-    "openspec archive": "allow"
-    "*": "deny"
-  webfetch: "allow"
+permissions:
+- action: read
+  resource: '*'
+  effect: allow
+- action: glob
+  resource: '*'
+  effect: allow
+- action: grep
+  resource: '*'
+  effect: allow
+- action: list
+  resource: '*'
+  effect: allow
+- action: edit
+  resource: '*'
+  effect: deny
+- action: shell
+  resource: openspec validate *
+  effect: allow
+- action: shell
+  resource: openspec show *
+  effect: allow
+- action: shell
+  resource: openspec list *
+  effect: allow
+- action: shell
+  resource: openspec spec *
+  effect: allow
+- action: shell
+  resource: openspec change *
+  effect: allow
+- action: shell
+  resource: openspec archive *
+  effect: allow
+- action: shell
+  resource: '*'
+  effect: deny
+- action: webfetch
+  resource: '*'
+  effect: allow
+request:
+  body:
+    temperature: 0.0
 ---
 
 ## Scope Discipline — CRITICAL
