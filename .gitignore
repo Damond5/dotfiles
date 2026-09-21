@@ -61,7 +61,6 @@
 .config/fish/fishd.ursim.work
 .config/gtk-4.0/servers
 !.config/dunst/
-!.config/yazi/keymap.toml
 
 # AI AGENTS
 !.gemini/
@@ -70,8 +69,12 @@
 !.gemini/settings.json
 !.claude/
 .claude/*
+!.claude/CLAUDE.md
 !.claude/settings.json
 !.claude/hooks/
+!.claude/commands/
+!.claude/tools/
 !.config/opencode/
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
+!.config/agents/

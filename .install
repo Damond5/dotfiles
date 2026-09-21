@@ -84,8 +84,20 @@ sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
 sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
 sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
-sudo sd "Identifier \"libinput keyboard catchall\"\n        MatchIsKeyboard \"on\"\n" "Identifier \"libinput keyboard catchall\"\n        Option \"NaturalScrolling\" \"True\"\n        Option \"Tapping\" \"on\"\n        MatchIsKeyboard \"on\"\n" /usr/share/X11/xorg.conf.d/40-libinput.conf
-sudo sd "Identifier \"libinput touchpad catchall\"\n        MatchIsTouchpad \"on\"\n" "Identifier \"libinput touchpad catchall\"\n        Option \"NaturalScrolling\" \"True\"\n        Option \"Tapping\" \"on\"\n        MatchIsTouchpad \"on\"\n" /usr/share/X11/xorg.conf.d/40-libinput.conf
+# Input tweaks live in /etc so xf86-input-libinput upgrades cannot revert them
+# (40-libinput.conf in /usr/share is package-owned).
+# Mice stay at the libinput default (traditional scrolling); only the touchpad
+# scrolls naturally - do not add a MatchIsPointer section, it catches the mice.
+sudo tee /etc/X11/xorg.conf.d/50-scroll.conf >/dev/null <<'EOF'
+Section "InputClass"
+    Identifier "touchpad natural scrolling"
+    MatchIsTouchpad "on"
+    MatchDevicePath "/dev/input/event*"
+    Driver "libinput"
+    Option "NaturalScrolling" "true"
+    Option "Tapping" "on"
+EndSection
+EOF
 paru -S --needed --noconfirm linux-headers
 paru -S --needed --noconfirm linux-lts-headers
 paru -S --needed --noconfirm man-db
@@ -148,7 +160,7 @@ paru -S --needed --noconfirm flatpak
 flatpak install -y com.github.tchx84.Flatseal
 flatpak install -y com.discordapp.Discord
 paru -S --needed --noconfirm krita
-paru -S --needed --noconfirm localsend-bin
+flatpak install -y org.localsend.localsend_app
 paru -S --needed --noconfirm p7zip
 paru -S --needed --noconfirm zip
 paru -S --needed --noconfirm udiskie
@@ -176,7 +188,7 @@ paru -S --needed --noconfirm gitui
 paru -S --needed --noconfirm starship
 cargo install rusti-cal
 paru -S --needed --noconfirm yazi
-ya pkg add yazi-rs/plugins:mount
+paru -S --needed --noconfirm 7zip
 paru -S --needed --noconfirm ueberzugpp
 paru -S --needed --noconfirm bluetui
 paru -S --needed --noconfirm difftastic
@@ -340,6 +352,10 @@ fi
 
 if [[ $work == true ]] then
   # WORK
+  paru -S --needed --noconfirm claude-code
+  # sandbox backend for claude-code
+  paru -S --needed --noconfirm bubblewrap
+  paru -S --needed --noconfirm socat
   paru -S --needed --noconfirm qt
   paru -S --needed --noconfirm qtcreator
   paru -S --needed --noconfirm jdk-openjdk

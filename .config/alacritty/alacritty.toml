@@ -30,3 +30,8 @@ style = "Italic"
 [font.normal]
 family = "roboto mono"
 style = "Regular"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

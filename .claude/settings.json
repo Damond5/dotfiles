@@ -1,9 +1,5 @@
 {
   "model": "opus[1m]",
-  "effortLevel": "medium",
-  "promptSuggestionEnabled": false,
-  "awaySummaryEnabled": false,
-  "editorMode": "vim",
   "hooks": {
     "Notification": [
       {
@@ -36,6 +32,73 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 5,
+            "statusMessage": "Recalling memory..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/tools/memory/memory_hook.py",
+            "timeout": 5
+          }
+        ]
+      }
     ]
+  },
+  "workflowKeywordTriggerEnabled": false,
+  "effortLevel": "medium",
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "editorMode": "vim",
+  "verbose": false,
+  "preferredNotifChannel": "auto",
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true
+  },
+  "permissions": {
+    "blockReadsOutsideWorkingDirectories": true,
+    "additionalDirectories": [
+      "/tmp",
+      "/home/nikv/.config/agents"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": true,
+    "filesystem": {
+      "allowRead": [
+        "/home/nikv/.claude/tools/**"
+      ],
+      "allowWrite": [
+        "/tmp/**",
+        "/home/nikv/.config/agents/**"
+      ]
+    }
   }
 }
