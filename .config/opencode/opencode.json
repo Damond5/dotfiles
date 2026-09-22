@@ -1,5 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "/tmp/*",
+      "effect": "allow"
+    }
+  ],
   "instructions": [".claude/rules/**/*.md"],
   "providers": {
     "llamacpp": {
