@@ -34,7 +34,7 @@ WantedBy=default.target
 EOF
 sudo loginctl enable-linger "$USER"
 systemctl --user daemon-reload
-systemctl --user enable --now serve-qwen36.service
+# Not enabled: the local-llm opencode plugin starts it on first prompt.
 python3 - <<'EOF'
 import json, os
 p = os.path.expanduser('~/.config/opencode/opencode.json')
