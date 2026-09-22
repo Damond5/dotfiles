@@ -5,6 +5,7 @@ import { promisify } from "node:util"
 const BASE = "http://127.0.0.1:8081"
 const SERVICE = "serve-qwen36.service"
 const WAIT_MS = 6 * 60 * 1000
+const IDLE_MS = Number(process.env.LOCAL_LLM_IDLE_MS ?? 30 * 60 * 1000)
 
 const run = promisify(execFile)
 
@@ -39,9 +40,20 @@ function scoped(event: { model?: { providerID?: string } }): boolean {
   return event.model?.providerID === "llamacpp"
 }
 
+function isLocal(event: { request?: { url?: string } }): boolean {
+  try {
+    return new URL(event.request?.url ?? "").port === "8081"
+  } catch {
+    return false
+  }
+}
+
 export default Plugin.define({
   id: "local-llm",
   async setup(ctx) {
+    let inFlight = 0
+    let lastActivity = Date.now()
+
     await ctx.session.hook(
       "context",
       async (event) => {
@@ -55,5 +67,27 @@ export default Plugin.define({
         await ensureUp()
       })
     }
+    await ctx.session.hook("http.request", async (event) => {
+      if (!isLocal(event as { request?: { url?: string } })) return
+      inFlight++
+      lastActivity = Date.now()
+    })
+    await ctx.session.hook("http.response", async (event) => {
+      if (!isLocal(event as { request?: { url?: string } })) return
+      inFlight = Math.max(0, inFlight - 1)
+      lastActivity = Date.now()
+    })
+
+    const timer = setInterval(async () => {
+      try {
+        if (inFlight > 0) return
+        if (Date.now() - lastActivity < IDLE_MS) return
+        if (!(await healthy())) return
+        await run("systemctl", ["--user", "stop", SERVICE])
+      } catch (error) {
+        console.error(`[local-llm] idle stop failed: ${error}`)
+      }
+    }, 60_000)
+    return () => clearInterval(timer)
   },
 })
