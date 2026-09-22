@@ -37,14 +37,15 @@ export default Plugin.define({
           if (!notifyAvailable) continue;
 
           // v2 does not reliably emit `session.idle`/`session.status`; the run-end
-          // signal is `session.execution.succeeded`. Keep the others for forward
-          // compatibility.
+          // signals are `session.execution.succeeded` / `session.execution.failed`.
+          // Keep the idle ones for forward compatibility.
           const type = event?.type;
-          const isIdle =
+          const idle =
             type === "session.execution.succeeded" ||
             type === "session.idle" ||
             (type === "session.status" && event.data?.status?.type === "idle");
-          if (!isIdle) continue;
+          const failed = type === "session.execution.failed";
+          if (!idle && !failed) continue;
           if (isDuplicate(event.id ?? `${event.data?.sessionID}:${event.created}`)) continue;
 
           try {
@@ -55,9 +56,13 @@ export default Plugin.define({
             const session = await ctx.session.get({ sessionID });
             if (!session || session.parentID) continue;
 
-            await execFileAsync("notify-send", ["OpenCode", "Session is idle", "--urgency=normal"]);
+            await execFileAsync("notify-send", [
+              "OpenCode",
+              failed ? "Session failed" : "Session is idle",
+              "--urgency=normal",
+            ]);
           } catch (error) {
-            console.error("Failed to send idle notification:", error.message);
+            console.error("Failed to send session notification:", error.message);
           }
         }
       } catch (error) {
