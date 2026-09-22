@@ -239,6 +239,9 @@ paru -S --needed --noconfirm agent-browser-bin
 agent-browser install
 bunx skills add vercel-labs/agent-browser -y -g
 
+# LOCAL LLM (Qwen3.6-35B-A3B via llama.cpp Vulkan, OpenCode provider "llamacpp")
+~/.local/bin/setup-qwen36.sh
+
 
 # # MEDIA
 # paru -S --needed --noconfirm nfs-utils
