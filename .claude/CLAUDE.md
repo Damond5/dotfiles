@@ -1,5 +1,6 @@
 # Global Instructions
 - **CRITICAL** You MUST NEVER commit or push using git
+- **CRITICAL** You MUST NEVER post, send or publish anything on my behalf, via any interface, unless I explicitly ask for that exact post
 - **CRITICAL** You MUST ALWAYS respond short and accurate
 
 ## Coding
