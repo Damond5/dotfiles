@@ -28,6 +28,10 @@
 ## Mimic memory-nicky Branch
 - In the Mimic repo (`gitlab.com/nordbo-robotics/products/mimic/mimic`) the project `MEMORY.md` is tracked only on the user's personal `memory-nicky` branch; feature branches carry it as an untracked file. When checking out a feature branch, keep the working-copy `MEMORY.md` from `memory-nicky` intact. When the user asks for a memory commit, it goes to `memory-nicky`, not the feature branch, with a message of the form `<MR subject> memory` (e.g. `move robot home after each execution memory`); committing through a temporary `git worktree` leaves the checked-out feature branch untouched.
 
+## Global File Restraint
+
+- Always-loaded global instruction files (`~/.claude/CLAUDE.md`, `~/.config/opencode/AGENTS.md`) stay lean: workflow and tooling knowledge lives in the command or prompt file that needs it, never as new sections in the globals.
+
 ## Gauging Performance Before It Reaches Site
 
 - Nicky's dev workstation has 24 cores, more than the site machines he deploys to, so a wall-clock benchmark measured on it overstates real on-site speed. The trap is replacing already-parallel code: the old implementation saturates both machines and makes them look equally fast, so the measured speedup silently assumes the dev box's core count — that produced a 35% optimistic projection on 2026-09-17. Scale the number before quoting it, and label it a projection until the deployed logs confirm it.
