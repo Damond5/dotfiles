@@ -34,4 +34,4 @@
 
 ## Gauging Performance Before It Reaches Site
 
-- Nicky's dev workstation has 24 cores, more than the site machines he deploys to, so a wall-clock benchmark measured on it overstates real on-site speed. The trap is replacing already-parallel code: the old implementation saturates both machines and makes them look equally fast, so the measured speedup silently assumes the dev box's core count — that produced a 35% optimistic projection on 2026-09-17. Scale the number before quoting it, and label it a projection until the deployed logs confirm it.
+- The user's dev workstation has 24 cores, more than the site machines they deploy to, so a wall-clock benchmark measured on it overstates real on-site speed. The trap is replacing already-parallel code: the old implementation saturates both machines and makes them look equally fast, so the measured speedup silently assumes the dev box's core count — that produced a 35% optimistic projection on 2026-09-17. Scale the number before quoting it, and label it a projection until the deployed logs confirm it.
