@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "blockReadsOutsideWorkingDirectories": false,
+    "additionalDirectories": [
+      "/tmp",
+      "/home/nikv/.config/agents"
+    ]
+  },
   "model": "opus[1m]",
   "hooks": {
     "Notification": [
@@ -29,6 +36,16 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/notify.sh Question"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-bash-file-writes.py",
+            "timeout": 5
           }
         ]
       }
@@ -70,35 +87,33 @@
     ]
   },
   "workflowKeywordTriggerEnabled": false,
-  "effortLevel": "medium",
-  "promptSuggestionEnabled": false,
-  "awaySummaryEnabled": false,
-  "editorMode": "vim",
-  "verbose": false,
-  "preferredNotifChannel": "auto",
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true
   },
-  "permissions": {
-    "blockReadsOutsideWorkingDirectories": true,
-    "additionalDirectories": [
-      "/tmp",
-      "/home/nikv/.config/agents"
-    ]
-  },
   "sandbox": {
-    "enabled": true,
+    "enabled": false,
     "failIfUnavailable": true,
     "autoAllowBashIfSandboxed": true,
     "allowUnsandboxedCommands": true,
     "filesystem": {
-      "allowRead": [
-        "/home/nikv/.claude/tools/**"
-      ],
       "allowWrite": [
         "/tmp/**",
         "/home/nikv/.config/agents/**"
+      ],
+      "allowRead": [
+        "/home/nikv/.claude/tools/**"
       ]
     }
-  }
+  },
+  "effortLevel": "medium",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "editorMode": "vim",
+  "verbose": false,
+  "preferredNotifChannel": "auto"
 }
