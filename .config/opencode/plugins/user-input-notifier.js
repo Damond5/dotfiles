@@ -4,6 +4,20 @@ import { Plugin } from "@opencode/plugin";
 
 const execFileAsync = promisify(execFile);
 
+// opencode instantiates a global plugin once per known location, and every
+// instance receives the same broadcast events. Dedupe globally by event id so
+// one event produces one notification.
+const SEEN_KEY = Symbol.for("opencode.notifier.seen");
+const seen = (globalThis[SEEN_KEY] ??= new Map());
+
+function isDuplicate(id) {
+  const now = Date.now();
+  if (seen.size > 500) for (const [key, at] of seen) if (now - at > 60_000) seen.delete(key);
+  if (seen.has(id)) return true;
+  seen.set(id, now);
+  return false;
+}
+
 async function sendNotification(title, message) {
   try {
     await execFileAsync("notify-send", [title, message, "--urgency=normal"]);
@@ -12,81 +26,35 @@ async function sendNotification(title, message) {
   }
 }
 
-// Shell escape function to prevent shell injection
-function shellEscape(str) {
-  if (str === null || str === undefined) {
-    return '""';
+// Build a notification message for a v2 `permission.asked` event.
+function buildPermissionMessage({ action, resources, message }) {
+  let text = `Permission requested: ${action || "unknown"}`;
+  if (Array.isArray(resources) && resources.length > 0) {
+    text += `\n${resources.join("\n")}`;
   }
-  const strVal = String(str);
-  // Escape shell metacharacters: " $` \ | ; < > ( ) { } [ ] ! # & ~ * ?
-  // Also escape newlines and tabs
-  const escaped = strVal
-    .replace(/"/g, '\\"')
-    .replace(/\$/g, '\\$')
-    .replace(/`/g, '\\`')
-    .replace(/\\/g, '\\\\')
-    .replace(/\|/g, '\\|')
-    .replace(/;/g, '\\;')
-    .replace(/</g, '\\<')
-    .replace(/>/g, '\\>')
-    .replace(/\(/g, '\\(')
-    .replace(/\)/g, '\\)')
-    .replace(/\{/g, '\\{')
-    .replace(/\}/g, '\\}')
-    .replace(/\[/g, '\\[')
-    .replace(/\]/g, '\\]')
-    .replace(/!/g, '\\!')
-    .replace(/#/g, '\\#')
-    .replace(/&/g, '\\&')
-    .replace(/~/g, '\\~')
-    .replace(/\*/g, '\\*')
-    .replace(/\?/g, '\\?')
-    .replace(/\n/g, '\\n')
-    .replace(/\t/g, '\\t');
-  return `"${escaped}"`;
+  if (message) text += `\n\n${message}`;
+  return text;
 }
 
-// Build question notification message
-function buildQuestionMessage(questions, tool) {
-  let message = 'A question was asked';
+// Build a notification message for a v2 `form.created` event (the question tool).
+function buildFormMessage(form) {
+  let message = form.title || "A question was asked";
 
-  // Add header if available
-  const firstQuestion = questions[0];
-  if (firstQuestion.header) {
-    message += `:\n${firstQuestion.header}`;
-  }
+  const fields = Array.isArray(form.fields) ? form.fields : [];
+  const lines = fields
+    .map((field) => field.title || field.description || field.key)
+    .filter(Boolean);
+  if (lines.length > 0) message += `\n\n${lines.join("\n")}`;
 
-  // Add question text(s)
-  if (firstQuestion.question) {
-    // Early exit optimization: if only one question or not all have questions, show single question
-    if (questions.length <= 1 || !questions.every(q => q.question)) {
-      message += `\n\nQuestion: ${firstQuestion.question}`;
-    } else {
-      // Show all questions as a list
-      message += `\n\nQuestions:\n${questions.map(q => q.question).join('\n')}`;
-    }
-  } else {
-    // If no direct question property, join all question texts
-    const questionTexts = questions.map(q => q.question).filter(Boolean);
-    if (questionTexts.length > 0) {
-      message += `\n\nQuestions:\n${questionTexts.join('\n')}`;
-    }
-  }
-
-  // Add options information if available
-  if (firstQuestion.options && Array.isArray(firstQuestion.options) && firstQuestion.options.length > 0) {
-    message += `\n\nAvailable options:\n${firstQuestion.options.map((opt, idx) => `${idx + 1}. ${opt}`).join('\n')}`;
-  }
-
-  // Add tool context if available (with validation)
-  if (tool && typeof tool === 'string') {
-    message += `\n\nContext: ${tool}`;
+  const firstWithOptions = fields.find((field) => Array.isArray(field.options) && field.options.length > 0);
+  if (firstWithOptions) {
+    message += `\n\nAvailable options:\n${firstWithOptions.options
+      .map((option, index) => `${index + 1}. ${option.label ?? option.value}`)
+      .join("\n")}`;
   }
 
   return message;
 }
-
-void shellEscape;
 
 export default Plugin.define({
   id: "user-input-notifier",
@@ -103,28 +71,20 @@ export default Plugin.define({
     void (async () => {
       try {
         for await (const event of ctx.event.subscribe({ signal: controller.signal })) {
+          // v2 events carry their payload under `data`, not `properties`.
           if (event.type === "permission.asked") {
-            const { permission, title, patterns, always } = event.properties || {};
-            if (!permission) continue;
-
-            let message = title || permission;
-            if (patterns && Array.isArray(patterns) && patterns.length > 0) {
-              message = title || patterns.join(', ');
-            }
-
-            let alwaysText = '';
-            if (always && Array.isArray(always) && always.length > 0) {
-              alwaysText = ` (always: ${always.join(', ')})`;
-            }
-
-            await sendNotification("OpenCode", `Permission requested: ${permission} - ${message}${alwaysText}`);
+            const permission = event.data;
+            if (!permission?.action) continue;
+            if (isDuplicate(event.id)) continue;
+            await sendNotification("OpenCode", buildPermissionMessage(permission));
             continue;
           }
 
-          if (event.type === "question.asked") {
-            const { questions, tool } = event.properties || {};
-            if (!questions || !Array.isArray(questions) || questions.length === 0) continue;
-            await sendNotification("OpenCode", buildQuestionMessage(questions, tool));
+          if (event.type === "form.created") {
+            const form = event.data?.form;
+            if (!form) continue;
+            if (isDuplicate(event.id)) continue;
+            await sendNotification("OpenCode", buildFormMessage(form));
           }
         }
       } catch (error) {

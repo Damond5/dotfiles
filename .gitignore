@@ -20,6 +20,9 @@
 !.vimrc
 !.Xmodmap
 !.gdfuse
+!.local
+.local/*
+!.local/bin
 # !.series
 # !installElvUI.sh
 !.install

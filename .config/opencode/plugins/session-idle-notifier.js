@@ -4,6 +4,20 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
+// opencode instantiates a global plugin once per known location, and every
+// instance receives the same broadcast events. Dedupe globally by event id so
+// one event produces one notification.
+const SEEN_KEY = Symbol.for("opencode.notifier.seen");
+const seen = (globalThis[SEEN_KEY] ??= new Map());
+
+function isDuplicate(id) {
+  const now = Date.now();
+  if (seen.size > 500) for (const [key, at] of seen) if (now - at > 60_000) seen.delete(key);
+  if (seen.has(id)) return true;
+  seen.set(id, now);
+  return false;
+}
+
 export default Plugin.define({
   id: "session-idle-notifier",
   setup(ctx) {
@@ -20,39 +34,35 @@ export default Plugin.define({
 
       try {
         for await (const event of ctx.event.subscribe({ signal: controller.signal })) {
-          if (!event || event.type !== "session.idle") continue;
           if (!notifyAvailable) continue;
 
+          // v2 does not reliably emit `session.idle`/`session.status`; the run-end
+          // signals are `session.execution.succeeded` / `session.execution.failed`.
+          // Keep the idle ones for forward compatibility.
+          const type = event?.type;
+          const idle =
+            type === "session.execution.succeeded" ||
+            type === "session.idle" ||
+            (type === "session.status" && event.data?.status?.type === "idle");
+          const failed = type === "session.execution.failed";
+          if (!idle && !failed) continue;
+          if (isDuplicate(event.id ?? `${event.data?.sessionID}:${event.created}`)) continue;
+
           try {
-            const sessionID = event.properties?.sessionID;
-            if (!sessionID) {
-              console.warn("No sessionID provided in event properties");
-              continue;
-            }
+            const sessionID = event.data?.sessionID;
+            if (!sessionID) continue;
 
-            // Filter out subagent sessions via API, with property fallback
-            try {
-              const session = await ctx.session.get({ sessionID });
-              if (!session) {
-                console.log("No session found for ID:", sessionID);
-                continue;
-              }
-              if (session.parentID) continue;
-            } catch (apiError) {
-              console.warn(
-                "Failed to get session via API, falling back to property-based detection:",
-                apiError.message,
-              );
-              const props = event.properties || {};
-              if (props.parentID || props.agent?.mode === "subagent") continue;
-            }
+            // Skip subagent sessions.
+            const session = await ctx.session.get({ sessionID });
+            if (!session || session.parentID) continue;
 
-            await execFileAsync("notify-send", ["OpenCode", "Session is idle", "--urgency=normal"]);
+            await execFileAsync("notify-send", [
+              "OpenCode",
+              failed ? "Session failed" : "Session is idle",
+              "--urgency=normal",
+            ]);
           } catch (error) {
-            console.error("Failed to send idle notification:", {
-              message: error.message,
-              stack: error.stack,
-            });
+            console.error("Failed to send session notification:", error.message);
           }
         }
       } catch (error) {
