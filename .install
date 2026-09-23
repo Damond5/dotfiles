@@ -164,6 +164,7 @@ flatpak install -y org.localsend.localsend_app
 paru -S --needed --noconfirm p7zip
 paru -S --needed --noconfirm zip
 paru -S --needed --noconfirm udiskie
+paru -S --needed --noconfirm jq
 
 ## scripts
 paru -S --needed --noconfirm pv
