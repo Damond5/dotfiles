@@ -81,3 +81,10 @@
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
 !.config/agents/
+!.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/context7-mcp/
+.agents/skills/context7-mcp/*
+!.agents/skills/context7-mcp/SKILL.md
