@@ -127,6 +127,19 @@ sudo systemctl enable reflector.timer
 sudo systemctl start reflector.service reflector.timer
 paru -S --needed --noconfirm calc
 
+# REMOTE ACCESS (personal tailnet, Tailscale SSH)
+# Install + enable always (safe). Login only on non-work to avoid
+# overwriting headscale mesh (one tailscaled = one active tailnet).
+paru -S --needed --noconfirm tailscale openssh
+sudo systemctl enable --now tailscaled
+if [[ $work == false ]]; then
+  if tailscale status &>/dev/null; then
+    sudo tailscale set --ssh=true
+  else
+    sudo tailscale up --ssh
+  fi
+fi
+
 ## desktop
 paru -S --needed --noconfirm i3-wm
 paru -S --needed --noconfirm autotiling
