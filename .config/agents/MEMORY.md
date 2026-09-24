@@ -22,7 +22,7 @@
 ## Arch Workstation Missing Tools, Sudo And SSH Prompts
 
 - On the user's Arch workstation, `sudo` has no way to prompt during a tool call, so `paru -S` and anything else needing root fails with "a terminal is required to read the password". Treat a missing package as a fixed constraint to work around, not something to install — `sshpass`, for one, is absent and cannot be added.
-- `jq` is listed in the desktop section of the user's `~/.install` script (added 2026-09-23) but was not yet installed on their Arch workstation host at that point. Check `command -v jq` before relying on it in a hook or shell pipeline, and fall back to `python3` (at `/usr/bin/python3`) for JSON parsing if it is missing.
+- The GitLab CLI `glab` is not installed on the user's Arch workstation, so GitLab work goes through the GitLab MCP tools rather than shell commands (confirmed 2026-09-24).
 - Password-authenticated `ssh`/`scp` from that workstation works by pointing `SSH_ASKPASS` at an executable helper script, setting `SSH_ASKPASS_REQUIRE=force`, and wrapping the call in `setsid -w`. On the far end, a `sudo` that must run without a tty needs `SUDO_ASKPASS` exported plus one `sudo -A -v` to prime the timestamp.
 
 ## Mimic memory-nicky Branch

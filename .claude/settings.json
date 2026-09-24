@@ -1,4 +1,7 @@
 {
+  "env": {
+    "MEMORY_ENGINE": "/home/nikv/.claude/tools/memory/memory.py"
+  },
   "permissions": {
     "blockReadsOutsideWorkingDirectories": false,
     "additionalDirectories": [
