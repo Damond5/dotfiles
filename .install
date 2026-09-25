@@ -155,6 +155,7 @@ paru -S --needed --noconfirm scrot
 paru -S --needed --noconfirm loupe
 paru -S --needed --noconfirm gnome-calculator
 paru -S --needed --noconfirm gnome-screenshot
+paru -S --needed --noconfirm gpu-screen-recorder-ui
 # paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
 paru -S --needed --noconfirm nautilus
 paru -S --needed --noconfirm evince
