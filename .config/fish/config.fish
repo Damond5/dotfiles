@@ -52,3 +52,9 @@ starship init fish | source
 # SSH-AGENT (GITUI)
 eval (ssh-agent -c | head -n2)
 ssh-add -q
+
+# Interactive SSH logins (e.g. phone via Tailscale SSH + Termius) land directly in opencode.
+# Quitting opencode drops back to a normal shell. Non-interactive SSH (scp, `ssh host cmd`) is unaffected.
+if status is-login; and status is-interactive; and set -q SSH_CONNECTION
+    opencode ~/workspace/rust-game
+end
