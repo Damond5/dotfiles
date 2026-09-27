@@ -15,7 +15,8 @@
 
 ## Escalation
 - If you encounter an issue you cannot resolve, or find yourself retrying the same approach, report it clearly in your completion summary. Do not retry the same approach repeatedly
-- If a tool permission is denied, do NOT work around it — report the limitation in your completion summary
+- If denied permission blocks the task, stop and ask user for permission instead of working around it. If optional, work around and note limitation in summary.
+- When implementation choice is ambiguous and not resolvable from request/code/sensible defaults, ask via `AskUserQuestion` with 2-4 options, recommended first with ` (Recommended)` suffix, before proceeding
 
 ## Host System Information
 - Operating system: Arch Linux
