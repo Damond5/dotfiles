@@ -134,9 +134,9 @@ paru -S --needed --noconfirm tailscale openssh
 sudo systemctl enable --now tailscaled
 if [[ $work == false ]]; then
   if tailscale status &>/dev/null; then
-    sudo tailscale set --ssh=true
+    sudo tailscale set --ssh=true --operator=$USER
   else
-    sudo tailscale up --ssh
+    sudo tailscale up --ssh --operator=$USER
   fi
 fi
 
