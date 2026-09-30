@@ -12,9 +12,6 @@
       "effect": "allow"
     }
   ],
-  "instructions": [
-    ".claude/rules/**/*.md"
-  ],
   "providers": {
     "llamacpp": {
       "name": "llama.cpp local",
@@ -36,21 +33,11 @@
   "mcp": {
     "servers": {
       "context7": {
-        "type": "local",
-        "command": [
-          "npx",
-          "-y",
-          "@upstash/context7-mcp"
-        ],
-        "disabled": false
-      }
-    },
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-      "enabled": true,
-      "headers": {
-        "Authorization": "Bearer ctx7sk-6f7e6c3d-7e14-4415-9239-032a224fb162"
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "headers": {
+          "Authorization": "Bearer ctx7sk-6f7e6c3d-7e14-4415-9239-032a224fb162"
+        }
       }
     }
   }
