@@ -90,6 +90,43 @@
     ]
   },
   "workflowKeywordTriggerEnabled": false,
+  "enableArtifact": false,
+  "disableWorkflows": true,
+  "deniedMcpServers": [
+    { "serverName": "claude.ai Claude Docs" },
+    { "serverName": "claude.ai Figma" },
+    { "serverName": "claude.ai Tally" },
+    { "serverName": "claude.ai BankMCP" }
+  ],
+  "skillOverrides": {
+    "artifact-design": "off",
+    "artifact-diagramming": "off",
+    "artifact-capabilities": "off",
+    "workflow-authoring": "off",
+    "dataviz": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:docx": "user-invocable-only",
+    "anthropic-skills:pptx": "user-invocable-only",
+    "anthropic-skills:xlsx": "user-invocable-only",
+    "anthropic-skills:pdf": "user-invocable-only",
+    "anthropic-skills:google-workspace": "user-invocable-only",
+    "anthropic-skills:morning": "off",
+    "anthropic-skills:import-memory": "off",
+    "anthropic-skills:skill-creator": "user-invocable-only",
+    "claude-api": "user-invocable-only",
+    "schedule": "user-invocable-only",
+    "loop": "user-invocable-only",
+    "update-config": "user-invocable-only",
+    "keybindings-help": "user-invocable-only",
+    "code-review": "user-invocable-only",
+    "simplify": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "claude-in-chrome": "user-invocable-only",
+    "run": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only"
+  },
+  "feedbackDrafts": "off",
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true
   },
@@ -111,7 +148,7 @@
   "effortLevel": "medium",
   "modelSettings": {
     "claude-opus-5-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
     }
   },
   "promptSuggestionEnabled": false,
