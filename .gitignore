@@ -23,6 +23,7 @@
 !.local
 .local/*
 !.local/bin
+.local/bin/serve-qwen36.sh
 # !.series
 # !installElvUI.sh
 !.install
@@ -77,6 +78,10 @@
 !.claude/hooks/
 !.claude/commands/
 !.claude/tools/
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/context-diet/
+.claude/skills/context-diet/**/__pycache__/
 !.config/opencode/
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
