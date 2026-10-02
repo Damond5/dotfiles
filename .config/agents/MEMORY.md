@@ -52,6 +52,11 @@
 
 - Each Nordbo customer project has a monday.com board named `[Dxxxxx] Customer, …` in the Projects workspace (id 2732943), built from a template with groups "1 Kickoff & Planning" to "5. Post-Project Review"; work notes go in as subitems under template items such as "💻 Develop software/hardware specifications". Subitems live on a separate "Subitems of [Dxxxxx] …" board and carry Status (Not Started / In Progress / Completed / Blocked / Cancelled), Owner and a free-text Description column — look up the column ids with get_board_info before writing. The user's own monday.com user id is 11972798.
 
+## R&D Development Backlog Board On monday.com
+
+- Nordbo's R&D Development Backlog is monday.com board 6419715614 in the R&D workspace (2650708). New items go in the "New Requests" group (`topics`) with Status New, and the field rules are in the "Development Backlog WoW" doc (id 45317025). Its "New Task" and "New BUG" forms are out of date (they still have a "Next Move" field for a column that no longer exists), so create items with create_items rather than create_form_submission.
+- On the Development Backlog board (6419715614), the Brief doc column (`doc_mm5shzz4`) fills itself from a template (Objective, Background, Scope, Non-goals, Acceptance criteria as checklist, Validation, Dependencies and constraints) when create_doc attaches a doc, and any markdown passed in is appended after the template. To fill a brief: create the doc, read its blocks with read_docs include_blocks, delete all of them, then add_markdown_content with the completed brief using the same headings.
+
 ## Mimic High Precision Standard Hardware
 
 - A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 66.6 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems used its predecessor, the UM790 Pro, whose manual is also still in the Drive folder next to the UM890 Pro datasheet — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
