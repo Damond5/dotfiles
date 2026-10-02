@@ -254,6 +254,7 @@ paru -S --needed --noconfirm opencode
 paru -S --needed --noconfirm agent-browser-bin
 agent-browser install
 bunx skills add vercel-labs/agent-browser -y -g
+paru -S --needed --noconfirm xorg-server-xvfb   # virtual display for agent-driven GUIs (RoboDK)
 
 # LOCAL LLM (Qwen3.6-35B-A3B via llama.cpp Vulkan, OpenCode provider "llamacpp")
 ~/.local/bin/setup-qwen36.sh
