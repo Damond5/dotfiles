@@ -40,3 +40,11 @@
 
 - Hands-off verification is conditional, not the default: it applies only when the user is actively using the PC for other things, and must only be mentioned when the user asks for it. When active: no screenshots of the display, no window activation or focus changes, and no mouse control.
 - While hands-off is active, drive GUI flows with env flags or auto-play modes and assert through logs, or have the user provide the input while monitoring logs; screenshots are acceptable only when testing graphics.
+
+## Nordbo Customer Project Boards On monday.com
+
+- Each Nordbo customer project has a monday.com board named `[Dxxxxx] Customer, …` in the Projects workspace (id 2732943), built from a template with groups "1 Kickoff & Planning" to "5. Post-Project Review"; work notes go in as subitems under template items such as "💻 Develop software/hardware specifications". Subitems live on a separate "Subitems of [Dxxxxx] …" board and carry Status (Not Started / In Progress / Completed / Blocked / Cancelled), Owner and a free-text Description column — look up the column ids with get_board_info before writing. The user's own monday.com user id is 11972798.
+
+## Mimic High Precision Standard Hardware
+
+- A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 67 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems and the Drive folder's manual still show its predecessor, the UM790 Pro, so don't take that model from there — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
