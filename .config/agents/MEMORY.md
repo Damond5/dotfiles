@@ -21,9 +21,16 @@
 
 ## Arch Workstation Missing Tools, Sudo And SSH Prompts
 
-- On the user's Arch workstation, `sudo` has no way to prompt during a tool call, so `paru -S` and anything else needing root fails with "a terminal is required to read the password". Treat a missing package as a fixed constraint to work around, not something to install — `sshpass`, for one, is absent and cannot be added.
+- On the user's Arch workstation, `sudo` has no way to prompt during a tool call, so `paru -S` and anything else needing root fails with "a terminal is required to read the password". When a task needs a missing package, ask the user to install it themselves with `! sudo pacman -S <pkg>` (they did so for `xorg-server-xvfb` on 2026-10-02) instead of working around it silently — but `sshpass` stays absent and is not to be added.
+- Packages the user adopts on that workstation are recorded in the bootstrap script `~/.install` (a tracked shell script of `paru -S --needed --noconfirm …` lines grouped under `# SECTION` comments); agent tooling goes in its `# AI` section.
 - The GitLab CLI `glab` is not installed on the user's Arch workstation, so GitLab work goes through the GitLab MCP tools rather than shell commands (confirmed 2026-09-24).
 - Password-authenticated `ssh`/`scp` from that workstation works by pointing `SSH_ASKPASS` at an executable helper script, setting `SSH_ASKPASS_REQUIRE=force`, and wrapping the call in `setsid -w`. On the far end, a `sudo` that must run without a tty needs `SUDO_ASKPASS` exported plus one `sudo -A -v` to prime the timestamp.
+
+## Home Directory Dotfiles Repository
+- The user's home directory `~` is itself a git repo whose `~/.gitignore` ignores everything and whitelists paths one by one; under `~/.claude/skills/` each skill needs its own `!.claude/skills/<name>/` line (plus a `__pycache__` ignore), so a newly created skill stays invisible to git until that line is added.
+
+## Google Drive Connector Upload Size
+- The Google Drive MCP connector uploads only inline file content (`textContent`/`base64Content` in the call), so files of tens of MB or more — STL models, recorded HTML simulations, .rdk stations — cannot go through it; plan another route (the user uploading, or a CLI such as rclone) before promising a Drive upload.
 
 ## Mimic memory-nicky Branch
 - In the Mimic repo (`gitlab.com/nordbo-robotics/products/mimic/mimic`) the project `MEMORY.md` is tracked only on the user's personal `memory-nicky` branch; feature branches carry it as an untracked file. When checking out a feature branch, keep the working-copy `MEMORY.md` from `memory-nicky` intact. When the user asks for a memory commit, it goes to `memory-nicky`, not the feature branch, with a message of the form `<MR subject> memory` (e.g. `move robot home after each execution memory`); committing through a temporary `git worktree` leaves the checked-out feature branch untouched.
@@ -47,4 +54,4 @@
 
 ## Mimic High Precision Standard Hardware
 
-- A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 67 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems and the Drive folder's manual still show its predecessor, the UM790 Pro, so don't take that model from there — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
+- A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 66.6 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems used its predecessor, the UM790 Pro, whose manual is also still in the Drive folder next to the UM890 Pro datasheet — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
