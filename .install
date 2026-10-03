@@ -257,6 +257,7 @@ bunx skills add vercel-labs/agent-browser -y -g
 bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -g -y
 # re-apply local OpenAI patches: --background + --openaiQuality (wiped by `skills update`)
 patch -N -s -d ~/.agents/skills/baoyu-image-gen -p1 < ~/.config/baoyu-image-gen/openai-background-quality.patch || echo "baoyu-image-gen OpenAI patch did not apply cleanly"
+paru -S --needed --noconfirm xorg-server-xvfb   # virtual display for agent-driven GUIs (RoboDK)
 
 # LOCAL LLM (Qwen3.6-35B-A3B via llama.cpp Vulkan, OpenCode provider "llamacpp")
 ~/.local/bin/setup-qwen36.sh
