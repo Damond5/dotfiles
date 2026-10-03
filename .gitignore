@@ -14,6 +14,7 @@
 !.config/xdg-desktop-portal/
 !.config/picom.conf
 !.config/monitors.xml
+!.config/baoyu-image-gen/
 !.bashrc
 !.gitignore
 !.profile

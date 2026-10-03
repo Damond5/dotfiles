@@ -1,0 +1,1033 @@
+diff -ruN orig/references/config/preferences-schema.md patched/references/config/preferences-schema.md
+--- orig/references/config/preferences-schema.md	2026-10-03 16:41:47.831450151 +0200
++++ patched/references/config/preferences-schema.md	2026-10-03 16:41:47.832211399 +0200
+@@ -21,6 +21,10 @@
+ 
+ default_image_api_dialect: null  # openai-native|ratio-metadata|null (OpenAI-compatible gateways; null = use env/default)
+ 
++default_background: null    # transparent|opaque|auto|null (OpenAI/Azure GPT Image; null = auto)
++
++default_openai_quality: null  # low|medium|high|xhigh|max|auto|null (OpenAI/Azure render tier; null = follow --quality preset)
++
+ default_model:
+   google: null              # e.g., "gemini-3-pro-image", "gemini-3.1-flash-image", "gemini-3.1-flash-lite-image"
+   openai: null              # e.g., "gpt-image-2.5-flare", "gpt-image-2.5-sunburst", "gpt-image-2", "gpt-image-1.5"
+@@ -79,6 +83,8 @@
+ | `default_aspect_ratio` | string\|null | null | Default aspect ratio |
+ | `default_image_size` | string\|null | null | Google/OpenRouter image size (overrides quality) |
+ | `default_image_api_dialect` | string\|null | null | OpenAI-compatible image dialect (`openai-native` or `ratio-metadata`) |
++| `default_background` | string\|null | null | Default background for OpenAI/Azure (`transparent`, `opaque`, or `auto`) |
++| `default_openai_quality` | string\|null | null | Default render tier for OpenAI/Azure (`low`, `medium`, `high`, `xhigh`, `max`, or `auto`) |
+ | `default_model.google` | string\|null | null | Google default model |
+ | `default_model.openai` | string\|null | null | OpenAI default model |
+ | `default_model.azure` | string\|null | null | Azure default deployment name |
+diff -ruN orig/scripts/main.test.ts patched/scripts/main.test.ts
+--- orig/scripts/main.test.ts	2026-10-03 16:41:47.831553749 +0200
++++ patched/scripts/main.test.ts	2026-10-03 16:41:47.832641413 +0200
+@@ -18,6 +18,8 @@
+   mergeConfig,
+   normalizeOutputImagePath,
+   parseArgs,
++  parseImageBackground,
++  parseOpenAIQuality,
+   parseOpenAIImageApiDialect,
+   parseSimpleYaml,
+   validateReferenceImages,
+@@ -37,6 +39,8 @@
+     imageSize: null,
+     imageSizeSource: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+@@ -334,6 +338,89 @@
+   );
+ });
+ 
++test("parseArgs parses --background and rejects invalid values", () => {
++  assert.equal(parseArgs(["--background", "transparent"]).background, "transparent");
++  assert.equal(parseArgs(["--background", "OPAQUE"]).background, "opaque");
++  assert.equal(parseArgs([]).background, null);
++  assert.throws(() => parseArgs(["--background", "checkerboard"]), /Invalid background/);
++});
++
++test("parseImageBackground validates supported values", () => {
++  assert.equal(parseImageBackground("transparent"), "transparent");
++  assert.equal(parseImageBackground("auto"), "auto");
++  assert.equal(parseImageBackground(null), null);
++  assert.throws(() => parseImageBackground("blur"), /Invalid background/);
++});
++
++test("mergeConfig resolves background CLI > EXTEND.md > env", (t) => {
++  useEnv(t, { OPENAI_IMAGE_BACKGROUND: "opaque" });
++
++  const fromEnv = mergeConfig(makeArgs(), {});
++  assert.equal(fromEnv.background, "opaque");
++
++  const fromExtend = mergeConfig(makeArgs(), { default_background: "transparent" });
++  assert.equal(fromExtend.background, "transparent");
++
++  const fromCli = mergeConfig(makeArgs({ background: "auto" }), {
++    default_background: "transparent",
++  });
++  assert.equal(fromCli.background, "auto");
++});
++
++test("parseSimpleYaml reads default_background", () => {
++  const config = parseSimpleYaml("version: 1\ndefault_background: transparent\n");
++  assert.equal(config.default_background, "transparent");
++});
++
++test("createTaskArgs carries per-task background over base args", () => {
++  const taskArgs = createTaskArgs(makeArgs({ background: "opaque" }), { background: "transparent" }, "/tmp");
++  assert.equal(taskArgs.background, "transparent");
++  const inherited = createTaskArgs(makeArgs({ background: "opaque" }), {}, "/tmp");
++  assert.equal(inherited.background, "opaque");
++});
++
++test("parseArgs parses --openaiQuality and rejects invalid tiers", () => {
++  assert.equal(parseArgs(["--openaiQuality", "low"]).openaiQuality, "low");
++  assert.equal(parseArgs(["--openaiQuality", "XHigh"]).openaiQuality, "xhigh");
++  assert.equal(parseArgs([]).openaiQuality, null);
++  assert.throws(() => parseArgs(["--openaiQuality", "ultra"]), /Invalid openaiQuality/);
++});
++
++test("parseOpenAIQuality validates supported tiers", () => {
++  assert.equal(parseOpenAIQuality("low"), "low");
++  assert.equal(parseOpenAIQuality("max"), "max");
++  assert.equal(parseOpenAIQuality("auto"), "auto");
++  assert.equal(parseOpenAIQuality(null), null);
++  assert.throws(() => parseOpenAIQuality("turbo"), /Invalid openaiQuality/);
++});
++
++test("mergeConfig resolves openaiQuality CLI > EXTEND.md > env", (t) => {
++  useEnv(t, { OPENAI_IMAGE_QUALITY: "medium" });
++
++  const fromEnv = mergeConfig(makeArgs(), {});
++  assert.equal(fromEnv.openaiQuality, "medium");
++
++  const fromExtend = mergeConfig(makeArgs(), { default_openai_quality: "low" });
++  assert.equal(fromExtend.openaiQuality, "low");
++
++  const fromCli = mergeConfig(makeArgs({ openaiQuality: "high" }), {
++    default_openai_quality: "low",
++  });
++  assert.equal(fromCli.openaiQuality, "high");
++});
++
++test("parseSimpleYaml reads default_openai_quality", () => {
++  const config = parseSimpleYaml("version: 1\ndefault_openai_quality: low\n");
++  assert.equal(config.default_openai_quality, "low");
++});
++
++test("createTaskArgs carries per-task openaiQuality over base args", () => {
++  const taskArgs = createTaskArgs(makeArgs({ openaiQuality: "medium" }), { openaiQuality: "low" }, "/tmp");
++  assert.equal(taskArgs.openaiQuality, "low");
++  const inherited = createTaskArgs(makeArgs({ openaiQuality: "medium" }), {}, "/tmp");
++  assert.equal(inherited.openaiQuality, "medium");
++});
++
+ test("detectProvider rejects non-ref-capable providers and prefers Google first when multiple keys exist", (t) => {
+   assert.throws(
+     () =>
+diff -ruN orig/scripts/main.ts patched/scripts/main.ts
+--- orig/scripts/main.ts	2026-10-03 16:41:47.831561729 +0200
++++ patched/scripts/main.ts	2026-10-03 16:41:47.832667882 +0200
+@@ -8,7 +8,9 @@
+   BatchTaskInput,
+   CliArgs,
+   ExtendConfig,
++  ImageBackground,
+   OpenAIImageApiDialect,
++  OpenAIQuality,
+   Provider,
+ } from "./types";
+ 
+@@ -84,9 +86,11 @@
+   -m, --model <id>          Model ID
+   --ar <ratio>              Aspect ratio (e.g., 16:9, 1:1, 4:3)
+   --size <WxH>              Size (e.g., 1024x1024)
+-  --quality normal|2k       Quality preset (default: 2k)
++  --quality normal|2k       Quality preset (default: 2k; controls dimensions, overridden per-tier by --openaiQuality on OpenAI/Azure)
+   --imageSize 1K|2K|4K      Image size for Google/OpenRouter (default: from quality)
+   --imageApiDialect <id>    OpenAI-compatible image dialect: openai-native|ratio-metadata
++  --background <mode>       Background: transparent|opaque|auto (OpenAI/Azure GPT Image; transparent needs png/webp)
++  --openaiQuality <tier>    Render tier for OpenAI/Azure: low|medium|high|xhigh|max|auto (xhigh|max need gpt-image-2.5-flare/sunburst)
+   --response-format file|url  Output mode: file (download image, default) or url (return URL text)
+   --ref <files...>          Reference images (Google, OpenAI, Azure, OpenRouter, Replicate supported families, MiniMax, Seedream 4.0/4.5/5.0, or DashScope wan2.7-image*)
+   --n <count>               Number of images for the current task (default: 1; Replicate currently requires 1)
+@@ -139,6 +143,8 @@
+   SEEDREAM_IMAGE_MODEL      Default Seedream model (doubao-seedream-5-0-260128)
+   OPENAI_BASE_URL           Custom OpenAI endpoint
+   OPENAI_IMAGE_API_DIALECT  OpenAI-compatible image dialect (openai-native|ratio-metadata)
++  OPENAI_IMAGE_BACKGROUND   Default background: transparent|opaque|auto (OpenAI/Azure; null = auto)
++  OPENAI_IMAGE_QUALITY      Default render tier for OpenAI/Azure: low|medium|high|xhigh|max|auto (overridden by --openaiQuality and EXTEND.md)
+   OPENAI_IMAGE_USE_CHAT     Use /chat/completions instead of /images/generations (true|false)
+   OPENROUTER_BASE_URL       Custom OpenRouter endpoint
+   OPENROUTER_HTTP_REFERER   Optional app URL for OpenRouter attribution
+@@ -183,6 +189,8 @@
+     imageSizeSource: null,
+     imageApiDialect: null,
+     responseFormat: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+@@ -330,6 +338,18 @@
+       continue;
+     }
+ 
++    if (a === "--background") {
++      const v = argv[++i];
++      out.background = parseImageBackground(v);
++      continue;
++    }
++
++    if (a === "--openaiQuality") {
++      const v = argv[++i];
++      out.openaiQuality = parseOpenAIQuality(v);
++      continue;
++    }
++
+     if (a === "--ref" || a === "--reference") {
+       const { items, next } = takeMany(i);
+       if (items.length === 0) throw new Error(`Missing files for ${a}`);
+@@ -436,6 +456,10 @@
+       } else if (key === "default_image_api_dialect") {
+         config.default_image_api_dialect =
+           value === "null" ? null : parseOpenAIImageApiDialect(value);
++      } else if (key === "default_background") {
++        config.default_background = value === "null" ? null : parseImageBackground(value);
++      } else if (key === "default_openai_quality") {
++        config.default_openai_quality = value === "null" ? null : parseOpenAIQuality(value);
+       } else if (key === "default_model") {
+         config.default_model = {
+           google: null,
+@@ -536,6 +560,31 @@
+   throw new Error(`Invalid OpenAI image API dialect: ${value}`);
+ }
+ 
++export function parseImageBackground(value: string | undefined | null): ImageBackground | null {
++  if (!value) return null;
++  const normalized = value.replace(/['"]/g, "").trim().toLowerCase();
++  if (normalized === "transparent" || normalized === "opaque" || normalized === "auto") {
++    return normalized;
++  }
++  throw new Error(`Invalid background: ${value}. Expected transparent|opaque|auto.`);
++}
++
++export function parseOpenAIQuality(value: string | undefined | null): OpenAIQuality | null {
++  if (!value) return null;
++  const normalized = value.replace(/['"]/g, "").trim().toLowerCase();
++  if (
++    normalized === "low" ||
++    normalized === "medium" ||
++    normalized === "high" ||
++    normalized === "xhigh" ||
++    normalized === "max" ||
++    normalized === "auto"
++  ) {
++    return normalized;
++  }
++  throw new Error(`Invalid openaiQuality: ${value}. Expected low|medium|high|xhigh|max|auto.`);
++}
++
+ type ExtendConfigPathPair = {
+   current: string;
+   legacy: string;
+@@ -619,6 +668,14 @@
+     ...args,
+     provider: args.provider ?? extend.default_provider ?? null,
+     quality: args.quality ?? extend.default_quality ?? null,
++    openaiQuality:
++      args.openaiQuality ??
++      extend.default_openai_quality ??
++      parseOpenAIQuality(process.env.OPENAI_IMAGE_QUALITY),
++    background:
++      args.background ??
++      extend.default_background ??
++      parseImageBackground(process.env.OPENAI_IMAGE_BACKGROUND),
+     aspectRatio,
+     aspectRatioSource:
+       args.aspectRatioSource ??
+@@ -1010,6 +1067,8 @@
+     imageSizeSource: task.imageSize != null ? "task" : (baseArgs.imageSizeSource ?? null),
+     imageApiDialect: task.imageApiDialect ?? baseArgs.imageApiDialect ?? null,
+     responseFormat: task.responseFormat ?? baseArgs.responseFormat ?? null,
++    background: task.background ?? baseArgs.background ?? null,
++    openaiQuality: task.openaiQuality ?? baseArgs.openaiQuality ?? null,
+     referenceImages: task.ref ? task.ref.map((filePath) => resolveBatchReferencePath(batchDir, filePath)) : [],
+     n: task.n ?? baseArgs.n,
+     batchFile: null,
+diff -ruN orig/scripts/providers/agnes.test.ts patched/scripts/providers/agnes.test.ts
+--- orig/scripts/providers/agnes.test.ts	2026-10-03 16:41:47.831583579 +0200
++++ patched/scripts/providers/agnes.test.ts	2026-10-03 16:41:47.832380187 +0200
+@@ -52,6 +52,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/azure.test.ts patched/scripts/providers/azure.test.ts
+--- orig/scripts/providers/azure.test.ts	2026-10-03 16:41:47.831595999 +0200
++++ patched/scripts/providers/azure.test.ts	2026-10-03 16:41:47.832414296 +0200
+@@ -49,6 +49,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+@@ -136,6 +138,77 @@
+   assert.equal(body.size, "1024x1024");
+ });
+ 
++test("Azure generations include background and png format for transparency", async (t) => {
++  useEnv(t, {
++    AZURE_OPENAI_API_KEY: "azure-key",
++    AZURE_OPENAI_BASE_URL: "https://example.openai.azure.com",
++    AZURE_API_VERSION: "2025-04-01-preview",
++    AZURE_OPENAI_DEPLOYMENT: null,
++    AZURE_OPENAI_IMAGE_MODEL: null,
++  });
++
++  const originalFetch = globalThis.fetch;
++  t.after(() => {
++    globalThis.fetch = originalFetch;
++  });
++
++  const calls: Array<{ url: string; body: string }> = [];
++  globalThis.fetch = async (input, init) => {
++    calls.push({
++      url: String(input),
++      body: String(init?.body ?? ""),
++    });
++    return Response.json({
++      data: [{ b64_json: Buffer.from("azure-image").toString("base64") }],
++    });
++  };
++
++  await generateImage(
++    "A game sprite",
++    "custom-deploy",
++    makeArgs({ quality: "2k", background: "transparent", imagePath: "out/sprite.png" }),
++  );
++
++  const transparentBody = JSON.parse(calls[0]!.body) as Record<string, string>;
++  assert.equal(transparentBody.background, "transparent");
++  assert.equal(transparentBody.output_format, "png");
++});
++
++test("Azure generations pass through explicit openaiQuality tiers", async (t) => {
++  useEnv(t, {
++    AZURE_OPENAI_API_KEY: "azure-key",
++    AZURE_OPENAI_BASE_URL: "https://example.openai.azure.com",
++    AZURE_API_VERSION: "2025-04-01-preview",
++    AZURE_OPENAI_DEPLOYMENT: null,
++    AZURE_OPENAI_IMAGE_MODEL: null,
++  });
++
++  const originalFetch = globalThis.fetch;
++  t.after(() => {
++    globalThis.fetch = originalFetch;
++  });
++
++  const calls: Array<{ url: string; body: string }> = [];
++  globalThis.fetch = async (input, init) => {
++    calls.push({
++      url: String(input),
++      body: String(init?.body ?? ""),
++    });
++    return Response.json({
++      data: [{ b64_json: Buffer.from("azure-image").toString("base64") }],
++    });
++  };
++
++  await generateImage(
++    "A game sprite",
++    "custom-deploy",
++    makeArgs({ quality: "2k", openaiQuality: "low" }),
++  );
++
++  const lowBody = JSON.parse(calls[0]!.body) as Record<string, string>;
++  assert.equal(lowBody.quality, "low");
++});
++
+ test("Azure image edits include quality in multipart requests", async (t) => {
+   const root = await makeTempDir("baoyu-image-gen-azure-");
+   t.after(() => fs.rm(root, { recursive: true, force: true }));
+diff -ruN orig/scripts/providers/azure.ts patched/scripts/providers/azure.ts
+--- orig/scripts/providers/azure.ts	2026-10-03 16:41:47.831601249 +0200
++++ patched/scripts/providers/azure.ts	2026-10-03 16:41:47.832406146 +0200
+@@ -1,7 +1,7 @@
+ import path from "node:path";
+ import { readFile } from "node:fs/promises";
+ import type { CliArgs } from "../types";
+-import { getOpenAISize, extractImageFromResponse } from "./openai.ts";
++import { getOpenAISize, extractImageFromResponse, getTransparentOutputFormat } from "./openai.ts";
+ 
+ type OpenAIImageResponse = { data: Array<{ url?: string; b64_json?: string }> };
+ type AzureEndpoint = {
+@@ -92,7 +92,11 @@
+   return { "api-key": getApiKey() };
+ }
+ 
+-function getAzureQuality(quality: CliArgs["quality"]): "medium" | "high" {
++function getAzureQuality(
++  quality: CliArgs["quality"],
++  openaiQuality: CliArgs["openaiQuality"]
++): "low" | "medium" | "high" | "xhigh" | "max" | "auto" {
++  if (openaiQuality) return openaiQuality;
+   return quality === "2k" ? "high" : "medium";
+ }
+ 
+@@ -105,6 +109,15 @@
+       );
+     }
+   }
++
++  if (args.background === "transparent") {
++    const ext = args.imagePath ? path.extname(args.imagePath).toLowerCase() : ".png";
++    if (ext === ".jpg" || ext === ".jpeg") {
++      throw new Error(
++        "Transparent background requires png or webp output. Use --image out.png (or .webp); jpeg cannot carry an alpha channel."
++      );
++    }
++  }
+ }
+ 
+ export async function generateImage(
+@@ -116,25 +129,33 @@
+   const size = args.size || getOpenAISize(model, args.aspectRatio, args.quality);
+ 
+   if (args.referenceImages.length > 0) {
+-    return generateWithAzureEdits(prompt, deployment, size, args.referenceImages, args.quality);
++    return generateWithAzureEdits(prompt, deployment, size, args.referenceImages, args);
+   }
+ 
+-  return generateWithAzureGenerations(prompt, deployment, size, args.quality);
++  return generateWithAzureGenerations(prompt, deployment, size, args);
+ }
+ 
+ async function generateWithAzureGenerations(
+   prompt: string,
+   deployment: string,
+   size: string,
+-  quality: CliArgs["quality"]
++  args: Pick<CliArgs, "quality" | "background" | "imagePath" | "openaiQuality">
+ ): Promise<Uint8Array> {
+   const body: Record<string, any> = {
+     prompt,
+     size,
+     n: 1,
+-    quality: getAzureQuality(quality),
++    quality: getAzureQuality(args.quality, args.openaiQuality),
+   };
+ 
++  const background = args.background ?? null;
++  if (background) {
++    body.background = background;
++  }
++  if (background === "transparent") {
++    body.output_format = getTransparentOutputFormat(args.imagePath ?? null);
++  }
++
+   const res = await fetch(buildURL(deployment, "/images/generations"), {
+     method: "POST",
+     headers: {
+@@ -158,13 +179,21 @@
+   deployment: string,
+   size: string,
+   referenceImages: string[],
+-  quality: CliArgs["quality"]
++  args: Pick<CliArgs, "quality" | "background" | "imagePath" | "openaiQuality">
+ ): Promise<Uint8Array> {
+   const form = new FormData();
+   form.append("prompt", prompt);
+   form.append("size", size);
+   form.append("n", "1");
+-  form.append("quality", getAzureQuality(quality));
++  form.append("quality", getAzureQuality(args.quality, args.openaiQuality));
++
++  const background = args.background ?? null;
++  if (background) {
++    form.append("background", background);
++  }
++  if (background === "transparent") {
++    form.append("output_format", getTransparentOutputFormat(args.imagePath ?? null));
++  }
+ 
+   for (const refPath of referenceImages) {
+     const bytes = await readFile(refPath);
+diff -ruN orig/scripts/providers/codex-cli.test.ts patched/scripts/providers/codex-cli.test.ts
+--- orig/scripts/providers/codex-cli.test.ts	2026-10-03 16:41:47.831606459 +0200
++++ patched/scripts/providers/codex-cli.test.ts	2026-10-03 16:41:47.832422866 +0200
+@@ -22,6 +22,8 @@
+     imageSize: null,
+     imageSizeSource: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/dashscope.test.ts patched/scripts/providers/dashscope.test.ts
+--- orig/scripts/providers/dashscope.test.ts	2026-10-03 16:41:47.831615638 +0200
++++ patched/scripts/providers/dashscope.test.ts	2026-10-03 16:41:47.832441476 +0200
+@@ -29,6 +29,8 @@
+     imageSize: null,
+     imageSizeSource: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/google.test.ts patched/scripts/providers/google.test.ts
+--- orig/scripts/providers/google.test.ts	2026-10-03 16:41:47.831628728 +0200
++++ patched/scripts/providers/google.test.ts	2026-10-03 16:41:47.832461646 +0200
+@@ -53,6 +53,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/jimeng.test.ts patched/scripts/providers/jimeng.test.ts
+--- orig/scripts/providers/jimeng.test.ts	2026-10-03 16:41:47.831639408 +0200
++++ patched/scripts/providers/jimeng.test.ts	2026-10-03 16:41:47.832481275 +0200
+@@ -16,6 +16,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/minimax.test.ts patched/scripts/providers/minimax.test.ts
+--- orig/scripts/providers/minimax.test.ts	2026-10-03 16:41:47.831655558 +0200
++++ patched/scripts/providers/minimax.test.ts	2026-10-03 16:41:47.832489225 +0200
+@@ -51,6 +51,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/openai.test.ts patched/scripts/providers/openai.test.ts
+--- orig/scripts/providers/openai.test.ts	2026-10-03 16:41:47.831669918 +0200
++++ patched/scripts/providers/openai.test.ts	2026-10-03 16:41:47.832509975 +0200
+@@ -12,9 +12,11 @@
+   getMimeType,
+   getOpenAISize,
+   getOrientationFromAspectRatio,
++  getTransparentOutputFormat,
+   inferAspectRatioFromSize,
+   inferResolutionFromSize,
+   parseAspectRatio,
++  supportsTransparentBackground,
+   validateArgs,
+ } from "./openai.ts";
+ 
+@@ -30,6 +32,8 @@
+     quality: "2k",
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+@@ -76,6 +80,8 @@
+       quality: "2k",
+       imageSize: null,
+       imageApiDialect: null,
++      background: null,
++      openaiQuality: null,
+     }),
+     {
+       model: "gpt-image-2",
+@@ -92,6 +98,8 @@
+       quality: "2k",
+       imageSize: null,
+       imageApiDialect: "ratio-metadata",
++      background: null,
++      openaiQuality: null,
+     }),
+     {
+       model: "gemini-3-pro-image-preview",
+@@ -111,6 +119,8 @@
+       quality: "normal",
+       imageSize: null,
+       imageApiDialect: "ratio-metadata",
++      background: null,
++      openaiQuality: null,
+     }),
+     {
+       model: "gemini-3-pro-image-preview",
+@@ -156,6 +166,151 @@
+   );
+ });
+ 
++test("OpenAI generations body carries background and pins png/webp for transparency", () => {
++  assert.deepEqual(
++    buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++      aspectRatio: null,
++      size: null,
++      quality: "2k",
++      imageSize: null,
++      imageApiDialect: null,
++      background: "transparent",
++      imagePath: "out/sprite.png",
++    }),
++    {
++      model: "gpt-image-2.5-flare",
++      prompt: "A sprite",
++      size: "2048x2048",
++      quality: "high",
++      background: "transparent",
++      output_format: "png",
++    },
++  );
++
++  const webpBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++    aspectRatio: null,
++    size: null,
++    quality: "2k",
++    imageSize: null,
++    imageApiDialect: null,
++    background: "transparent",
++    imagePath: "out/sprite.webp",
++  });
++  assert.equal(webpBody.output_format, "webp");
++
++  const opaqueBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++    aspectRatio: null,
++    size: null,
++    quality: "2k",
++    imageSize: null,
++    imageApiDialect: null,
++    background: "opaque",
++    imagePath: "out/sprite.png",
++  });
++  assert.equal(opaqueBody.background, "opaque");
++  assert.equal("output_format" in opaqueBody, false);
++
++  assert.throws(
++    () =>
++      buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++        aspectRatio: null,
++        size: null,
++        quality: "2k",
++        imageSize: null,
++        imageApiDialect: "ratio-metadata",
++        background: "transparent",
++        imagePath: "out/sprite.png",
++      }),
++    /openai-native/,
++  );
++});
++
++test("OpenAI background support matrix matches model capabilities", () => {
++  assert.equal(supportsTransparentBackground("gpt-image-2.5-flare"), true);
++  assert.equal(supportsTransparentBackground("gpt-image-2.5-sunburst"), true);
++  assert.equal(supportsTransparentBackground("gpt-image-1.5"), true);
++  assert.equal(supportsTransparentBackground("gpt-image-2"), false);
++  assert.equal(supportsTransparentBackground("gpt-image-2-2026-04-21"), false);
++  assert.equal(supportsTransparentBackground("dall-e-3"), false);
++
++  assert.equal(getTransparentOutputFormat("out/sprite.png"), "png");
++  assert.equal(getTransparentOutputFormat("out/sprite.webp"), "webp");
++  assert.equal(getTransparentOutputFormat(null), "png");
++
++  assert.doesNotThrow(() =>
++    validateArgs("gpt-image-2.5-flare", makeArgs({ background: "transparent", imagePath: "out/sprite.png" })),
++  );
++  assert.throws(
++    () => validateArgs("gpt-image-2", makeArgs({ background: "transparent" })),
++    /does not support transparent/,
++  );
++  assert.throws(
++    () => validateArgs("dall-e-3", makeArgs({ background: "transparent" })),
++    /does not support transparent/,
++  );
++  assert.throws(
++    () => validateArgs("gpt-image-2.5-flare", makeArgs({ background: "transparent", imagePath: "out/sprite.jpg" })),
++    /png or webp/,
++  );
++});
++
++test("OpenAI quality tiers override the preset mapping with model gating", () => {
++  const base = {
++    aspectRatio: null,
++    size: null,
++    imageSize: null,
++    imageApiDialect: null,
++    background: null,
++    imagePath: "out/sprite.png",
++  } as const;
++
++  const lowBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++    ...base,
++    quality: "2k",
++    openaiQuality: "low",
++  });
++  assert.equal(lowBody.quality, "low");
++
++  const maxBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-sunburst", {
++    ...base,
++    quality: "normal",
++    openaiQuality: "max",
++  });
++  assert.equal(maxBody.quality, "max");
++
++  const snapshotBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare-2026-09-08", {
++    ...base,
++    quality: "normal",
++    openaiQuality: "xhigh",
++  });
++  assert.equal(snapshotBody.quality, "xhigh");
++
++  // Preset mapping still applies without override
++  const presetBody = buildOpenAIGenerationsBody("A sprite", "gpt-image-2.5-flare", {
++    ...base,
++    quality: "normal",
++    openaiQuality: null,
++  });
++  assert.equal(presetBody.quality, "medium");
++
++  // xhigh|max rejected off the 2.5 family (fail fast, non-retryable)
++  assert.throws(
++    () => validateArgs("gpt-image-2", makeArgs({ openaiQuality: "xhigh" })),
++    /Invalid quality xhigh/,
++  );
++  assert.throws(
++    () => validateArgs("gpt-image-1.5", makeArgs({ openaiQuality: "max" })),
++    /Invalid quality max/,
++  );
++  assert.throws(
++    () => validateArgs("dall-e-3", makeArgs({ openaiQuality: "low" })),
++    /only supported for GPT Image models/,
++  );
++  assert.doesNotThrow(() =>
++    validateArgs("gpt-image-2.5-flare", makeArgs({ openaiQuality: "low" })),
++  );
++});
++
+ test("OpenAI mime-type detection covers supported reference image extensions", () => {
+   assert.equal(getMimeType("frame.png"), "image/png");
+   assert.equal(getMimeType("frame.jpg"), "image/jpeg");
+diff -ruN orig/scripts/providers/openai.ts patched/scripts/providers/openai.ts
+--- orig/scripts/providers/openai.ts	2026-10-03 16:41:47.831676778 +0200
++++ patched/scripts/providers/openai.ts	2026-10-03 16:41:47.832531805 +0200
+@@ -180,7 +180,32 @@
+   return args.quality === "normal" ? "1K" : "2K";
+ }
+ 
+-function getOpenAIQuality(model: string, quality: CliArgs["quality"]): "standard" | "hd" | "medium" | "high" | null {
++function isGptImage25Model(model: string): boolean {
++  return model.includes("gpt-image-2.5");
++}
++
++function getOpenAIQuality(
++  model: string,
++  quality: CliArgs["quality"],
++  openaiQuality: CliArgs["openaiQuality"]
++): "standard" | "hd" | "low" | "medium" | "high" | "xhigh" | "max" | "auto" | null {
++  if (openaiQuality) {
++    if (openaiQuality === "xhigh" || openaiQuality === "max") {
++      if (!isGptImage25Model(model)) {
++        throw new Error(
++          `Invalid quality ${openaiQuality} for ${model}: xhigh|max require gpt-image-2.5-flare or gpt-image-2.5-sunburst (including dated snapshots).`
++        );
++      }
++      return openaiQuality;
++    }
++    if (!isGptImageModel(model)) {
++      throw new Error(
++        `Invalid openaiQuality ${openaiQuality} for ${model}: explicit tiers are only supported for GPT Image models. Use --quality normal|2k for DALL·E.`
++      );
++    }
++    return openaiQuality;
++  }
++
+   if (model.includes("dall-e-3")) {
+     return quality === "2k" ? "hd" : "standard";
+   }
+@@ -204,7 +229,7 @@
+ export function buildOpenAIGenerationsBody(
+   prompt: string,
+   model: string,
+-  args: Pick<CliArgs, "aspectRatio" | "size" | "quality" | "imageSize" | "imageApiDialect">
++  args: Pick<CliArgs, "aspectRatio" | "size" | "quality" | "imageSize" | "imageApiDialect" | "background" | "imagePath" | "openaiQuality">
+ ): OpenAIGenerationsBody {
+   if (getOpenAIImageApiDialect(args) === "ratio-metadata") {
+     const aspectRatio = getOpenAIAspectRatio(args);
+@@ -214,6 +239,12 @@
+     const orientation = getOrientationFromAspectRatio(aspectRatio);
+     if (orientation) metadata.orientation = orientation;
+ 
++    if (args.background && args.background !== "auto") {
++      throw new Error(
++        "Background transparency requires the openai-native dialect. Use --imageApiDialect openai-native (or omit it) with an OpenAI GPT Image model."
++      );
++    }
++
+     return {
+       model,
+       prompt,
+@@ -228,15 +259,52 @@
+     size: args.size || getOpenAISize(model, args.aspectRatio, args.quality),
+   };
+ 
+-  const quality = getOpenAIQuality(model, args.quality);
++  const quality = getOpenAIQuality(model, args.quality, args.openaiQuality);
+   if (quality) {
+     body.quality = quality;
+   }
+ 
++  const background = args.background ?? null;
++  if (background) {
++    body.background = background;
++  }
++  if (background === "transparent") {
++    body.output_format = getTransparentOutputFormat(args.imagePath ?? null);
++  }
++
+   return body;
+ }
+ 
++export function getTransparentOutputFormat(imagePath: string | null): "png" | "webp" {
++  if (imagePath?.toLowerCase().endsWith(".webp")) return "webp";
++  return "png";
++}
++
++export function supportsTransparentBackground(model: string): boolean {
++  if (model.includes("dall-e")) return false;
++  if (model.includes("gpt-image-2") && !model.includes("gpt-image-2.5")) return false;
++  return model.includes("gpt-image");
++}
++
+ export function validateArgs(model: string, args: CliArgs): void {
++  if (args.openaiQuality) {
++    getOpenAIQuality(model, args.quality, args.openaiQuality);
++  }
++
++  if (args.background === "transparent") {
++    if (!supportsTransparentBackground(model)) {
++      throw new Error(
++        `${model} does not support transparent backgrounds. Use --background opaque|auto, or switch to gpt-image-2.5-flare / gpt-image-2.5-sunburst (or gpt-image-1 / gpt-image-1.5).`
++      );
++    }
++    const ext = args.imagePath ? path.extname(args.imagePath).toLowerCase() : ".png";
++    if (ext === ".jpg" || ext === ".jpeg") {
++      throw new Error(
++        "Transparent background requires png or webp output. Use --image out.png (or .webp); jpeg cannot carry an alpha channel."
++      );
++    }
++  }
++
+   if (!isGptImageCustomSizeModel(model)) return;
+ 
+   if (args.aspectRatio && !args.size) {
+@@ -307,7 +375,7 @@
+       );
+     }
+     const size = args.size || getOpenAISize(model, args.aspectRatio, args.quality);
+-    return generateWithOpenAIEdits(baseURL, apiKey, prompt, model, size, args.referenceImages, args.quality);
++    return generateWithOpenAIEdits(baseURL, apiKey, prompt, model, size, args.referenceImages, args);
+   }
+ 
+   return generateWithOpenAIGenerations(
+@@ -381,18 +449,27 @@
+   model: string,
+   size: string,
+   referenceImages: string[],
+-  quality: CliArgs["quality"]
++  args: Pick<CliArgs, "quality" | "background" | "imagePath" | "openaiQuality">
+ ): Promise<Uint8Array> {
++  const quality = args.quality;
+   const form = new FormData();
+   form.append("model", model);
+   form.append("prompt", prompt);
+   form.append("size", size);
+ 
+-  const openAIQuality = getOpenAIQuality(model, quality);
++  const openAIQuality = getOpenAIQuality(model, quality, args.openaiQuality);
+   if (openAIQuality && openAIQuality !== "standard" && openAIQuality !== "hd") {
+     form.append("quality", openAIQuality);
+   }
+ 
++  const background = args.background ?? null;
++  if (background) {
++    form.append("background", background);
++  }
++  if (background === "transparent") {
++    form.append("output_format", getTransparentOutputFormat(args.imagePath ?? null));
++  }
++
+   for (const refPath of referenceImages) {
+     const bytes = await readFile(refPath);
+     const filename = path.basename(refPath);
+diff -ruN orig/scripts/providers/openrouter.test.ts patched/scripts/providers/openrouter.test.ts
+--- orig/scripts/providers/openrouter.test.ts	2026-10-03 16:41:47.831683047 +0200
++++ patched/scripts/providers/openrouter.test.ts	2026-10-03 16:41:47.832540974 +0200
+@@ -29,6 +29,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/replicate.test.ts patched/scripts/providers/replicate.test.ts
+--- orig/scripts/providers/replicate.test.ts	2026-10-03 16:41:47.831694187 +0200
++++ patched/scripts/providers/replicate.test.ts	2026-10-03 16:41:47.832557994 +0200
+@@ -25,6 +25,8 @@
+     imageSize: null,
+     imageSizeSource: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/seedream.test.ts patched/scripts/providers/seedream.test.ts
+--- orig/scripts/providers/seedream.test.ts	2026-10-03 16:41:47.831706467 +0200
++++ patched/scripts/providers/seedream.test.ts	2026-10-03 16:41:47.832580304 +0200
+@@ -26,6 +26,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/providers/zai.test.ts patched/scripts/providers/zai.test.ts
+--- orig/scripts/providers/zai.test.ts	2026-10-03 16:41:47.831717487 +0200
++++ patched/scripts/providers/zai.test.ts	2026-10-03 16:41:47.832597254 +0200
+@@ -26,6 +26,8 @@
+     quality: null,
+     imageSize: null,
+     imageApiDialect: null,
++    background: null,
++    openaiQuality: null,
+     referenceImages: [],
+     n: 1,
+     batchFile: null,
+diff -ruN orig/scripts/types.ts patched/scripts/types.ts
+--- orig/scripts/types.ts	2026-10-03 16:41:47.831728627 +0200
++++ patched/scripts/types.ts	2026-10-03 16:41:47.832679992 +0200
+@@ -14,6 +14,8 @@
+ export type Quality = "normal" | "2k";
+ export type OpenAIImageApiDialect = "openai-native" | "ratio-metadata";
+ export type ResponseFormat = "file" | "url";
++export type ImageBackground = "transparent" | "opaque" | "auto";
++export type OpenAIQuality = "low" | "medium" | "high" | "xhigh" | "max" | "auto";
+ 
+ export type CliArgs = {
+   prompt: string | null;
+@@ -29,6 +31,8 @@
+   imageSizeSource?: "cli" | "task" | "config" | null;
+   imageApiDialect: OpenAIImageApiDialect | null;
+   responseFormat: ResponseFormat | null;
++  background: ImageBackground | null;
++  openaiQuality: OpenAIQuality | null;
+   referenceImages: string[];
+   n: number;
+   batchFile: string | null;
+@@ -50,6 +54,8 @@
+   imageSize?: "1K" | "2K" | "4K" | null;
+   imageApiDialect?: OpenAIImageApiDialect | null;
+   responseFormat?: ResponseFormat | null;
++  background?: ImageBackground | null;
++  openaiQuality?: OpenAIQuality | null;
+   ref?: string[];
+   n?: number;
+ };
+@@ -68,6 +74,8 @@
+   default_aspect_ratio: string | null;
+   default_image_size: "1K" | "2K" | "4K" | null;
+   default_image_api_dialect: OpenAIImageApiDialect | null;
++  default_background: ImageBackground | null;
++  default_openai_quality: OpenAIQuality | null;
+   default_model: {
+     google: string | null;
+     openai: string | null;
+diff -ruN orig/SKILL.md patched/SKILL.md
+--- orig/SKILL.md	2026-10-03 16:41:47.831407772 +0200
++++ patched/SKILL.md	2026-10-03 16:41:47.832689412 +0200
+@@ -115,9 +115,11 @@
+ | `--model <id>`, `-m` | Model ID — see provider references for defaults and allowed values |
+ | `--ar <ratio>` | Aspect ratio (`16:9`, `1:1`, `4:3`, …) |
+ | `--size <WxH>` | Explicit size (e.g., `1024x1024`; for `gpt-image-2.5-*` and `gpt-image-2`, width/height must be multiples of 16, max edge 3840px, ratio no wider than 3:1) |
+-| `--quality normal\|2k` | Quality preset (default: `2k`) |
++| `--quality normal\|2k` | Quality preset (default: `2k`; controls output dimensions — use `--openaiQuality` for the render tier on OpenAI/Azure) |
++| `--openaiQuality low\|medium\|high\|xhigh\|max\|auto` | Render tier for OpenAI/Azure GPT Image models. Overrides the `--quality` tier mapping (dimensions still follow `--quality`). `xhigh`/`max` need `gpt-image-2.5-flare`/`sunburst` (default: from EXTEND.md `default_openai_quality`, env `OPENAI_IMAGE_QUALITY`, else preset) |
+ | `--imageSize 1K\|2K\|4K` | Image size for Google/OpenRouter (default: from quality) |
+ | `--imageApiDialect openai-native\|ratio-metadata` | OpenAI-compatible endpoint dialect — use `ratio-metadata` for gateways that expect aspect-ratio `size` plus `metadata.resolution` |
++| `--background transparent\|opaque\|auto` | Background for OpenAI/Azure GPT Image models. `transparent` needs a supporting model (`gpt-image-2.5-flare`/`sunburst`, `gpt-image-1`/`1.5`) and png/webp output (default: from EXTEND.md `default_background`, env `OPENAI_IMAGE_BACKGROUND`, else `auto`) |
+ | `--ref <files...>` | Reference images. Supported by Google multimodal, OpenAI GPT Image edits, Azure OpenAI edits (PNG/JPG only), OpenRouter multimodal models, Replicate supported families, MiniMax subject-reference, Seedream 5.0/4.5/4.0, DashScope `wan2.7-image-pro`/`wan2.7-image`. Not supported by Jimeng, Seedream 3.0, SeedEdit 3.0, or any DashScope model outside the `wan2.7-image*` family |
+ | `--n <count>` | Number of images. Replicate requires `--n 1` (single-output save semantics) |
+ | `--json` | JSON output |
+@@ -142,6 +144,8 @@
+ | `AZURE_API_VERSION` | Azure image API version (default `2025-04-01-preview`) |
+ | `JIMENG_REGION` | Jimeng region (default `cn-north-1`) |
+ | `OPENAI_IMAGE_API_DIALECT` | `openai-native` \| `ratio-metadata` |
++| `OPENAI_IMAGE_BACKGROUND` | Default background for OpenAI/Azure: `transparent` \| `opaque` \| `auto` (overridden by `--background` and EXTEND.md `default_background`) |
++| `OPENAI_IMAGE_QUALITY` | Default render tier for OpenAI/Azure: `low` \| `medium` \| `high` \| `xhigh` \| `max` \| `auto` (overridden by `--openaiQuality` and EXTEND.md `default_openai_quality`) |
+ | `OPENROUTER_HTTP_REFERER`, `OPENROUTER_TITLE` | Optional OpenRouter attribution |
+ | `BAOYU_IMAGE_GEN_MAX_WORKERS` | Override batch worker cap |
+ | `BAOYU_IMAGE_GEN_<PROVIDER>_CONCURRENCY` | Per-provider concurrency (e.g., `BAOYU_IMAGE_GEN_REPLICATE_CONCURRENCY`; for codex-cli use `BAOYU_IMAGE_GEN_CODEX_CLI_CONCURRENCY`) |
+@@ -197,7 +201,26 @@
+ - `openai-native`: pixel `size` (`1536x1024`) and native OpenAI quality fields
+ - `ratio-metadata`: aspect-ratio `size` (`16:9`) plus `metadata.resolution` (`1K|2K|4K`) and `metadata.orientation`
+ 
+-Use `openai-native` for the OpenAI native API or strict clones; try `ratio-metadata` for compatibility gateways in front of Gemini or similar models. Current limitation: `ratio-metadata` applies only to text-to-image; reference-image edits still need `openai-native` or a provider with first-class edit support.
++Use `openai-native` for the OpenAI native API or strict clones; try `ratio-metadata` for compatibility gateways in front of Gemini or similar models. Current limitation: `ratio-metadata` applies only to text-to-image; reference-image edits and `--background` still need `openai-native` or a provider with first-class edit support.
++
++## Transparent Backgrounds
++
++Native alpha-channel transparency for OpenAI/Azure GPT Image models (`gpt-image-2.5-flare`, `gpt-image-2.5-sunburst`, `gpt-image-1`, `gpt-image-1.5`):
++
++```bash
++# Single sprite with transparent background
++${BUN_X} {baseDir}/scripts/main.ts --prompt "A knight sprite, isolated subject" --image sprite.png --provider openai --background transparent
++
++# Batch: per-task background overrides the base default
++# batch.json tasks accept "background": "transparent"|"opaque"|"auto"
++```
++
++Rules:
++
++- Request isolation in the prompt **and** pass `--background transparent` — the param alone does not guarantee clean silhouette edges.
++- Output must be png (default) or webp; jpeg cannot carry alpha and fails fast in validation.
++- `gpt-image-2` (non-2.5) and DALL·E models do not support transparency — use `opaque`/`auto` or switch models.
++- For transparent-by-default workflows, set `default_background: transparent` in EXTEND.md (CLI `--background` still wins per call).
+ 
+ ## Provider-Specific Guides
+ 
+@@ -232,6 +255,8 @@
+ 
+ For OpenAI native `gpt-image-2.5-*` and `gpt-image-2`, `normal` maps to `quality=medium` and a low-latency valid size near the requested aspect ratio; `2k` maps to `quality=high` and 2048px-class sizes such as `2048x2048`, `2048x1152`, or `1152x2048`. Use explicit `--size` for valid custom or 4K outputs, e.g. `3840x2160`.
+ 
++`--openaiQuality` overrides only the render tier (`low` = cheapest drafts, `max` = finest detail on 2.5); output dimensions still follow `--quality`/`--size`. Tier availability is model-gated: `xhigh`/`max` require `gpt-image-2.5-flare`/`sunburst`, and explicit tiers are rejected for DALL·E (use the preset there).
++
+ ## Aspect Ratios
+ 
+ Supported: `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `2.35:1`.
