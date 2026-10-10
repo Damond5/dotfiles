@@ -28,6 +28,7 @@
 # !.series
 # !installElvUI.sh
 !.install
+!install-pi.sh
 !redshift.sh
 !gdMount.sh
 !ugdMount.sh

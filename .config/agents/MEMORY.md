@@ -74,7 +74,8 @@
 ## Home PC Wake Setup
 - The gaming PC (ASUS PRIME-X870-P-WIFI, Arch) wakes from suspend and soft-off on a magic packet to wired `enp8s0` (`bc:fc:e7:19:9c:fb`, `192.168.87.50`); the BIOS side needs ErP Disabled plus Power On By PCI-E Enabled, and G3 (PSU unplugged) is not wakeable — that needs Restore AC Power Loss: Power On plus a smart plug instead.
 - The `ethtool -s enp8s0 wol g` setting is persisted by a `wol-enp8s0.service` unit that lives in the gaming block of the home-repo bootstrap script `~/.install`, so re-imaging keeps remote wake working.
-- A Pi Zero 2 W named `pi-wol` (user `wol`, WiFi-only on `192.168.87.0/24`, camera ribbon physically removed) is the always-on WoL proxy on the Tailscale network; `~/install-pi.sh` reproduces it from Raspberry Pi OS Lite 64-bit (BT/camera/display/audio off, Tailscale, `/usr/local/bin/wol` broadcasting to `192.168.87.255`), and the phone wakes the PC with `ssh wol@<tailscale-ip> wol`.
+- A Pi Zero 2 W named `pi-wol` (user `wol`, WiFi-only on `192.168.87.0/24`, camera ribbon physically removed) is the always-on WoL proxy on the Tailscale network; `~/install-pi.sh` reproduces it from Raspberry Pi OS Lite 64-bit (BT/camera/display/audio/ACT LED off, Tailscale, `/usr/local/bin/wol` broadcasting to `192.168.87.255`), and any SSH login to it auto-sends the wake packet via an `SSH_CONNECTION`-guarded block in its `~/.bashrc` — so the phone wakes the PC by merely opening an SSH session.
+- `~/install-pi.sh` runs on the Pi but is invoked from the gaming PC with `ssh -t pi 'bash -s' < ~/install-pi.sh` (no scp needed; `-t` gives sudo its password prompt).
 
 ## Mimic High Precision Standard Hardware
 
