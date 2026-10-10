@@ -17,7 +17,7 @@ permissions:
   effect: allow
 - action: shell
   resource: '*'
-  effect: deny
+  effect: allow
 - action: edit
   resource: '*'
   effect: deny
