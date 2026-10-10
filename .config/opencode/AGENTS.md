@@ -1,5 +1,5 @@
 # Global Instructions
-- **CRITICAL** You MUST NEVER commit or push using git
+- **CRITICAL** You MUST NEVER commit or push using git unless explicitly requested by user
 - **CRITICAL** You MUST ALWAYS respond short and accurate
 
 ## Coding
