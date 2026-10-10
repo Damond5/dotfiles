@@ -333,6 +333,22 @@ if [[ $gaming == true ]] then
   ## heroic
   paru -S --needed --noconfirm heroic-games-launcher-bin
 
+  # WAKE-ON-LAN (let LAN Pi wake this PC via enp8s0, from S5 or suspend)
+  # BIOS still needs: ErP Disabled, Power On By PCI-E Enabled.
+  paru -S --needed --noconfirm ethtool
+  sudo tee /etc/systemd/system/wol-enp8s0.service >/dev/null <<'EOF'
+[Unit]
+Description=Enable WoL on enp8s0
+After=network.target
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ethtool -s enp8s0 wol g
+[Install]
+WantedBy=multi-user.target
+EOF
+  sudo systemctl enable wol-enp8s0.service
+  sudo ethtool -s enp8s0 wol g || true
+
   ## Android SDK (for building and running on real device)
   paru -S --needed --noconfirm jdk17-openjdk
   sudo archlinux-java set java-17-openjdk

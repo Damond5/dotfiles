@@ -23,3 +23,4 @@
 ## Host System Information
 - Operating system: Arch Linux
 - Package manager: paru
+- Shell: fish

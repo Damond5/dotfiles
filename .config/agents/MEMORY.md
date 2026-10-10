@@ -71,6 +71,11 @@
 - The global `baoyu-image-gen` default OpenAI model is `gpt-image-2.5-sunburst`, set as `default_model.openai` in `~/.baoyu-skills/baoyu-image-gen/EXTEND.md`: `flare` systemically misreads left/right facing no matter the prompt wording, while `sunburst` follows directional cues (verified on game-sprite work). Keep cheap dev tiers (`normal / low`) alongside it rather than switching back to `flare` for cost.
 
 
+## Home PC Wake Setup
+- The gaming PC (ASUS PRIME-X870-P-WIFI, Arch) wakes from suspend and soft-off on a magic packet to wired `enp8s0` (`bc:fc:e7:19:9c:fb`, `192.168.87.50`); the BIOS side needs ErP Disabled plus Power On By PCI-E Enabled, and G3 (PSU unplugged) is not wakeable — that needs Restore AC Power Loss: Power On plus a smart plug instead.
+- The `ethtool -s enp8s0 wol g` setting is persisted by a `wol-enp8s0.service` unit that lives in the gaming block of the home-repo bootstrap script `~/.install`, so re-imaging keeps remote wake working.
+- A Pi Zero 2 W named `pi-wol` (user `wol`, WiFi-only on `192.168.87.0/24`, camera ribbon physically removed) is the always-on WoL proxy on the Tailscale network; `~/install-pi.sh` reproduces it from Raspberry Pi OS Lite 64-bit (BT/camera/display/audio off, Tailscale, `/usr/local/bin/wol` broadcasting to `192.168.87.255`), and the phone wakes the PC with `ssh wol@<tailscale-ip> wol`.
+
 ## Mimic High Precision Standard Hardware
 
 - A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 66.6 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems used its predecessor, the UM790 Pro, whose manual is also still in the Drive folder next to the UM890 Pro datasheet — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
