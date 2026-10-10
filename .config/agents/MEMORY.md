@@ -1,7 +1,9 @@
 # Memory
 
-## Phone File Drop
+## Phone Over Tailscale
 - The user's OnePlus 10T sits on their Tailscale network as `oneplus-10t-5g` (this workstation is `gamer`), and large files reach it with `tailscale file cp <file> oneplus-10t-5g:` followed by accepting on the phone. This is the working route because wireless debugging is off (`adb connect <tailscale-ip>:5555` is refused) and there is no USB connection.
+- Opencode on `gamer` serves the phone over Tailscale from a boot-time system unit (`/etc/systemd/system/opencode.service`, `User=nikv`, `ExecStart=/usr/bin/opencode serve --service`), so the web UI is up at the GDM login screen before anyone logs in; the unit source is tracked at `~/.config/opencode/opencode.service` and `~/.install` copies it into place. It binds the Tailscale IPv4 only (`100.98.230.3:49374`, same server for TUI and web).
+- Phone login to that server needs `opencode pair --url http://gamer:49374` — the pair session cookie is host-specific, so the link must be generated for the exact host the phone browses. Keep the service hostname an IP or dotted FQDN: a bare `gamer` there crashes opencode v2.0.26 `service`/`pair` commands with `TypeError: Invalid URL`.
 
 ## Deciding What To Build
 
