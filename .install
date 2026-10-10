@@ -250,6 +250,13 @@ curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | ba
 
 # AI
 paru -S --needed --noconfirm opencode
+# OpenCode server: tailnet-only bind + boot-to-login-screen unit (phone web via `opencode pair --url http://gamer:49374`)
+if tailscale status &>/dev/null; then
+  opencode service set hostname "$(tailscale ip -4)"
+fi
+sudo cp ~/.config/opencode/opencode.service /etc/systemd/system/opencode.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now opencode.service
 # paru -S --needed --noconfirm openspec
 paru -S --needed --noconfirm agent-browser-bin
 agent-browser install

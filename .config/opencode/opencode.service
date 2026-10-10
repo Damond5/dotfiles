@@ -1,0 +1,18 @@
+[Unit]
+Description=OpenCode server
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nikv
+Group=nikv
+WorkingDirectory=/home/nikv
+Environment=HOME=/home/nikv
+Environment=PATH=/home/nikv/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/opencode serve --service
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
