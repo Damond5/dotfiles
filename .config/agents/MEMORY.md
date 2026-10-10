@@ -1,5 +1,8 @@
 # Memory
 
+## Phone File Drop
+- The user's OnePlus 10T sits on their Tailscale network as `oneplus-10t-5g` (this workstation is `gamer`), and large files reach it with `tailscale file cp <file> oneplus-10t-5g:` followed by accepting on the phone. This is the working route because wireless debugging is off (`adb connect <tailscale-ip>:5555` is refused) and there is no USB connection.
+
 ## Deciding What To Build
 
 - When the user says a feature is small, build it on a throwaway branch rather than recommending it be deferred pending more evidence. They treat a scrappable branch as cheaper than an extended design debate, and answer a "let's wait and see" recommendation by asking for the implementation instead.
@@ -56,6 +59,17 @@
 
 - Nordbo's R&D Development Backlog is monday.com board 6419715614 in the R&D workspace (2650708). New items go in the "New Requests" group (`topics`) with Status New, and the field rules are in the "Development Backlog WoW" doc (id 45317025). Its "New Task" and "New BUG" forms are out of date (they still have a "Next Move" field for a column that no longer exists), so create items with create_items rather than create_form_submission.
 - On the Development Backlog board (6419715614), the Brief doc column (`doc_mm5shzz4`) fills itself from a template (Objective, Background, Scope, Non-goals, Acceptance criteria as checklist, Validation, Dependencies and constraints) when create_doc attaches a doc, and any markdown passed in is appended after the template. To fill a brief: create the doc, read its blocks with read_docs include_blocks, delete all of them, then add_markdown_content with the completed brief using the same headings.
+
+## Secret Placement
+
+- The user's OpenAI API key lives only in `~/.baoyu-skills/.env` (mode 600, untracked by the home repo); never write it into chat, committed files, or anywhere else on disk.
+- `~/.config/fish/fish_variables` is tracked in the user's home git repo, so fish universal variables (`set -Ux`) are commit-bound — never store a secret that way.
+
+## Patched Global Agent Skill
+
+- The global `baoyu-image-gen` skill (`~/.agents/skills/baoyu-image-gen`) carries local additions upstream lacks: `--background transparent|opaque|auto` and `--openaiQuality low|medium|high|xhigh|max|auto` for OpenAI/Azure. The source diff is the tracked `~/.config/baoyu-image-gen/openai-background-quality.patch`, and `~/.install` re-applies it after install — because `skills update` wipes the installed copy, a failed re-apply means the flags are gone until the patch is refreshed against upstream.
+- The global `baoyu-image-gen` default OpenAI model is `gpt-image-2.5-sunburst`, set as `default_model.openai` in `~/.baoyu-skills/baoyu-image-gen/EXTEND.md`: `flare` systemically misreads left/right facing no matter the prompt wording, while `sunburst` follows directional cues (verified on game-sprite work). Keep cheap dev tiers (`normal / low`) alongside it rather than switching back to `flare` for cost.
+
 
 ## Mimic High Precision Standard Hardware
 
