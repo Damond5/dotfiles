@@ -36,9 +36,15 @@ sudo loginctl enable-linger "$USER"
 systemctl --user daemon-reload
 # Not enabled: the local-llm opencode plugin starts it on first prompt.
 python3 - <<'EOF'
-import json, os
+import datetime, json, os, shutil
 p = os.path.expanduser('~/.config/opencode/opencode.json')
-cfg = json.load(open(p)) if os.path.exists(p) else {"$schema": "https://opencode.ai/config.json"}
+try:
+    cfg = json.load(open(p)) if os.path.exists(p) else {"$schema": "https://opencode.ai/config.json"}
+except json.JSONDecodeError:
+    bak = p + ".bak-" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    shutil.copy(p, bak)
+    print(f"{p} is corrupt, backed up to {bak}, starting fresh")
+    cfg = {"$schema": "https://opencode.ai/config.json"}
 cfg.setdefault("providers", {})["llamacpp"] = {
   "name": "llama.cpp local",
   "package": "aisdk:@ai-sdk/openai-compatible",

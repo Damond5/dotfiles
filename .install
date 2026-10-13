@@ -6,16 +6,9 @@ trap 'echo "FAILED at line $LINENO: $BASH_COMMAND" >&2' ERR
 sudo -v
 ( while sleep 50; do sudo -n true; done ) &
 SUDO_KEEPALIVE=$!
-trap 'kill $SUDO_KEEPALIVE 2>/dev/null' EXIT
+trap 'kill $SUDO_KEEPALIVE 2>/dev/null; rm -rf "${tmpdir:-}"' EXIT
 
 # INSTALL OPTIONS
-update_only=false
-update_only_answer=
-read -rp "Update only? (Y/n): " update_only_answer || true
-if [[ $update_only_answer != [nN] ]] then
-  update_only=true
-fi
-
 gaming=false
 work=false
 tablet=false
@@ -63,19 +56,20 @@ function install_appimage {
   chmod +x "$local_dir$name"
 }
 
+have() { command -v "$1" >/dev/null; }
+snapper_configured() { sudo snapper -c root list-configs 2>/dev/null | grep -q '^root '; }
+
 
 # MAINTENANCE
 sudo pacman -Syu --needed --noconfirm
 sudo pacman -S --needed --noconfirm git
 
 
-if [[ $update_only == false ]] && ! command -v paru >/dev/null; then
-  # AUR
+if ! have paru; then
+  # AUR (subshell so the cd never leaks into the rest of the script)
   tmpdir=$(mktemp -d)
   git clone https://aur.archlinux.org/paru-bin.git "$tmpdir/paru-bin"
-  cd "$tmpdir/paru-bin/"
-  makepkg -si --needed --noconfirm
-  cd /
+  ( cd "$tmpdir/paru-bin" && makepkg -si --needed --noconfirm )
   rm -rf "$tmpdir"
 fi
 
@@ -119,14 +113,18 @@ Section "InputClass"
     Option "Tapping" "on"
 EndSection
 EOF
-if [[ $update_only == false ]] then
+if [[ ${SHELL:-} != *fish* ]]; then
   chsh -s "$(command -v fish)" "$USER"
 fi
-sudo sd "fsck\)" "fsck grub-btrfs-overlayfs)" /etc/mkinitcpio.conf
+grep -q grub-btrfs-overlayfs /etc/mkinitcpio.conf || sudo sd "fsck\)" "fsck grub-btrfs-overlayfs)" /etc/mkinitcpio.conf
 sudo systemctl enable grub-btrfsd.service
 sudo systemctl start grub-btrfsd.service
-sudo snapper -c root create-config /
-sudo snapper -c root create --description fresh
+if snapper_configured; then
+  : # further snapshots are automatic (snap-pac)
+else
+  sudo snapper -c root create-config /
+  sudo snapper -c root create --description fresh
+fi
 sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
@@ -231,8 +229,8 @@ UTILS_PKGS=(
   xan
 )
 paru -S --needed --noconfirm "${SCRIPTS_PKGS[@]}" "${LAUNCHER_PKGS[@]}" "${UTILS_PKGS[@]}"
-rustup install stable
-cargo install rusti-cal
+rustup toolchain list 2>/dev/null | grep -q stable || rustup install stable
+have rusti-cal || cargo install rusti-cal
 
 ## theme
 THEME_PKGS=(
@@ -291,9 +289,13 @@ paru -S --needed --noconfirm "${AI_PKGS[@]}"
 if tailscale status &>/dev/null; then
   opencode service set hostname "$(tailscale ip -4)"
 fi
-sudo cp ~/.config/opencode/opencode.service /etc/systemd/system/opencode.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now opencode.service
+if [[ -f ~/.config/opencode/opencode.service ]]; then
+  sudo cp ~/.config/opencode/opencode.service /etc/systemd/system/opencode.service
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now opencode.service
+else
+  echo "No ~/.config/opencode/opencode.service, skipping opencode.service install" >&2
+fi
 agent-browser install
 bunx skills add vercel-labs/agent-browser -y -g
 bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -g -y
@@ -420,7 +422,11 @@ EOF
   fi
 
   # LOGIN
-  sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/
+  if [[ -f ~/.config/monitors.xml ]]; then
+    sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/
+  else
+    echo "No ~/.config/monitors.xml, skipping GDM monitor config" >&2
+  fi
 fi
 
 
@@ -492,23 +498,21 @@ if [[ $work == true ]] then
   ## nordbo vpn (tailscale via self-hosted headscale)
   sudo systemctl enable tailscaled
   sudo systemctl start tailscaled
-  if [[ $update_only == false ]] then
-    if tailscale status &>/dev/null; then
-      echo "Tailscale already registered"
+  if tailscale status &>/dev/null; then
+    echo "Tailscale already registered"
+  else
+    echo "Create a pre-auth key at headscale.nordbo.io/admin (Pre-Auth Keys)."
+    echo "IMPORTANT: leave tags empty, or the node is owned by tagged-devices and gets no network access."
+    hskey=
+    read -rsp "Headscale pre-auth key (blank to skip): " hskey || true
+    echo
+    if [[ -n $hskey ]] then
+      sudo tailscale up --login-server=https://headscale.nordbo.io --authkey="$hskey" --accept-routes --accept-dns
+      unset hskey
+      tailscale status | head -1
     else
-      echo "Create a pre-auth key at headscale.nordbo.io/admin (Pre-Auth Keys)."
-      echo "IMPORTANT: leave tags empty, or the node is owned by tagged-devices and gets no network access."
-      hskey=
-      read -rsp "Headscale pre-auth key (blank to skip): " hskey || true
-      echo
-      if [[ -n $hskey ]] then
-        sudo tailscale up --login-server=https://headscale.nordbo.io --authkey="$hskey" --accept-routes --accept-dns
-        unset hskey
-        tailscale status | head -1
-      else
-        echo "Skipped. Run later:"
-        echo "  sudo tailscale up --login-server=https://headscale.nordbo.io --authkey=<key> --accept-routes --accept-dns"
-      fi
+      echo "Skipped. Run later:"
+      echo "  sudo tailscale up --login-server=https://headscale.nordbo.io --authkey=<key> --accept-routes --accept-dns"
     fi
   fi
 
@@ -519,11 +523,11 @@ if [[ $work == true ]] then
   ## virtual machine
 
   # google drive
-  if [[ $update_only == false ]] then
+  if [[ ! -d ~/.opam ]]; then
     opam init
-    opam update
-    opam install depext
-    opam depext google-drive-ocamlfuse
-    opam install google-drive-ocamlfuse
   fi
+  opam update
+  opam install depext
+  opam depext google-drive-ocamlfuse
+  opam install google-drive-ocamlfuse
 fi
