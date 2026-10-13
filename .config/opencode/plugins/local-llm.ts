@@ -9,6 +9,10 @@ const IDLE_MS = Number(process.env.LOCAL_LLM_IDLE_MS ?? 30 * 60 * 1000)
 
 const run = promisify(execFile)
 
+const uid = process.getuid?.() ?? 1000
+process.env.XDG_RUNTIME_DIR ??= `/run/user/${uid}`
+process.env.DBUS_SESSION_BUS_ADDRESS ??= `unix:path=/run/user/${uid}/bus`
+
 async function healthy(): Promise<boolean> {
   try {
     const r = await fetch(`${BASE}/health`, { signal: AbortSignal.timeout(5000) })
