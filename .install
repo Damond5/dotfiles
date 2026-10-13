@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
+set -euo pipefail
+trap 'echo "FAILED at line $LINENO: $BASH_COMMAND" >&2' ERR
+
+# Script outlasts the sudo timestamp: cache credentials and keep them alive.
+sudo -v
+( while sleep 50; do sudo -n true; done ) &
+SUDO_KEEPALIVE=$!
+trap 'kill $SUDO_KEEPALIVE 2>/dev/null' EXIT
 
 # INSTALL OPTIONS
 update_only=false
-read -p "Update only? (Y/n): " update_only_answer
+update_only_answer=
+read -rp "Update only? (Y/n): " update_only_answer || true
 if [[ $update_only_answer != [nN] ]] then
   update_only=true
 fi
@@ -10,7 +19,8 @@ fi
 gaming=false
 work=false
 tablet=false
-read -p "Gaming, work or tablet? (g/w/t): " device
+device=
+read -rp "Gaming, work or tablet? (g/w/t): " device || true
 if [[ $device == [gG] ]] then
   gaming=true
 elif [[ $device == [wW] ]] then
@@ -239,7 +249,9 @@ THEME_PKGS=(
   adwaita-qt6-git
 )
 paru -S --needed --noconfirm "${THEME_PKGS[@]}"
-gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+if [[ -n ${DISPLAY:-}${WAYLAND_DISPLAY:-} ]]; then
+  gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+fi
 
 
 # DEVELOPMENT
@@ -390,8 +402,14 @@ EOF
   # Set environment variables for session (persistence handled in .profile)
   export ANDROID_HOME=/opt/android-sdk
   export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/latest/bin
-  # Accept licenses (auto-accept)
-  if ! yes | sdkmanager --licenses; then
+  # Accept licenses (auto-accept).
+  # `yes` dies of SIGPIPE once licenses are accepted, so only sdkmanager's
+  # status matters (pipefail is off for this pipeline).
+  set +o pipefail
+  yes | sdkmanager --licenses
+  licenses_rc=${PIPESTATUS[1]}
+  set -o pipefail
+  if [[ $licenses_rc -ne 0 ]]; then
     echo "Failed to accept Android SDK licenses" >&2
     exit 1
   fi
@@ -467,7 +485,9 @@ if [[ $work == true ]] then
   )
   paru -S --needed --noconfirm "${WORK_PKGS[@]}"
   flatpak install -y "${WORK_FLATPAKS[@]}"
-  xhost +si:localuser:$USER
+  if [[ -n ${DISPLAY:-} ]]; then
+    xhost +si:localuser:$USER
+  fi
 
   ## nordbo vpn (tailscale via self-hosted headscale)
   sudo systemctl enable tailscaled
@@ -478,7 +498,8 @@ if [[ $work == true ]] then
     else
       echo "Create a pre-auth key at headscale.nordbo.io/admin (Pre-Auth Keys)."
       echo "IMPORTANT: leave tags empty, or the node is owned by tagged-devices and gets no network access."
-      read -sp "Headscale pre-auth key (blank to skip): " hskey
+      hskey=
+      read -rsp "Headscale pre-auth key (blank to skip): " hskey || true
       echo
       if [[ -n $hskey ]] then
         sudo tailscale up --login-server=https://headscale.nordbo.io --authkey="$hskey" --accept-routes --accept-dns
