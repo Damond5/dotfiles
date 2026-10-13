@@ -31,33 +31,26 @@ fi
 # FUNCTIONS
 function install_appimage {
   # install_appimage(user, repo, package)
-  user=$1
-  repo=$2
-  package=$3
+  local user=$1 repo=$2 package=$3
 
-  local_dir=~/Applications/
+  local local_dir=~/Applications/
 
-  if [ -e $local_dir$package*.AppImage ]; then
+  if compgen -G "$local_dir$package*.AppImage" > /dev/null; then
     return
   fi
 
-  api_url=https://api.github.com/repos/$user/$repo/releases/latest
+  local api_url=https://api.github.com/repos/$user/$repo/releases/latest
 
-  curl --silent $api_url | \
-  while read -r line
-  do
-    if [[ $line == *"name"*".AppImage"* ]]
-    then
-      name=${line:9:$((${#line} - 9 - 2))}
-    elif [[ $line == *"browser_download_url"*".AppImage"* ]]
-    then
-      browser_download_url=${line:25:$((${#line} - 25 - 1))}
-      echo "Downloading $browser_download_url"
-      curl -fLo $local_dir$name $browser_download_url --create-dirs
-      chmod +x $local_dir$name
-      break
-    fi
-  done
+  local browser_download_url name
+  browser_download_url=$(curl -fsSL "$api_url" | jq -r '.assets[] | select(.name | endswith(".AppImage")) | .browser_download_url' | head -n1)
+  name=${browser_download_url##*/}
+  if [[ -z $browser_download_url ]]; then
+    echo "No AppImage found for $user/$repo" >&2
+    return 1
+  fi
+  echo "Downloading $browser_download_url"
+  curl -fLo "$local_dir$name" "$browser_download_url" --create-dirs
+  chmod +x "$local_dir$name"
 }
 
 
@@ -66,14 +59,14 @@ sudo pacman -Syu --needed --noconfirm
 sudo pacman -S --needed --noconfirm git
 
 
-if [[ $update_only == false ]] then
+if [[ $update_only == false ]] && ! command -v paru >/dev/null; then
   # AUR
-  git clone https://aur.archlinux.org/paru-bin.git
-  cd paru-bin/
-  git pull
+  tmpdir=$(mktemp -d)
+  git clone https://aur.archlinux.org/paru-bin.git "$tmpdir/paru-bin"
+  cd "$tmpdir/paru-bin/"
   makepkg -si --needed --noconfirm
-  cd ../
-  sudo rm -r paru-bin/
+  cd /
+  rm -rf "$tmpdir"
 fi
 
 
@@ -103,7 +96,7 @@ paru -S --needed --noconfirm linux-lts-headers
 paru -S --needed --noconfirm man-db
 paru -S --needed --noconfirm fish
 if [[ $update_only == false ]] then
-  chsh -s /bin/fish $whoami
+  chsh -s "$(command -v fish)" "$USER"
 fi
 # paru -S --needed --noconfirm vim
 paru -S --needed --noconfirm grub-btrfs
@@ -360,7 +353,7 @@ EOF
   paru -S --needed --noconfirm jdk17-openjdk
   sudo archlinux-java set java-17-openjdk
   paru -S --needed --noconfirm android-sdk-cmdline-tools-latest android-sdk-platform-tools android-sdk-build-tools
-  sudo chown -R $USER:$USER /opt/android-sdk
+  sudo chown -R "$USER:$USER" /opt/android-sdk
   # Set environment variables for session (persistence handled in .profile)
   export ANDROID_HOME=/opt/android-sdk
   export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/latest/bin
@@ -390,8 +383,8 @@ if [[ $portable == true ]] then
   sudo systemctl mask systemd-rfkill.socket
   sudo sd "#START_CHARGE_THRESH_BAT0=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
   sudo sd "#STOP_CHARGE_THRESH_BAT0=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
-  sudo sd "#START_CHARGE_THRESH_BAT1=75" "START_CHARGE_THRESH_BAT0=75" /etc/tlp.conf
-  sudo sd "#STOP_CHARGE_THRESH_BAT1=80" "STOP_CHARGE_THRESH_BAT0=80" /etc/tlp.conf
+  sudo sd "#START_CHARGE_THRESH_BAT1=75" "START_CHARGE_THRESH_BAT1=75" /etc/tlp.conf
+  sudo sd "#STOP_CHARGE_THRESH_BAT1=80" "STOP_CHARGE_THRESH_BAT1=80" /etc/tlp.conf
   sudo sd "#RESTORE_THRESHOLDS_ON_BAT=1" "RESTORE_THRESHOLDS_ON_BAT=1" /etc/tlp.conf
 fi
 
@@ -433,7 +426,8 @@ if [[ $work == true ]] then
       read -sp "Headscale pre-auth key (blank to skip): " hskey
       echo
       if [[ -n $hskey ]] then
-        sudo tailscale up --login-server=https://headscale.nordbo.io --authkey=$hskey --accept-routes --accept-dns
+        sudo tailscale up --login-server=https://headscale.nordbo.io --authkey="$hskey" --accept-routes --accept-dns
+        unset hskey
         tailscale status | head -1
       else
         echo "Skipped. Run later:"
@@ -444,7 +438,7 @@ if [[ $work == true ]] then
 
   ## universal robots
   bun install -g @devcontainers/cli
-  fish_add_path "/home/nikv/.bun/bin"
+  fish -c 'fish_add_path ~/.bun/bin'
   paru -S --needed --noconfirm docker
   paru -S --needed --noconfirm docker-buildx
   paru -S --needed --noconfirm docker-compose
