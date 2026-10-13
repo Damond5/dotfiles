@@ -117,8 +117,7 @@ if [[ ${SHELL:-} != *fish* ]]; then
   chsh -s "$(command -v fish)" "$USER"
 fi
 grep -q grub-btrfs-overlayfs /etc/mkinitcpio.conf || sudo sd "fsck\)" "fsck grub-btrfs-overlayfs)" /etc/mkinitcpio.conf
-sudo systemctl enable grub-btrfsd.service
-sudo systemctl start grub-btrfsd.service
+sudo systemctl enable --now grub-btrfsd.service
 if snapper_configured; then
   : # further snapshots are automatic (snap-pac)
 else
@@ -128,8 +127,8 @@ fi
 sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
-sudo systemctl enable reflector.timer
-sudo systemctl start reflector.service reflector.timer
+sudo systemctl enable --now reflector.timer
+sudo systemctl start reflector.service # refresh mirrors immediately
 
 # REMOTE ACCESS (personal tailnet, Tailscale SSH)
 # Install + enable always (safe). Login only on non-work to avoid
@@ -142,9 +141,9 @@ paru -S --needed --noconfirm "${REMOTE_PKGS[@]}"
 sudo systemctl enable --now tailscaled
 if [[ $work == false ]]; then
   if tailscale status &>/dev/null; then
-    sudo tailscale set --ssh=true --operator=$USER
+    sudo tailscale set --ssh=true --operator="$USER"
   else
-    sudo tailscale up --ssh --operator=$USER
+    sudo tailscale up --ssh --operator="$USER"
   fi
 fi
 
@@ -273,9 +272,6 @@ DEV_PKGS=(
 )
 paru -S --needed --noconfirm "${DEV_PKGS[@]}"
 
-## android
-curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | bash
-
 
 # AI
 AI_PKGS=(
@@ -285,7 +281,7 @@ AI_PKGS=(
   xorg-server-xvfb   # virtual display for agent-driven GUIs (RoboDK)
 )
 paru -S --needed --noconfirm "${AI_PKGS[@]}"
-# OpenCode server: tailnet-only bind + boot-to-login-screen unit (phone web via `opencode pair --url http://gamer:49374`)
+# OpenCode server: tailnet-only bind + boot-to-login-screen unit (phone web via `opencode pair --url http://<this-host>:49374`)
 if tailscale status &>/dev/null; then
   opencode service set hostname "$(tailscale ip -4)"
 fi
@@ -357,7 +353,6 @@ if [[ $gaming == true ]] then
     cups
     cups-filters
     samba
-    lib32-nvidia-utils
     ## heroic
     heroic-games-launcher-bin
     ethtool
@@ -383,20 +378,22 @@ if [[ $gaming == true ]] then
   # rm curseforge-latest-linux.zip
   # cd
 
-  # WAKE-ON-LAN (let LAN Pi wake this PC via enp8s0, from S5 or suspend)
+  # WAKE-ON-LAN (let LAN Pi wake this PC via the primary NIC, from S5 or suspend)
   # BIOS still needs: ErP Disabled, Power On By PCI-E Enabled.
-  sudo tee /etc/systemd/system/wol-enp8s0.service >/dev/null <<'EOF'
+  WOL_IFACE=$(ip -o route get 1.1.1.1 | awk '{for (i = 1; i <= NF; i++) if ($i == "dev") print $(i + 1)}')
+  [[ -n $WOL_IFACE ]] || { echo "Could not detect primary NIC for WoL" >&2; exit 1; }
+  sudo tee /etc/systemd/system/wol.service >/dev/null <<EOF
 [Unit]
-Description=Enable WoL on enp8s0
+Description=Enable WoL on $WOL_IFACE
 After=network.target
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/ethtool -s enp8s0 wol g
+ExecStart=/usr/bin/ethtool -s $WOL_IFACE wol g
 [Install]
 WantedBy=multi-user.target
 EOF
-  sudo systemctl enable wol-enp8s0.service
-  sudo ethtool -s enp8s0 wol g || true
+  sudo systemctl enable wol.service
+  sudo ethtool -s "$WOL_IFACE" wol g || true
 
   ## Android SDK (for building and running on real device)
   sudo archlinux-java set java-17-openjdk
@@ -471,7 +468,6 @@ if [[ $work == true ]] then
     bats-assert
     bats-file
     bats-support
-    tailscale
     ## universal robots
     docker
     docker-buildx
@@ -492,12 +488,11 @@ if [[ $work == true ]] then
   paru -S --needed --noconfirm "${WORK_PKGS[@]}"
   flatpak install -y "${WORK_FLATPAKS[@]}"
   if [[ -n ${DISPLAY:-} ]]; then
-    xhost +si:localuser:$USER
+    xhost +si:localuser:"$USER"
   fi
 
   ## nordbo vpn (tailscale via self-hosted headscale)
-  sudo systemctl enable tailscaled
-  sudo systemctl start tailscaled
+  sudo systemctl enable --now tailscaled
   if tailscale status &>/dev/null; then
     echo "Tailscale already registered"
   else
