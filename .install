@@ -71,9 +71,27 @@ fi
 
 
 # BASE
-paru -S --needed --noconfirm sd
+paru -S --needed --noconfirm sd # bootstrap: sd configs below need it
 sudo sd "#Color" "Color" /etc/pacman.conf
 sudo sd "#ParallelDownloads" "ParallelDownloads" /etc/pacman.conf
+BASE_PKGS=(
+  linux-headers
+  linux-lts-headers
+  man-db
+  fish
+  # vim
+  grub-btrfs
+  snapper
+  snap-pac
+  inotify-tools
+  plocate
+  fastfetch
+  ventoy-bin
+  fwupd
+  reflector
+  calc
+)
+paru -S --needed --noconfirm "${BASE_PKGS[@]}"
 sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
 sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -91,39 +109,28 @@ Section "InputClass"
     Option "Tapping" "on"
 EndSection
 EOF
-paru -S --needed --noconfirm linux-headers
-paru -S --needed --noconfirm linux-lts-headers
-paru -S --needed --noconfirm man-db
-paru -S --needed --noconfirm fish
 if [[ $update_only == false ]] then
   chsh -s "$(command -v fish)" "$USER"
 fi
-# paru -S --needed --noconfirm vim
-paru -S --needed --noconfirm grub-btrfs
 sudo sd "fsck\)" "fsck grub-btrfs-overlayfs)" /etc/mkinitcpio.conf
 sudo systemctl enable grub-btrfsd.service
 sudo systemctl start grub-btrfsd.service
-paru -S --needed --noconfirm snapper
 sudo snapper -c root create-config /
 sudo snapper -c root create --description fresh
-paru -S --needed --noconfirm snap-pac
-paru -S --needed --noconfirm inotify-tools
-paru -S --needed --noconfirm plocate
-paru -S --needed --noconfirm fastfetch
-paru -S --needed --noconfirm ventoy-bin
-paru -S --needed --noconfirm fwupd
-paru -S --needed --noconfirm reflector
 sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
 sudo systemctl enable reflector.timer
 sudo systemctl start reflector.service reflector.timer
-paru -S --needed --noconfirm calc
 
 # REMOTE ACCESS (personal tailnet, Tailscale SSH)
 # Install + enable always (safe). Login only on non-work to avoid
 # overwriting headscale mesh (one tailscaled = one active tailnet).
-paru -S --needed --noconfirm tailscale openssh
+REMOTE_PKGS=(
+  tailscale
+  openssh
+)
+paru -S --needed --noconfirm "${REMOTE_PKGS[@]}"
 sudo systemctl enable --now tailscaled
 if [[ $work == false ]]; then
   if tailscale status &>/dev/null; then
@@ -134,115 +141,140 @@ if [[ $work == false ]]; then
 fi
 
 ## desktop
-paru -S --needed --noconfirm i3-wm
-paru -S --needed --noconfirm autotiling
-paru -S --needed --noconfirm perl-anyevent-i3
-paru -S --needed --noconfirm xlayoutdisplay
-paru -S --needed --noconfirm redshift
-paru -S --needed --noconfirm brightnessctl
-paru -S --needed --noconfirm picom
-paru -S --needed --noconfirm dunst
-paru -S --needed --noconfirm alacritty
-paru -S --needed --noconfirm mpv
-paru -S --needed --noconfirm scrot
-paru -S --needed --noconfirm loupe
-paru -S --needed --noconfirm gnome-calculator
-paru -S --needed --noconfirm gnome-screenshot
-paru -S --needed --noconfirm gpu-screen-recorder-ui
-paru -S --needed --noconfirm xclip
-# paru -S --needed --noconfirm gnome-shell-extension-dash-to-panel
-paru -S --needed --noconfirm nautilus
-paru -S --needed --noconfirm evince
-# paru -S --needed --noconfirm popsicle-bin
-paru -S --needed --noconfirm pizarra-bin
-paru -S --needed --noconfirm tor
-sudo systemctl enable tor
-paru -S --needed --noconfirm firefox
-paru -S --needed --noconfirm chromium
-paru -S --needed --noconfirm proton-vpn-gtk-app
-paru -S --needed --noconfirm qbittorrent
-paru -S --needed --noconfirm appimagelauncher
-# paru -S --needed --noconfirm discord
+DESKTOP_PKGS=(
+  i3-wm
+  autotiling
+  perl-anyevent-i3
+  xlayoutdisplay
+  redshift
+  brightnessctl
+  picom
+  dunst
+  alacritty
+  mpv
+  scrot
+  loupe
+  gnome-calculator
+  gnome-screenshot
+  gpu-screen-recorder-ui
+  xclip
+  # gnome-shell-extension-dash-to-panel
+  nautilus
+  evince
+  # popsicle-bin
+  pizarra-bin
+  tor
+  firefox
+  chromium
+  proton-vpn-gtk-app
+  qbittorrent
+  appimagelauncher
+  # discord
+  flatpak
+  krita
+  p7zip
+  zip
+  udiskie
+  jq
+)
+DESKTOP_FLATPAKS=(
+  com.github.tchx84.Flatseal
+  com.discordapp.Discord
+  org.localsend.localsend_app
+)
+paru -S --needed --noconfirm "${DESKTOP_PKGS[@]}"
 # fixes long gtk app startup (dbus timeout)
-paru -S --needed --noconfirm flatpak
-flatpak install -y com.github.tchx84.Flatseal
-flatpak install -y com.discordapp.Discord
-paru -S --needed --noconfirm krita
-flatpak install -y org.localsend.localsend_app
-paru -S --needed --noconfirm p7zip
-paru -S --needed --noconfirm zip
-paru -S --needed --noconfirm udiskie
-paru -S --needed --noconfirm jq
+flatpak install -y "${DESKTOP_FLATPAKS[@]}"
+sudo systemctl enable tor
 
 ## scripts
-paru -S --needed --noconfirm pv
-paru -S --needed --noconfirm pigz
+SCRIPTS_PKGS=(
+  pv
+  pigz
+)
 
 ## launcher
-paru -S --needed --noconfirm rofi
+LAUNCHER_PKGS=(
+  rofi
+)
 
 ## modern utils
-paru -S --needed --noconfirm rustup
+UTILS_PKGS=(
+  rustup
+  btop
+  dua-cli
+  bat
+  dysk
+  tealdeer
+  eza
+  ripgrep-all
+  fd
+  helix
+  gitui
+  starship
+  yazi
+  7zip
+  ueberzugpp
+  bluetui
+  difftastic
+  mermaid-cli
+  xan
+)
+paru -S --needed --noconfirm "${SCRIPTS_PKGS[@]}" "${LAUNCHER_PKGS[@]}" "${UTILS_PKGS[@]}"
 rustup install stable
-paru -S --needed --noconfirm btop
-paru -S --needed --noconfirm dua-cli
-paru -S --needed --noconfirm bat
-paru -S --needed --noconfirm dysk
-paru -S --needed --noconfirm tealdeer
-paru -S --needed --noconfirm eza
-paru -S --needed --noconfirm ripgrep-all
-paru -S --needed --noconfirm fd
-paru -S --needed --noconfirm helix
-paru -S --needed --noconfirm gitui
-paru -S --needed --noconfirm starship
 cargo install rusti-cal
-paru -S --needed --noconfirm yazi
-paru -S --needed --noconfirm 7zip
-paru -S --needed --noconfirm ueberzugpp
-paru -S --needed --noconfirm bluetui
-paru -S --needed --noconfirm difftastic
-paru -S --needed --noconfirm mermaid-cli
-paru -S --needed --noconfirm xan
 
 ## theme
-paru -S --needed --noconfirm gnome-themes-extra
-paru -S --needed --noconfirm papirus-icon-theme
-paru -S --needed --noconfirm vimix-cursors
-paru -S --needed --noconfirm ttf-roboto
-paru -S --needed --noconfirm ttf-roboto-mono
-# paru -S --needed --noconfirm lxappearance-gtk3
-# paru -S --needed --noconfirm kvantum
-paru -S --needed --noconfirm qt5ct
-paru -S --needed --noconfirm qt6ct
-paru -S --needed --noconfirm adwaita-qt5-git
-paru -S --needed --noconfirm adwaita-qt6-git
+THEME_PKGS=(
+  gnome-themes-extra
+  papirus-icon-theme
+  vimix-cursors
+  ttf-roboto
+  ttf-roboto-mono
+  # lxappearance-gtk3
+  # kvantum
+  qt5ct
+  qt6ct
+  adwaita-qt5-git
+  adwaita-qt6-git
+)
+paru -S --needed --noconfirm "${THEME_PKGS[@]}"
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 
 
 # DEVELOPMENT
-paru -S --needed --noconfirm base-devel
-paru -S --needed --noconfirm rust-analyzer
-paru -S --needed --noconfirm mold
-paru -S --needed --noconfirm ctags
-paru -S --needed --noconfirm uv
-paru -S --needed --noconfirm ruff
-paru -S --needed --noconfirm python-lsp-server
-paru -S --needed --noconfirm dart
-paru -S --needed --noconfirm fvm
-paru -S --needed --noconfirm lldb
-paru -S --needed --noconfirm bash-language-server
-paru -S --needed --noconfirm bun
-paru -S --needed --noconfirm yaml-language-server
-paru -S --needed --noconfirm bear
-paru -S --needed --noconfirm markdown-oxide
-paru -S --needed --noconfirm entr
+DEV_PKGS=(
+  base-devel
+  rust-analyzer
+  mold
+  ctags
+  uv
+  ruff
+  python-lsp-server
+  dart
+  fvm
+  lldb
+  bash-language-server
+  bun
+  yaml-language-server
+  bear
+  markdown-oxide
+  entr
+)
+paru -S --needed --noconfirm "${DEV_PKGS[@]}"
 
 ## android
 curl -fsSL https://dl.google.com/android/cli/latest/linux_x86_64/install.sh | bash
 
 
 # AI
-paru -S --needed --noconfirm opencode
+AI_PKGS=(
+  opencode
+  # openspec
+  agent-browser-bin
+  xorg-server-xvfb   # virtual display for agent-driven GUIs (RoboDK)
+)
+paru -S --needed --noconfirm "${AI_PKGS[@]}"
 # OpenCode server: tailnet-only bind + boot-to-login-screen unit (phone web via `opencode pair --url http://gamer:49374`)
 if tailscale status &>/dev/null; then
   opencode service set hostname "$(tailscale ip -4)"
@@ -250,14 +282,11 @@ fi
 sudo cp ~/.config/opencode/opencode.service /etc/systemd/system/opencode.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now opencode.service
-# paru -S --needed --noconfirm openspec
-paru -S --needed --noconfirm agent-browser-bin
 agent-browser install
 bunx skills add vercel-labs/agent-browser -y -g
 bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -g -y
 # re-apply local OpenAI patches: --background + --openaiQuality (wiped by `skills update`)
 patch -N -s -d ~/.agents/skills/baoyu-image-gen -p1 < ~/.config/baoyu-image-gen/openai-background-quality.patch || echo "baoyu-image-gen OpenAI patch did not apply cleanly"
-paru -S --needed --noconfirm xorg-server-xvfb   # virtual display for agent-driven GUIs (RoboDK)
 
 # LOCAL LLM (Qwen3.6-35B-A3B via llama.cpp Vulkan, OpenCode provider "llamacpp")
 ~/.local/bin/setup-qwen36.sh
@@ -279,23 +308,57 @@ paru -S --needed --noconfirm xorg-server-xvfb   # virtual display for agent-driv
 
 if [[ $gaming == true ]] then
   # GAMING
-  paru -S --needed --noconfirm gamemode
-  paru -S --needed --noconfirm lib32-gamemode
-  paru -S --needed --noconfirm mangohud
-  paru -S --needed --noconfirm gamescope
-  paru -S --needed --noconfirm lib32-vulkan-radeon
-  paru -S --needed --noconfirm lib32-vulkan-mesa-layers
-  # aur, really needed?
-  # paru -S --needed --noconfirm amdvlk
-  # paru -S --needed --noconfirm lib32-amdvlk
-  flatpak install -y com.vysp3r.ProtonPlus
-  paru -S --needed --noconfirm protontricks
-
-  ## steam
-  paru -S --needed --noconfirm steam-native-runtime
-  paru -S --needed --noconfirm linux-steam-integration
-
-  # flatpak install -y com.usebottles.bottles
+  GAMING_PKGS=(
+    gamemode
+    lib32-gamemode
+    mangohud
+    gamescope
+    lib32-vulkan-radeon
+    lib32-vulkan-mesa-layers
+    # aur, really needed?
+    # amdvlk
+    # lib32-amdvlk
+    protontricks
+    ## steam
+    steam-native-runtime
+    linux-steam-integration
+    ## wine
+    dxvk-bin
+    lib32-vkd3d
+    vkd3d
+    wine-staging
+    wine-gecko
+    wine-mono
+    wine-nine
+    winetricks
+    ## lutris
+    lutris
+    # no longer exists?
+    # lutris-battlenet-meta
+    lutris-wine-meta
+    # out of date?
+    # lutris-world-of-warcraft-dependencies-nvidia
+    umu-launcher
+    qpdf
+    cups
+    cups-filters
+    samba
+    lib32-nvidia-utils
+    ## heroic
+    heroic-games-launcher-bin
+    ethtool
+    ## Android SDK (for building and running on real device)
+    jdk17-openjdk
+    android-sdk-cmdline-tools-latest
+    android-sdk-platform-tools
+    android-sdk-build-tools
+  )
+  GAMING_FLATPAKS=(
+    com.vysp3r.ProtonPlus
+    # com.usebottles.bottles
+  )
+  paru -S --needed --noconfirm "${GAMING_PKGS[@]}"
+  flatpak install -y "${GAMING_FLATPAKS[@]}"
 
   ## appimages
   # install_appimage WowUp WowUp WowUp
@@ -306,36 +369,8 @@ if [[ $gaming == true ]] then
   # rm curseforge-latest-linux.zip
   # cd
 
-  ## wine
-  paru -S --needed --noconfirm dxvk-bin
-  paru -S --needed --noconfirm lib32-vkd3d
-  paru -S --needed --noconfirm vkd3d
-  paru -S --needed --noconfirm wine-staging
-  paru -S --needed --noconfirm wine-gecko
-  paru -S --needed --noconfirm wine-mono
-  paru -S --needed --noconfirm wine-nine
-  paru -S --needed --noconfirm winetricks
-
-  ## lutris
-  paru -S --needed --noconfirm lutris
-  # no longer exists?
-  # paru -S --needed --noconfirm lutris-battlenet-meta
-  paru -S --needed --noconfirm lutris-wine-meta
-  # out of date?
-  # paru -S --needed --noconfirm lutris-world-of-warcraft-dependencies-nvidia
-  paru -S --needed --noconfirm umu-launcher
-  paru -S --needed --noconfirm qpdf
-  paru -S --needed --noconfirm cups
-  paru -S --needed --noconfirm cups-filters
-  paru -S --needed --noconfirm samba
-  paru -S --needed --noconfirm lib32-nvidia-utils
-
-  ## heroic
-  paru -S --needed --noconfirm heroic-games-launcher-bin
-
   # WAKE-ON-LAN (let LAN Pi wake this PC via enp8s0, from S5 or suspend)
   # BIOS still needs: ErP Disabled, Power On By PCI-E Enabled.
-  paru -S --needed --noconfirm ethtool
   sudo tee /etc/systemd/system/wol-enp8s0.service >/dev/null <<'EOF'
 [Unit]
 Description=Enable WoL on enp8s0
@@ -350,9 +385,7 @@ EOF
   sudo ethtool -s enp8s0 wol g || true
 
   ## Android SDK (for building and running on real device)
-  paru -S --needed --noconfirm jdk17-openjdk
   sudo archlinux-java set java-17-openjdk
-  paru -S --needed --noconfirm android-sdk-cmdline-tools-latest android-sdk-platform-tools android-sdk-build-tools
   sudo chown -R "$USER:$USER" /opt/android-sdk
   # Set environment variables for session (persistence handled in .profile)
   export ANDROID_HOME=/opt/android-sdk
@@ -375,9 +408,12 @@ fi
 
 if [[ $portable == true ]] then
   # PORTABLE
-  paru -S --needed --noconfirm battop
-  paru -S --needed --noconfirm tlp
-  paru -S --needed --noconfirm tlp-rdw
+  PORTABLE_PKGS=(
+    battop
+    tlp
+    tlp-rdw
+  )
+  paru -S --needed --noconfirm "${PORTABLE_PKGS[@]}"
   sudo systemctl enable tlp.service
   sudo systemctl mask systemd-rfkill.service
   sudo systemctl mask systemd-rfkill.socket
@@ -391,30 +427,49 @@ fi
 
 if [[ $work == true ]] then
   # WORK
-  paru -S --needed --noconfirm claude-code
-  # sandbox backend for claude-code
-  paru -S --needed --noconfirm bubblewrap
-  paru -S --needed --noconfirm socat
-  paru -S --needed --noconfirm qt
-  paru -S --needed --noconfirm qtcreator
-  paru -S --needed --noconfirm jdk-openjdk
-  paru -S --needed --noconfirm jdtls
-  paru -S --needed --noconfirm freecad
-  paru -S --needed --noconfirm podman
-  paru -S --needed --noconfirm distrobox
-  # xhost needed for distrobox
-  paru -S --needed --noconfirm xhost
+  WORK_PKGS=(
+    claude-code
+    # sandbox backend for claude-code
+    bubblewrap
+    socat
+    qt
+    qtcreator
+    jdk-openjdk
+    jdtls
+    freecad
+    podman
+    distrobox
+    # xhost needed for distrobox
+    xhost
+    # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
+    # teamviewer
+    bats
+    bats-assert
+    bats-file
+    bats-support
+    tailscale
+    ## universal robots
+    docker
+    docker-buildx
+    docker-compose
+    ## virtual machine
+    qemu-desktop
+    libvirt
+    virt-manager
+    dnsmasq
+    iptables-nft
+    mate-polkit
+    # google drive
+    opam
+  )
+  WORK_FLATPAKS=(
+    org.cloudcompare.CloudCompare
+  )
+  paru -S --needed --noconfirm "${WORK_PKGS[@]}"
+  flatpak install -y "${WORK_FLATPAKS[@]}"
   xhost +si:localuser:$USER
-  # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
-  # paru -S --needed --noconfirm teamviewer
-  paru -S --needed --noconfirm bats
-  paru -S --needed --noconfirm bats-assert
-  paru -S --needed --noconfirm bats-file
-  paru -S --needed --noconfirm bats-support
-  flatpak install -y org.cloudcompare.CloudCompare
 
   ## nordbo vpn (tailscale via self-hosted headscale)
-  paru -S --needed --noconfirm tailscale
   sudo systemctl enable tailscaled
   sudo systemctl start tailscaled
   if [[ $update_only == false ]] then
@@ -439,20 +494,10 @@ if [[ $work == true ]] then
   ## universal robots
   bun install -g @devcontainers/cli
   fish -c 'fish_add_path ~/.bun/bin'
-  paru -S --needed --noconfirm docker
-  paru -S --needed --noconfirm docker-buildx
-  paru -S --needed --noconfirm docker-compose
 
   ## virtual machine
-  paru -S --needed --noconfirm qemu-desktop
-  paru -S --needed --noconfirm libvirt
-  paru -S --needed --noconfirm virt-manager
-  paru -S --needed --noconfirm dnsmasq
-  paru -S --needed --noconfirm iptables-nft
-  paru -S --needed --noconfirm mate-polkit
 
   # google drive
-  paru -S --needed --noconfirm opam
   if [[ $update_only == false ]] then
     opam init
     opam update
