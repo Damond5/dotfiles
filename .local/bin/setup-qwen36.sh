@@ -18,7 +18,7 @@ exec $HOME/llama.cpp/build/bin/llama-server \
   -m $HOME/models/qwen36/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf \
   --alias qwen3.6-35b --host 127.0.0.1 --port 8081 -ngl 999 -c 131072 \
   --cache-type-k q8_0 --cache-type-v q8_0 --parallel 1 \
-  --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0
+  --spec-type ngram-mod -fa on --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0
 EOF
 chmod +x ~/.local/bin/serve-qwen36.sh
 mkdir -p ~/.config/systemd/user
