@@ -26,12 +26,6 @@ function img
 end
 
 
-# # opam configuration
-if test -e /home/nikv/.opam/opam-init/init.fish
-    source /home/nikv/.opam/opam-init/init.fish >/dev/null 2 >/dev/null; or true
-end
-
-
 # run last command as sudo
 function sudo
     if test "$argv" = !!
