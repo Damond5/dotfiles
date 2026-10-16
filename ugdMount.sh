@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Unmount the drives mounted by ~/gdMount.sh.
 
-fusermount -u ~/drive/
-fusermount -u ~/shared/
+for dir in ~/drive ~/shared; do
+  if mountpoint -q "$dir"; then
+    fusermount3 -u "$dir" && echo "Unmounted $dir"
+  fi
+done
