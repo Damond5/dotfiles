@@ -86,6 +86,8 @@
 .claude/skills/context-diet/**/__pycache__/
 !.claude/skills/robodk/
 .claude/skills/robodk/**/__pycache__/
+!.claude/skills/application-insights/
+.claude/skills/application-insights/**/__pycache__/
 !.config/opencode/
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work

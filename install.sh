@@ -480,7 +480,8 @@ if [[ $work == true ]] then
     iptables-nft
     mate-polkit
     # google drive
-    opam
+    rclone
+    fuse3
   )
   WORK_FLATPAKS=(
     org.cloudcompare.CloudCompare
@@ -517,12 +518,13 @@ if [[ $work == true ]] then
 
   ## virtual machine
 
-  # google drive
-  if [[ ! -d ~/.opam ]]; then
-    opam init
+  # google drive (rclone, mounted with ~/gdMount.sh)
+  if rclone listremotes | grep -qx 'gdrive:'; then
+    echo "rclone remote gdrive: already configured"
+  else
+    echo "rclone needs your own OAuth client: Google Cloud project > enable Google Drive API (and Google Slides API)"
+    echo "> OAuth consent screen: Internal > Credentials > OAuth client ID > Desktop app."
+    echo "In rclone config: n > name gdrive > drive > paste client ID/secret > scope 1 > defaults > log in."
+    rclone config
   fi
-  opam update
-  opam install depext
-  opam depext google-drive-ocamlfuse
-  opam install google-drive-ocamlfuse
 fi

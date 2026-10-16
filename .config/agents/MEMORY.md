@@ -2,7 +2,7 @@
 
 ## Phone Over Tailscale
 - The user's OnePlus 10T sits on their Tailscale network as `oneplus-10t-5g` (this workstation is `gamer`), and large files reach it with `tailscale file cp <file> oneplus-10t-5g:` followed by accepting on the phone. This is the working route because wireless debugging is off (`adb connect <tailscale-ip>:5555` is refused) and there is no USB connection.
-- Opencode on `gamer` serves the phone over Tailscale from a boot-time system unit (`/etc/systemd/system/opencode.service`, `User=nikv`, `ExecStart=/usr/bin/opencode serve --service`), so the web UI is up at the GDM login screen before anyone logs in; the unit source is tracked at `~/.config/opencode/opencode.service` and `~/.install` copies it into place. It binds the Tailscale IPv4 only (`100.98.230.3:49374`, same server for TUI and web).
+- Opencode on `gamer` serves the phone over Tailscale from a boot-time system unit (`/etc/systemd/system/opencode.service`, `User=nikv`, `ExecStart=/usr/bin/opencode serve --service`), so the web UI is up at the GDM login screen before anyone logs in; the unit source is tracked at `~/.config/opencode/opencode.service` and `~/install.sh` copies it into place. It binds the Tailscale IPv4 only (`100.98.230.3:49374`, same server for TUI and web).
 - Phone login to that server needs `opencode pair --url http://gamer:49374` — the pair session cookie is host-specific, so the link must be generated for the exact host the phone browses. Keep the service hostname an IP or dotted FQDN: a bare `gamer` there crashes opencode v2.0.26 `service`/`pair` commands with `TypeError: Invalid URL`.
 
 ## Deciding What To Build
@@ -27,15 +27,18 @@
 ## Arch Workstation Missing Tools, Sudo And SSH Prompts
 
 - On the user's Arch workstation, `sudo` has no way to prompt during a tool call, so `paru -S` and anything else needing root fails with "a terminal is required to read the password". When a task needs a missing package, ask the user to install it themselves with `! sudo pacman -S <pkg>` (they did so for `xorg-server-xvfb` on 2026-10-02) instead of working around it silently — but `sshpass` stays absent and is not to be added.
-- Packages the user adopts on that workstation are recorded in the bootstrap script `~/.install` (a tracked shell script of `paru -S --needed --noconfirm …` lines grouped under `# SECTION` comments); agent tooling goes in its `# AI` section.
+- Packages the user adopts on that workstation are recorded in the tracked home-repo bootstrap script `~/install.sh`, as entries in per-topic package arrays (`BASE_PKGS`, `DEV_PKGS`, `WORK_PKGS`, …) each installed with `paru -S --needed --noconfirm`; agent tooling goes in `AI_PKGS` under the `# AI` comment.
 - The GitLab CLI `glab` is not installed on the user's Arch workstation, so GitLab work goes through the GitLab MCP tools rather than shell commands (confirmed 2026-09-24).
 - Password-authenticated `ssh`/`scp` from that workstation works by pointing `SSH_ASKPASS` at an executable helper script, setting `SSH_ASKPASS_REQUIRE=force`, and wrapping the call in `setsid -w`. On the far end, a `sudo` that must run without a tty needs `SUDO_ASKPASS` exported plus one `sudo -A -v` to prime the timestamp.
 
 ## Home Directory Dotfiles Repository
 - The user's home directory `~` is itself a git repo whose `~/.gitignore` ignores everything and whitelists paths one by one; under `~/.claude/skills/` each skill needs its own `!.claude/skills/<name>/` line (plus a `__pycache__` ignore), so a newly created skill stays invisible to git until that line is added.
 
-## Google Drive Connector Upload Size
-- The Google Drive MCP connector uploads only inline file content (`textContent`/`base64Content` in the call), so files of tens of MB or more — STL models, recorded HTML simulations, .rdk stations — cannot go through it; plan another route (the user uploading, or a CLI such as rclone) before promising a Drive upload.
+## Google Drive And Slides Access: Connectors Versus rclone
+- The Google Drive MCP connector uploads only inline file content (`textContent`/`base64Content` in the call) and fails to download files above about 4 MB, so real photos, videos, STL models or .rdk stations go through rclone instead.
+- On the user's Arch workstation, the rclone remote `gdrive:` (full `drive` scope, the user's own OAuth desktop client in a Google Cloud project with the Drive API and Slides API enabled) is kept configured on purpose for reuse. Nordbo shared-drive folders are reachable with `--drive-root-folder-id <folderId>` and single files with `rclone backend copyid gdrive: <fileId> <dir>/`; `rclone purge` moves to Drive trash.
+- `~/gdMount.sh` mounts My Drive at `~/drive` and the "Nordbo" shared drive (id `0AM3FOeFA60q6Uk9PVA`) at `~/shared` with `rclone mount`, and `~/ugdMount.sh` unmounts both with `fusermount3 -u`; `~/install.sh` installs `rclone` + `fuse3` and runs `rclone config` when `gdrive:` is missing. google-drive-ocamlfuse and opam are no longer used.
+- The claude.ai Google Slides connector inserts images only from public URLs and refuses every `createVideo`; the working route is a short-lived "anyone with the link" upload on the user's My Drive for images, and the Slides API called directly with the rclone token for Drive videos (scripts in the personal `application-insights` skill). Named Slides versions ("rev.1") have no API and must be set by the user.
 
 ## Mimic memory-nicky Branch
 - In the Mimic repo (`gitlab.com/nordbo-robotics/products/mimic/mimic`) the project `MEMORY.md` is tracked only on the user's personal `memory-nicky` branch; feature branches carry it as an untracked file. When checking out a feature branch, keep the working-copy `MEMORY.md` from `memory-nicky` intact. When the user asks for a memory commit, it goes to `memory-nicky`, not the feature branch, with a message of the form `<MR subject> memory` (e.g. `move robot home after each execution memory`); committing through a temporary `git worktree` leaves the checked-out feature branch untouched.
@@ -69,13 +72,13 @@
 
 ## Patched Global Agent Skill
 
-- The global `baoyu-image-gen` skill (`~/.agents/skills/baoyu-image-gen`) carries local additions upstream lacks: `--background transparent|opaque|auto` and `--openaiQuality low|medium|high|xhigh|max|auto` for OpenAI/Azure. The source diff is the tracked `~/.config/baoyu-image-gen/openai-background-quality.patch`, and `~/.install` re-applies it after install — because `skills update` wipes the installed copy, a failed re-apply means the flags are gone until the patch is refreshed against upstream.
+- The global `baoyu-image-gen` skill (`~/.agents/skills/baoyu-image-gen`) carries local additions upstream lacks: `--background transparent|opaque|auto` and `--openaiQuality low|medium|high|xhigh|max|auto` for OpenAI/Azure. The source diff is the tracked `~/.config/baoyu-image-gen/openai-background-quality.patch`, and `~/install.sh` re-applies it after install — because `skills update` wipes the installed copy, a failed re-apply means the flags are gone until the patch is refreshed against upstream.
 - The global `baoyu-image-gen` default OpenAI model is `gpt-image-2.5-sunburst`, set as `default_model.openai` in `~/.baoyu-skills/baoyu-image-gen/EXTEND.md`: `flare` systemically misreads left/right facing no matter the prompt wording, while `sunburst` follows directional cues (verified on game-sprite work). Keep cheap dev tiers (`normal / low`) alongside it rather than switching back to `flare` for cost.
 
 
 ## Home PC Wake Setup
 - The gaming PC (ASUS PRIME-X870-P-WIFI, Arch) wakes from suspend and soft-off on a magic packet to wired `enp8s0` (`bc:fc:e7:19:9c:fb`, `192.168.87.50`); the BIOS side needs ErP Disabled plus Power On By PCI-E Enabled, and G3 (PSU unplugged) is not wakeable — that needs Restore AC Power Loss: Power On plus a smart plug instead.
-- The `ethtool -s enp8s0 wol g` setting is persisted by a `wol.service` unit that lives in the gaming block of the home-repo bootstrap script `~/.install`, so re-imaging keeps remote wake working.
+<- Wake-on-LAN on the gaming PC is persisted by a `wol.service` unit (`ethtool -s <iface> wol g` on the NIC auto-detected from the default route) written by the home-repo bootstrap script `~/install.sh`, so re-imaging keeps remote wake working; the BIOS still needs ErP disabled and Power On By PCI-E enabled.
 - A Pi Zero 2 W named `pi-wol` (user `wol`, WiFi-only on `192.168.87.0/24`, camera ribbon physically removed) is the always-on WoL proxy on the Tailscale network; `~/install-pi.sh` reproduces it from Raspberry Pi OS Lite 64-bit (BT/camera/display/audio/ACT LED off, Tailscale, `/usr/local/bin/wol` broadcasting to `192.168.87.255`), and any SSH login to it auto-sends the wake packet via an `SSH_CONNECTION`-guarded block in its `~/.bashrc` — so the phone wakes the PC by merely opening an SSH session.
 - `~/install-pi.sh` runs on the Pi but is invoked from the gaming PC with `ssh -t pi 'bash -s' < ~/install-pi.sh` (no scp needed; `-t` gives sudo its password prompt).
 
