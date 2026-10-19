@@ -89,6 +89,7 @@
 !.claude/skills/application-insights/
 .claude/skills/application-insights/**/__pycache__/
 !.config/opencode/
+.config/opencode/service.json
 .config/fish/conf.d/fish_frozen_theme.fish
 .config/fish/fishd.work
 !.config/agents/
