@@ -120,7 +120,15 @@ grep -q grub-btrfs-overlayfs /etc/mkinitcpio.conf || sudo sd "fsck\)" "fsck grub
 sudo systemctl enable --now grub-btrfsd.service
 if snapper_configured; then
   : # further snapshots are automatic (snap-pac)
+elif sudo snapper -c root create-config / 2>/dev/null; then
+  sudo snapper -c root create --description fresh
 else
+  # Leftover /.snapshots without a config (previous install): unmount if
+  # mounted, remove iff empty (never touch real snapshots), retry once.
+  sudo umount /.snapshots 2>/dev/null || true
+  if [ -z "$(ls -A /.snapshots 2>/dev/null)" ]; then
+    sudo rmdir /.snapshots 2>/dev/null || sudo btrfs subvolume delete /.snapshots 2>/dev/null || true
+  fi
   sudo snapper -c root create-config /
   sudo snapper -c root create --description fresh
 fi
@@ -139,6 +147,11 @@ REMOTE_PKGS=(
 )
 paru -S --needed --noconfirm "${REMOTE_PKGS[@]}"
 sudo systemctl enable --now tailscaled
+# Restart if already running so a just-upgraded daemon matches the CLI
+# (avoids 'client version != tailscaled server version' warnings).
+if systemctl is-active --quiet tailscaled; then
+  sudo systemctl restart tailscaled
+fi
 if [[ $work == false ]]; then
   if tailscale status &>/dev/null; then
     sudo tailscale set --ssh=true --operator="$USER"
@@ -293,6 +306,8 @@ else
   echo "No ~/.config/opencode/opencode.service, skipping opencode.service install" >&2
 fi
 agent-browser install
+# NOTE: "PromptScript does not support global skill installation" failure is benign
+# (upstream limitation); the skills still install to ~/.agents/skills.
 bunx skills add vercel-labs/agent-browser -y -g
 bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -g -y
 # re-apply local OpenAI patches: --background + --openaiQuality (wiped by `skills update`)
@@ -330,7 +345,7 @@ if [[ $gaming == true ]] then
     # lib32-amdvlk
     protontricks
     ## steam
-    steam-native-runtime
+    # steam-native-runtime
     linux-steam-integration
     ## wine
     dxvk-bin
@@ -345,7 +360,7 @@ if [[ $gaming == true ]] then
     lutris
     # no longer exists?
     # lutris-battlenet-meta
-    lutris-wine-meta
+    # lutris-wine-meta
     # out of date?
     # lutris-world-of-warcraft-dependencies-nvidia
     umu-launcher
