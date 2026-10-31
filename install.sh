@@ -68,8 +68,8 @@ sudo pacman -S --needed --noconfirm git
 if ! have paru; then
   # AUR (subshell so the cd never leaks into the rest of the script)
   tmpdir=$(mktemp -d)
-  git clone https://aur.archlinux.org/paru-bin.git "$tmpdir/paru-bin"
-  ( cd "$tmpdir/paru-bin" && makepkg -si --needed --noconfirm )
+  git clone https://aur.archlinux.org/paru.git "$tmpdir/paru"
+  ( cd "$tmpdir/paru" && makepkg -si --needed --noconfirm )
   rm -rf "$tmpdir"
 fi
 
@@ -144,6 +144,7 @@ sudo systemctl start reflector.service # refresh mirrors immediately
 REMOTE_PKGS=(
   tailscale
   openssh
+  teamviewer
 )
 paru -S --needed --noconfirm "${REMOTE_PKGS[@]}"
 sudo systemctl enable --now tailscaled
@@ -192,7 +193,6 @@ DESKTOP_PKGS=(
   # discord
   flatpak
   krita
-  p7zip
   zip
   udiskie
   jq
@@ -477,8 +477,6 @@ if [[ $work == true ]] then
     distrobox
     # xhost needed for distrobox
     xhost
-    # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
-    # teamviewer
     bats
     bats-assert
     bats-file
