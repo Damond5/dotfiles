@@ -306,9 +306,8 @@ focus_follows_mouse no
 # floating calculator
 for_window [instance="gnome-calculator" class="Gnome-calculator"] floating enable
 
-# keyboard config
-exec --no-startup-id setxkbmap -option caps:escape
-exec --no-startup-id sleep 5 && xmodmap ~/.Xmodmap
+# keyboard remaps (caps->esc, Win+hjkl arrows) are system-wide via keyd
+# (source ~/.config/keyd/keyd.conf, installed to /etc by install.sh).
 
 exec --no-startup-id ~/redshift.sh
 

@@ -94,6 +94,7 @@ BASE_PKGS=(
   fwupd
   reflector
   calc
+  keyd
 )
 paru -S --needed --noconfirm "${BASE_PKGS[@]}"
 sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
@@ -113,6 +114,18 @@ Section "InputClass"
     Option "Tapping" "on"
 EndSection
 EOF
+# System-wide remaps (replaces setxkbmap caps:escape + old ~/.Xmodmap Win+hjkl).
+# evdev-level via keyd: survives X resets, hotplug, suspend, VT/Wayland.
+# Tap Win = Super (i3 $sub bindings keep working), hold Win + h/j/k/l = arrows.
+# Sources: ~/.config/keyd/keyd.conf, ~/.config/libinput/local-overrides.quirks.
+sudo install -Dm644 ~/.config/keyd/keyd.conf /etc/keyd/keyd.conf
+sudo install -Dm644 ~/.config/libinput/local-overrides.quirks /etc/libinput/local-overrides.quirks
+sudo usermod -aG keyd "$USER" || true
+sudo systemctl enable --now keyd
+# restart (not reload): applies config changes on reruns too, no socket race
+sudo systemctl restart keyd
+# Single owner of XKB: plain dk (keyd already provides esc-on-caps).
+sudo localectl set-x11-keymap dk pc105 terminate:ctrl_alt_bksp || true
 if [[ ${SHELL:-} != *fish* ]]; then
   chsh -s "$(command -v fish)" "$USER"
 fi
