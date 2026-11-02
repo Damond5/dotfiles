@@ -85,3 +85,8 @@
 ## Mimic High Precision Standard Hardware
 
 - A Mimic High Precision (OptiTrack) system ships with an ASUS NUC 13 Pro NUC13ANH as the Mimic controller, a Minisforum UM890 Pro (130 × 127 × 66.6 mm, 120 W 19 V adapter) as the OptiTrack/Motive controller — older systems used its predecessor, the UM790 Pro, whose manual is also still in the Drive folder next to the UM890 Pro datasheet — an OptiHub 2 feeding 4 Flex 13 cameras, a TP-Link TL-SG105 gigabit switch and, where an ATEX screen is sold, a Beckhoff CPX3921 panel with a CU8803-0000 extender. Datasheets and certificates for these parts are collected in one Google Drive folder (id `16863-f3LJvB9nBVNXOB0UB1_kbXNx5Kz`); check there before searching the web for dimensions or power figures.
+
+## Keyd Remap Ownership
+
+- On the gamer Arch workstation (i3/X11, Danish layout) every key remap lives in keyd, not XKB or xmodmap: the tracked sources `~/.config/keyd/keyd.conf` (caps→esc; Win tap sends Super so the i3 `$sub` bindings keep working, Win hold turns `hjkl` into arrows) and `~/.config/libinput/local-overrides.quirks` are installed under `/etc` by `~/install.sh`, which also keeps XKB at plain `dk` — so a lost remap means checking `systemctl status keyd`, never re-running `setxkbmap`/`xmodmap` (the old `~/.Xmodmap` is deleted).
+- `localectl set-x11-keymap` on that box always exits 1 with "Specified keymap cannot be compiled" because there is no active VT to apply the console keymap to; it still writes `/etc/X11/xorg.conf.d/00-keyboard.conf` and `/etc/vconsole.conf` correctly (the same keymap compiles clean under `xkbcli compile-keymap`), so the error is noise and `~/install.sh` already guards that line with `|| true`.

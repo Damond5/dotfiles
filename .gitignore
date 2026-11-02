@@ -15,11 +15,12 @@
 !.config/picom.conf
 !.config/monitors.xml
 !.config/baoyu-image-gen/
+!.config/keyd/
+!.config/libinput/
 !.bashrc
 !.gitignore
 !.profile
 !.vimrc
-!.Xmodmap
 !.gdfuse
 !.local
 .local/*
@@ -27,7 +28,7 @@
 .local/bin/serve-qwen36.sh
 # !.series
 # !installElvUI.sh
-!.install
+!install.sh
 !install-pi.sh
 !redshift.sh
 !gdMount.sh

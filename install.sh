@@ -68,8 +68,8 @@ sudo pacman -S --needed --noconfirm git
 if ! have paru; then
   # AUR (subshell so the cd never leaks into the rest of the script)
   tmpdir=$(mktemp -d)
-  git clone https://aur.archlinux.org/paru-bin.git "$tmpdir/paru-bin"
-  ( cd "$tmpdir/paru-bin" && makepkg -si --needed --noconfirm )
+  git clone https://aur.archlinux.org/paru.git "$tmpdir/paru"
+  ( cd "$tmpdir/paru" && makepkg -si --needed --noconfirm )
   rm -rf "$tmpdir"
 fi
 
@@ -94,6 +94,7 @@ BASE_PKGS=(
   fwupd
   reflector
   calc
+  keyd
 )
 paru -S --needed --noconfirm "${BASE_PKGS[@]}"
 sudo sd GRUB_DEFAULT=0 GRUB_DEFAULT=saved /etc/default/grub
@@ -113,6 +114,18 @@ Section "InputClass"
     Option "Tapping" "on"
 EndSection
 EOF
+# System-wide remaps (replaces setxkbmap caps:escape + old ~/.Xmodmap Win+hjkl).
+# evdev-level via keyd: survives X resets, hotplug, suspend, VT/Wayland.
+# Tap Win = Super (i3 $sub bindings keep working), hold Win + h/j/k/l = arrows.
+# Sources: ~/.config/keyd/keyd.conf, ~/.config/libinput/local-overrides.quirks.
+sudo install -Dm644 ~/.config/keyd/keyd.conf /etc/keyd/keyd.conf
+sudo install -Dm644 ~/.config/libinput/local-overrides.quirks /etc/libinput/local-overrides.quirks
+sudo usermod -aG keyd "$USER" || true
+sudo systemctl enable --now keyd
+# restart (not reload): applies config changes on reruns too, no socket race
+sudo systemctl restart keyd
+# Single owner of XKB: plain dk (keyd already provides esc-on-caps).
+sudo localectl set-x11-keymap dk pc105 terminate:ctrl_alt_bksp || true
 if [[ ${SHELL:-} != *fish* ]]; then
   chsh -s "$(command -v fish)" "$USER"
 fi
@@ -120,7 +133,15 @@ grep -q grub-btrfs-overlayfs /etc/mkinitcpio.conf || sudo sd "fsck\)" "fsck grub
 sudo systemctl enable --now grub-btrfsd.service
 if snapper_configured; then
   : # further snapshots are automatic (snap-pac)
+elif sudo snapper -c root create-config / 2>/dev/null; then
+  sudo snapper -c root create --description fresh
 else
+  # Leftover /.snapshots without a config (previous install): unmount if
+  # mounted, remove iff empty (never touch real snapshots), retry once.
+  sudo umount /.snapshots 2>/dev/null || true
+  if [ -z "$(ls -A /.snapshots 2>/dev/null)" ]; then
+    sudo rmdir /.snapshots 2>/dev/null || sudo btrfs subvolume delete /.snapshots 2>/dev/null || true
+  fi
   sudo snapper -c root create-config /
   sudo snapper -c root create --description fresh
 fi
@@ -136,9 +157,15 @@ sudo systemctl start reflector.service # refresh mirrors immediately
 REMOTE_PKGS=(
   tailscale
   openssh
+  teamviewer
 )
 paru -S --needed --noconfirm "${REMOTE_PKGS[@]}"
 sudo systemctl enable --now tailscaled
+# Restart if already running so a just-upgraded daemon matches the CLI
+# (avoids 'client version != tailscaled server version' warnings).
+if systemctl is-active --quiet tailscaled; then
+  sudo systemctl restart tailscaled
+fi
 if [[ $work == false ]]; then
   if tailscale status &>/dev/null; then
     sudo tailscale set --ssh=true --operator="$USER"
@@ -179,7 +206,6 @@ DESKTOP_PKGS=(
   # discord
   flatpak
   krita
-  p7zip
   zip
   udiskie
   jq
@@ -294,6 +320,8 @@ else
   echo "No ~/.config/opencode/opencode.service, skipping opencode.service install" >&2
 fi
 agent-browser install
+# NOTE: "PromptScript does not support global skill installation" failure is benign
+# (upstream limitation); the skills still install to ~/.agents/skills.
 bunx skills add vercel-labs/agent-browser -y -g
 bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -g -y
 # re-apply local OpenAI patches: --background + --openaiQuality (wiped by `skills update`)
@@ -331,7 +359,7 @@ if [[ $gaming == true ]] then
     # lib32-amdvlk
     protontricks
     ## steam
-    steam-native-runtime
+    # steam-native-runtime
     linux-steam-integration
     ## wine
     dxvk-bin
@@ -346,7 +374,7 @@ if [[ $gaming == true ]] then
     lutris
     # no longer exists?
     # lutris-battlenet-meta
-    lutris-wine-meta
+    # lutris-wine-meta
     # out of date?
     # lutris-world-of-warcraft-dependencies-nvidia
     umu-launcher
@@ -463,8 +491,6 @@ if [[ $work == true ]] then
     distrobox
     # xhost needed for distrobox
     xhost
-    # installed teamviewer through distrobox on ubuntu 24.04 for now. setup automatically?
-    # teamviewer
     bats
     bats-assert
     bats-file

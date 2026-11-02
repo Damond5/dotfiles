@@ -3,6 +3,7 @@
 xrandr --output DisplayPort-0 --off
 
 xrandr --output HDMI-A-0 --mode 3840x2160 --rate 60 --scale 0.4x0.4
+# xrandr --output HDMI-A-0 --mode 3840x2160 --rate 60
 # xrandr --output HDMI-A-0 --mode 1920x1080 --rate 60
 
 hdmi_sink="$(pactl list sinks short | grep hdmi-stereo-extra3 | awk '{print $1;}')"
