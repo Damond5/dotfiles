@@ -482,15 +482,13 @@ if [[ $work == true ]] then
     # sandbox backend for claude-code
     bubblewrap
     socat
-    qt
-    qtcreator
     jdk-openjdk
     jdtls
     freecad
     podman
     distrobox
     # xhost needed for distrobox
-    xhost
+    xorg-xhost
     bats
     bats-assert
     bats-file
@@ -541,7 +539,7 @@ if [[ $work == true ]] then
 
   ## universal robots
   bun install -g @devcontainers/cli
-  fish -c 'fish_add_path ~/.bun/bin'
+  fish -c 'fish_add_path ~/.bun/bin' || true # exits 1 if already added
 
   ## virtual machine
 
