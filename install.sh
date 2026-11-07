@@ -281,6 +281,7 @@ DEV_PKGS=(
   fvm
   lldb
   bash-language-server
+  shellcheck
   bun
   yaml-language-server
   bear
@@ -474,15 +475,13 @@ if [[ $work == true ]] then
     # sandbox backend for claude-code
     bubblewrap
     socat
-    qt
-    qtcreator
     jdk-openjdk
     jdtls
     freecad
     podman
     distrobox
     # xhost needed for distrobox
-    xhost
+    xorg-xhost
     bats
     bats-assert
     bats-file
@@ -533,7 +532,7 @@ if [[ $work == true ]] then
 
   ## universal robots
   bun install -g @devcontainers/cli
-  fish -c 'fish_add_path ~/.bun/bin'
+  fish -c 'fish_add_path ~/.bun/bin' || true # exits 1 if already added
 
   ## virtual machine
 
@@ -545,5 +544,11 @@ if [[ $work == true ]] then
     echo "> OAuth consent screen: Internal > Credentials > OAuth client ID > Desktop app."
     echo "In rclone config: n > name gdrive > drive > paste client ID/secret > scope 1 > defaults > log in."
     rclone config
+  fi
+
+  # nordbo hardware docs (NORDBO_HARDWARE_DOCS is exported in ~/.profile)
+  if [[ ! -d ~/workspace/hardware-docs ]]; then
+    git clone git@gitlab.com:nordbo-robotics/internal/robots/robot-hardware-docs.git ~/workspace/hardware-docs \
+      || echo "hardware-docs clone failed (GitLab SSH key not set up?); clone it manually later" >&2
   fi
 fi

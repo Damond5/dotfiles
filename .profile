@@ -25,3 +25,6 @@ export PATH="/home/nikv/.local/bin:$PATH"
 # Android SDK
 export ANDROID_HOME=/opt/android-sdk
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/latest/bin"
+
+# Nordbo robot hardware docs (used by the robotics:*-programming-expert skills)
+export NORDBO_HARDWARE_DOCS="$HOME/workspace/hardware-docs"
