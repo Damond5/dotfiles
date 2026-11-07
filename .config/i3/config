@@ -264,10 +264,13 @@ hide_edge_borders both
 # alt tab
 bindsym $mod+Tab workspace next
 bindsym $mod+onehalf workspace prev
+# physical Esc sends Insert via keyd (WoW bind); keep physical chord working
 bindsym $mod+Escape workspace prev
+bindsym $mod+Insert workspace prev
 bindsym $sub+Tab workspace next
 bindsym $sub+onehalf workspace prev
 bindsym $sub+Escape workspace prev
+bindsym $sub+Insert workspace prev
 
 # screenshot
 bindsym --release $mod+s exec scrot -s ~/Pictures/screenshot.png -e "nautilus ~/Pictures"
