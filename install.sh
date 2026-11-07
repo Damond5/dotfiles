@@ -102,18 +102,9 @@ sudo sd \#GRUB_SAVEDEFAULT=true GRUB_SAVEDEFAULT=true /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 # Input tweaks live in /etc so xf86-input-libinput upgrades cannot revert them
 # (40-libinput.conf in /usr/share is package-owned).
-# Mice stay at the libinput default (traditional scrolling); only the touchpad
-# scrolls naturally - do not add a MatchIsPointer section, it catches the mice.
-sudo tee /etc/X11/xorg.conf.d/50-scroll.conf >/dev/null <<'EOF'
-Section "InputClass"
-    Identifier "touchpad natural scrolling"
-    MatchIsTouchpad "on"
-    MatchDevicePath "/dev/input/event*"
-    Driver "libinput"
-    Option "NaturalScrolling" "true"
-    Option "Tapping" "on"
-EndSection
-EOF
+# Source: ~/.config/xorg.conf.d/50-scroll.conf (touchpad + K400 natural,
+# real mice stay traditional).
+sudo install -Dm644 ~/.config/xorg.conf.d/50-scroll.conf /etc/X11/xorg.conf.d/50-scroll.conf
 # System-wide remaps (replaces setxkbmap caps:escape + old ~/.Xmodmap Win+hjkl).
 # evdev-level via keyd: survives X resets, hotplug, suspend, VT/Wayland.
 # Tap Win = Super (i3 $sub bindings keep working), hold Win + h/j/k/l = arrows.
@@ -353,6 +344,7 @@ if [[ $gaming == true ]] then
     gamescope
     lib32-vulkan-radeon
     lib32-vulkan-mesa-layers
+    vulkan-tools
     # aur, really needed?
     # amdvlk
     # lib32-amdvlk
@@ -371,6 +363,7 @@ if [[ $gaming == true ]] then
     winetricks
     ## lutris
     lutris
+    python-protobuf # lutris Battle.net source dep
     # no longer exists?
     # lutris-battlenet-meta
     # lutris-wine-meta
