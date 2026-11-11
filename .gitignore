@@ -17,6 +17,7 @@
 !.config/baoyu-image-gen/
 !.config/keyd/
 !.config/libinput/
+!.config/mimeapps.list
 !.bashrc
 !.gitignore
 !.profile

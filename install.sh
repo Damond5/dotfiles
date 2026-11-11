@@ -211,6 +211,7 @@ paru -S --needed --noconfirm "${DESKTOP_PKGS[@]}"
 flatpak install -y "${DESKTOP_FLATPAKS[@]}"
 # --needed skips packages already pulled in as deps; pin them so orphan cleanups keep them
 sudo pacman -D --asexplicit flatpak openssh
+xdg-settings set default-web-browser firefox.desktop
 sudo systemctl enable tor
 
 ## scripts
