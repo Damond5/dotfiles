@@ -218,6 +218,8 @@ DESKTOP_FLATPAKS=(
 paru -S --needed --noconfirm "${DESKTOP_PKGS[@]}"
 # fixes long gtk app startup (dbus timeout)
 flatpak install -y "${DESKTOP_FLATPAKS[@]}"
+# --needed skips packages already pulled in as deps; pin them so orphan cleanups keep them
+sudo pacman -D --asexplicit flatpak openssh
 sudo systemctl enable tor
 
 ## scripts
@@ -502,14 +504,18 @@ if [[ $work == true ]] then
     libvirt
     virt-manager
     dnsmasq
-    iptables-nft
+    iptables
     mate-polkit
     # google drive
     rclone
     fuse3
+    libreoffice-fresh
+    rustdesk-bin
+    solaar
   )
   WORK_FLATPAKS=(
     org.cloudcompare.CloudCompare
+    com.tencent.WeChat
   )
   paru -S --needed --noconfirm "${WORK_PKGS[@]}"
   flatpak install -y "${WORK_FLATPAKS[@]}"
