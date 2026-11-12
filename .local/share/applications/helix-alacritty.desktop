@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Helix (Alacritty)
+Exec=alacritty -e helix %F
+Terminal=false
+MimeType=text/plain;text/csv;text/markdown;application/json;application/x-shellscript;text/x-python;
+NoDisplay=true

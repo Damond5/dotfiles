@@ -27,6 +27,11 @@
 .local/*
 !.local/bin
 .local/bin/serve-qwen36.sh
+!.local/share
+.local/share/*
+!.local/share/applications
+.local/share/applications/*
+!.local/share/applications/helix-alacritty.desktop
 # !.series
 # !installElvUI.sh
 !install.sh
