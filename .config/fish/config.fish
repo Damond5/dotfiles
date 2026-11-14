@@ -5,6 +5,7 @@ fish_vi_key_bindings
 
 
 source ~/.profile
+set -gx TERMINAL alacritty
 
 
 # ALIASES

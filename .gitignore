@@ -32,6 +32,7 @@
 !.local/share/applications
 .local/share/applications/*
 !.local/share/applications/helix-alacritty.desktop
+!.local/share/applications/yazi.desktop
 # !.series
 # !installElvUI.sh
 !install.sh

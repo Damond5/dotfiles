@@ -19,3 +19,4 @@ text/markdown=helix-alacritty.desktop
 application/json=helix-alacritty.desktop
 application/x-shellscript=helix-alacritty.desktop
 text/x-python=helix-alacritty.desktop
+inode/directory=yazi.desktop

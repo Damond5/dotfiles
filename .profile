@@ -2,6 +2,7 @@
 export QT_QPA_PLATFORMTHEME="qt6ct"
 export EDITOR=/usr/bin/helix
 export VISUAL=/usr/bin/helix
+export TERMINAL=alacritty
 
 # formatted output
 alias date "date +'%T'"
