@@ -176,6 +176,7 @@ DESKTOP_PKGS=(
   picom
   dunst
   alacritty
+  xdg-terminal-exec # default-terminal spec: gsettings exec + ~/.config/xdg-terminals.list
   mpv
   scrot
   loupe

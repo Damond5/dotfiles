@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Yazi File Manager
-Comment=Blazing fast terminal file manager
-Exec=alacritty -e yazi %f
-Icon=yazi
-Terminal=false
-Categories=System;FileManager;FileTools;ConsoleOnly
-MimeType=inode/directory
