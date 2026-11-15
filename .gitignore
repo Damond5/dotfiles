@@ -17,6 +17,7 @@
 !.config/baoyu-image-gen/
 !.config/keyd/
 !.config/libinput/
+!.config/xorg.conf.d/
 !.config/mimeapps.list
 !.config/xdg-terminals.list
 !.bashrc

@@ -103,6 +103,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # Input tweaks live in /etc so xf86-input-libinput upgrades cannot revert them
 # (40-libinput.conf in /usr/share is package-owned).
 # Source: ~/.config/xorg.conf.d/50-scroll.conf (touchpad + K400 natural,
+# + keyd virtual pointer natural since K400 scroll goes via keyd,
 # real mice stay traditional).
 sudo install -Dm644 ~/.config/xorg.conf.d/50-scroll.conf /etc/X11/xorg.conf.d/50-scroll.conf
 # System-wide remaps (replaces setxkbmap caps:escape + old ~/.Xmodmap Win+hjkl).
