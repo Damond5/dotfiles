@@ -139,7 +139,7 @@ else
 fi
 # Enforce retention + auto-cleanup on both new and existing installs
 # (prevents metadata ENOSPC from 100+ accumulated snapshots).
-sudo snapper -c root set-config NUMBER_LIMIT=20 NUMBER_LIMIT_IMPORTANT=10 TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 TIMELINE_LIMIT_WEEKLY=0 TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=4
+sudo snapper -c root set-config NUMBER_LIMIT=20 NUMBER_LIMIT_IMPORTANT=10 TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 TIMELINE_LIMIT_WEEKLY=0 TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0
 sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
 sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
