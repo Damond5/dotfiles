@@ -253,6 +253,8 @@ UTILS_PKGS=(
   xan
 )
 paru -S --needed --noconfirm "${SCRIPTS_PKGS[@]}" "${LAUNCHER_PKGS[@]}" "${UTILS_PKGS[@]}"
+# btop GPU box on AMD (vendor 0x1002)
+grep -qs 0x1002 /sys/class/drm/card*/device/vendor && paru -S --needed --noconfirm rocm-smi-lib
 rustup toolchain list 2>/dev/null | grep -q stable || rustup install stable
 have rusti-cal || cargo install rusti-cal
 
