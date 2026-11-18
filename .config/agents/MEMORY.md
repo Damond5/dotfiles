@@ -48,6 +48,13 @@
 ## Linking Email To Pipedrive Deals
 - An email is filed on a Nordbo Pipedrive deal by BCC'ing that deal's Smart BCC address, `nordborobotics+deal<dealId>@pipedrivemail.com` (returned by getDeal with `include_fields: ["smart_bcc_email"]`); this works when sending from Gmail, so a mail the user wants "linked to the deal" can go out through Gmail with that BCC.
 
+## Nordbo Quote Pricing Sources And Owners
+- Nordbo's sales prices come from the Pipedrive product catalogue, which the user confirmed is the ground truth for what Nordbo charges (list prices per product in EUR and DKK; its cost fields are all 0). Cost, hours per task and gross margin come from the Google Sheet "Project Calculations Budget/GM" (id `1JX5bVBeaV9y_m4iFxj32AIp5MZoyr-lqpd_XPT_n9qo`), not from Pipedrive.
+- Sabina Kethelz (sabina@nordbo-robotics.com) and Jacob Vølund (jacob@nordbo-robotics.com) own Nordbo's price documentation: when Pipedrive products or the calculation sheet disagree, they fix it at the source, reached in the Google Chat group "Jacob, Sabina" with the user (`spaces/AAQAQrDxGTk`), where the conversation is in Danish.
+
+## Finding Google Chat Conversations With Nordbo Colleagues
+- A Google Chat DM or group chat with Nordbo colleagues is found with `search_conversations` by participant email, `<firstname>@nordbo-robotics.com` (verified for jacob, sabina and the user's own nicky@); a `spaceNameQuery` only matches named spaces, and Pipedrive `getAccountContext` returns no user list to look emails up in.
+
 ## Mimic memory-nicky Branch
 - In the Mimic repo (`gitlab.com/nordbo-robotics/products/mimic/mimic`) the project `MEMORY.md` is tracked only on the user's personal `memory-nicky` branch; feature branches carry it as an untracked file. When checking out a feature branch, keep the working-copy `MEMORY.md` from `memory-nicky` intact. When the user asks for a memory commit, it goes to `memory-nicky`, not the feature branch, with a message of the form `<MR subject> memory` (e.g. `move robot home after each execution memory`); committing through a temporary `git worktree` leaves the checked-out feature branch untouched.
 
@@ -67,11 +74,15 @@
 ## Nordbo Customer Project Boards On monday.com
 
 - Each Nordbo customer project has a monday.com board named `[Dxxxxx] Customer, …` in the Projects workspace (id 2732943), built from a template with groups "1 Kickoff & Planning" to "5. Post-Project Review"; work notes go in as subitems under template items such as "💻 Develop software/hardware specifications". Subitems live on a separate "Subitems of [Dxxxxx] …" board and carry Status (Not Started / In Progress / Completed / Blocked / Cancelled), Owner and a free-text Description column — look up the column ids with get_board_info before writing. The user's own monday.com user id is 11972798.
+- A monday.com link to a customer-project subitem can carry the parent `[Dxxxxx]` board's id (`/boards/<parent>/pulses/<subitem>`), and `get_board_items_page` on that board with the pulse id returns an empty list with no error. Read the item from its "Subitems of [Dxxxxx] …" board instead; `get_updates` on the pulse id returns the item's real URL, including that board's id (verified 2026-11-18 on [D11252] Promegi, Sindura).
 
 ## R&D Development Backlog Board On monday.com
 
 - Nordbo's R&D Development Backlog is monday.com board 6419715614 in the R&D workspace (2650708). New items go in the "New Requests" group (`topics`) with Status New, and the field rules are in the "Development Backlog WoW" doc (id 45317025). Its "New Task" and "New BUG" forms are out of date (they still have a "Next Move" field for a column that no longer exists), so create items with create_items rather than create_form_submission.
 - On the Development Backlog board (6419715614), the Brief doc column (`doc_mm5shzz4`) fills itself from a template (Objective, Background, Scope, Non-goals, Acceptance criteria as checklist, Validation, Dependencies and constraints) when create_doc attaches a doc, and any markdown passed in is appended after the template. To fill a brief: create the doc, read its blocks with read_docs include_blocks, delete all of them, then add_markdown_content with the completed brief using the same headings.
+
+## Filtering monday.com Items With GraphQL query_params
+- In monday.com GraphQL `items_page(query_params:…)`, a dropdown column's `compare_value` takes the label IDs from the column's `settings_str` (e.g. `[1]`), never label names: `compare_value:["UR"]` returns an empty item list with no error, which looks like "no matches". Look the IDs up with `boards { columns(ids:[…]) { id settings_str } }` first. `query_params` accepts nested `groups` (each with its own `operator` and `rules`), so "column empty OR any_of IDs" per column, ANDed across columns, is one query (`is_empty` takes `compare_value:[]`); verified 2026-11-18 through the claude.ai monday connector's `all_api_read`.
 
 ## Secret Placement
 
