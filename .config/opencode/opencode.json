@@ -28,6 +28,22 @@
           }
         }
       }
+    },
+    "inkling": {
+      "name": "Inkling 2 Mini local",
+      "package": "aisdk:@ai-sdk/openai-compatible",
+      "settings": {
+        "baseURL": "http://127.0.0.1:8082/v1"
+      },
+      "models": {
+        "inkling-2-mini": {
+          "name": "Inkling 2 Mini UD-IQ4_XS",
+          "limit": {
+            "context": 131072,
+            "output": 16384
+          }
+        }
+      }
     }
   },
   "mcp": {
@@ -37,6 +53,36 @@
         "url": "https://mcp.context7.com/mcp",
         "headers": {
           "Authorization": "Bearer ctx7sk-6f7e6c3d-7e14-4415-9239-032a224fb162"
+        }
+      },
+      "blender": {
+        "type": "local",
+        "command": [
+          "/usr/bin/uvx",
+          "--python",
+          "3.11",
+          "mcp-for-blender"
+        ],
+        "enabled": true,
+        "environment": {
+          "BLENDER_HOST": "localhost",
+          "BLENDER_PORT": "9876",
+          "UV_PYTHON_PREFERENCE": "only-managed"
+        }
+      },
+      "blender_official": {
+        "type": "local",
+        "command": [
+          "uv",
+          "--directory",
+          "/home/nikv/blender_mcp/mcp",
+          "run",
+          "blender-mcp"
+        ],
+        "enabled": true,
+        "environment": {
+          "BLENDER_MCP_HOST": "127.0.0.1",
+          "BLENDER_MCP_PORT": "9877"
         }
       }
     }
