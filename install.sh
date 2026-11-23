@@ -328,8 +328,11 @@ bunx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-image-gen -
 # re-apply local OpenAI patches: --background + --openaiQuality (wiped by `skills update`)
 patch -N -s -d ~/.agents/skills/baoyu-image-gen -p1 < ~/.config/baoyu-image-gen/openai-background-quality.patch || echo "baoyu-image-gen OpenAI patch did not apply cleanly"
 
-# LOCAL LLM (Qwen3.6-35B-A3B via llama.cpp Vulkan, OpenCode provider "llamacpp")
+# LOCAL LLMs (llama.cpp Vulkan servers, OpenCode providers "llamacpp" + "inkling")
+# Qwen3.6-35B-A3B via upstream mainline; Inkling 2 Mini via pinned Unsloth
+# prebuilt (root UD-* GGUFs need Unsloth's looped layout, see setup-inkling.sh).
 ~/.local/bin/setup-qwen36.sh
+~/.local/bin/setup-inkling.sh
 
 
 # # MEDIA

@@ -38,36 +38,53 @@ else
   echo "Could not fetch llama.cpp upstream, skipping rebuild check" >&2
 fi
 if [[ $NEED_BUILD == true ]]; then
-  cmake -S ~/llama.cpp -B ~/llama.cpp/build -DGGML_VULKAN=ON -DGGML_HIP=OFF -DGGML_CUDA=OFF -DCMAKE_BUILD_TYPE=Release
+  # GGML_CCACHE=OFF: a cached ccache path goes stale on rebuild (Error 127) if ccache is ever uninstalled.
+  cmake -S ~/llama.cpp -B ~/llama.cpp/build -DGGML_VULKAN=ON -DGGML_HIP=OFF -DGGML_CUDA=OFF -DGGML_CCACHE=OFF -DCMAKE_BUILD_TYPE=Release
   cmake --build ~/llama.cpp/build --config Release -j "$(nproc)" --target llama-server
 fi
 mkdir -p ~/models/qwen36 ~/bin
+QWEN_GGUF="Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"
 if [[ $FORCE == true || ! -f $MODEL_FILE ]]; then
-  hf download unsloth/Qwen3.6-35B-A3B-GGUF --local-dir ~/models/qwen36 --include "*UD-Q4_K_XL*"
+  hf download unsloth/Qwen3.6-35B-A3B-GGUF "$QWEN_GGUF" --local-dir ~/models/qwen36
 else
   echo "model present, skipping download"
+fi
+if [[ $FORCE == true || ! -f ~/models/qwen36/mmproj-F16.gguf ]]; then
+  hf download unsloth/Qwen3.6-35B-A3B-GGUF mmproj-F16.gguf --local-dir ~/models/qwen36
+else
+  echo "mmproj present, skipping download"
 fi
 cat > ~/.local/bin/serve-qwen36.sh <<'EOF'
 #!/bin/bash
 exec $HOME/llama.cpp/build/bin/llama-server \
   -m $HOME/models/qwen36/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf \
+  --mmproj $HOME/models/qwen36/mmproj-F16.gguf --image-min-tokens 1024 \
   --alias qwen3.6-35b --host 127.0.0.1 --port 8081 -ngl 999 -c 131072 \
   --cache-type-k q8_0 --cache-type-v q8_0 --parallel 1 \
   --spec-type ngram-mod -fa on --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0
 EOF
 chmod +x ~/.local/bin/serve-qwen36.sh
+cat > ~/stop-llms.sh <<'EOF'
+#!/bin/bash
+# Stop local LLM servers to free VRAM/RAM (e.g. before gaming).
+systemctl --user stop serve-qwen36.service serve-inkling.service 2>/dev/null
+echo "qwen:    $(systemctl --user is-active serve-qwen36.service)"
+echo "inkling: $(systemctl --user is-active serve-inkling.service)"
+EOF
+chmod +x ~/stop-llms.sh
 mkdir -p ~/.config/systemd/user
 cat > ~/.config/systemd/user/serve-qwen36.service <<'EOF'
 [Unit]
 Description=Qwen3.6-35B-A3B llama-server (Vulkan)
 After=network.target
+Conflicts=serve-inkling.service
 [Service]
 ExecStart=%h/.local/bin/serve-qwen36.sh
 Restart=on-failure
 [Install]
 WantedBy=default.target
 EOF
-sudo loginctl enable-linger "$USER"
+sudo loginctl enable-linger "$USER" 2>/dev/null || true # silent no-op on non-interactive re-runs (install.sh has sudo keepalive)
 systemctl --user daemon-reload
 # Not enabled: the local-llm opencode plugin starts it on first prompt.
 python3 - <<'EOF'
