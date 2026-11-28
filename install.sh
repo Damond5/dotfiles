@@ -87,6 +87,7 @@ BASE_PKGS=(
   grub-btrfs
   snapper
   snap-pac
+  btrfsmaintenance
   inotify-tools
   plocate
   fastfetch
@@ -141,6 +142,14 @@ fi
 # (prevents metadata ENOSPC from 100+ accumulated snapshots).
 sudo snapper -c root set-config NUMBER_LIMIT=20 NUMBER_LIMIT_IMPORTANT=10 TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 TIMELINE_LIMIT_WEEKLY=0 TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0
 sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
+# Space-aware snapshot cleanup: needs a quota group or SPACE_LIMIT/FREE_LIMIT are ignored.
+sudo snapper -c root setup-quota 2>/dev/null || true
+# Auto-balance/scrub so chunk allocation can't wedge at 1MiB unallocated again.
+sudo systemctl enable --now btrfs-balance.timer btrfs-scrub.timer
+# Return empty chunks to the unallocated pool (this is what actually fixes
+# "No space left" after deleting files; deletes alone don't free chunks).
+sudo btrfs balance start -musage=5 / || true
+sudo btrfs balance start -dusage=5 / || true
 sudo sd "# --country France,Germany" -- "--country Denmark,Sweden,Netherlands" /etc/xdg/reflector/reflector.conf
 sudo sd "latest 5" "latest 10" /etc/xdg/reflector/reflector.conf
 sudo sd "sort age" "sort rate" /etc/xdg/reflector/reflector.conf
